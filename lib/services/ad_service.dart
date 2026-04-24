@@ -8,18 +8,21 @@ class AdService {
   factory AdService() => _instance;
   AdService._internal();
 
-  // TODO: Replace with real Plantera AdMob IDs when account is set up.
   static const String appIdAndroid = '';
-  static const String appIdIos = '';
+  static const String appIdIos = 'ca-app-pub-4013461464810205~6226446270';
 
   static const String bannerAdUnitIdAndroid = '';
-  static const String bannerAdUnitIdIos = '';
+  static const String bannerAdUnitIdIos =
+      'ca-app-pub-4013461464810205/4721792916';
   static const String interstitialAdUnitIdAndroid = '';
-  static const String interstitialAdUnitIdIos = '';
+  static const String interstitialAdUnitIdIos =
+      'ca-app-pub-4013461464810205/1042087723';
   static const String rewardedAdUnitIdAndroid = '';
-  static const String rewardedAdUnitIdIos = '';
+  static const String rewardedAdUnitIdIos =
+      'ca-app-pub-4013461464810205/9164120328';
   static const String appOpenAdUnitIdAndroid = '';
-  static const String appOpenAdUnitIdIos = '';
+  static const String appOpenAdUnitIdIos =
+      'ca-app-pub-4013461464810205/4103365339';
 
   static const String testBannerAndroid =
       'ca-app-pub-3940256099942544/6300978111';

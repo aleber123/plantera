@@ -77,7 +77,7 @@
 	<key>NSUserTrackingUsageDescription</key>
 	<string>Ditt tillstånd används för att visa mer relevanta annonser.</string>
 	<key>GADApplicationIdentifier</key>
-	<string>ca-app-pub-3940256099942544~1458002511</string>
+	<string>ca-app-pub-4013461464810205~6226446270</string>
 	<key>SKAdNetworkItems</key>
 	<array>
 		<dict>
