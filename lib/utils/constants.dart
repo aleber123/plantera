@@ -2,11 +2,11 @@ class AppConstants {
   static const String amazonAffiliateTag = 'alexanderbe05-21';
 
   static const String privacyPolicyUrl =
-      'https://aleber123.github.io/plantera-docs/privacy.html';
+      'https://aleber123.github.io/plantera/privacy.html';
   static const String termsOfUseUrl =
-      'https://aleber123.github.io/plantera-docs/terms.html';
+      'https://aleber123.github.io/plantera/terms.html';
   static const String supportUrl =
-      'https://aleber123.github.io/plantera-docs/support.html';
+      'https://aleber123.github.io/plantera/support.html';
   static const String supportEmail = 'support@alexanderbergqvist.com';
 
   static const String smhiPointForecastBase =
