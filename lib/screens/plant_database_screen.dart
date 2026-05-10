@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import '../l10n/app_localizations.dart';
 import '../models/plant.dart';
 import '../services/plant_database_service.dart';
 import '../widgets/plant_card.dart';
@@ -17,8 +18,9 @@ class _PlantDatabaseScreenState extends State<PlantDatabaseScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context);
     return Scaffold(
-      appBar: AppBar(title: const Text('Växtdatabas')),
+      appBar: AppBar(title: Text(l10n.plantDatabaseTitle)),
       body: Consumer<PlantDatabaseService>(
         builder: (ctx, db, _) {
           var list = db.searchByName(_query);
@@ -31,7 +33,7 @@ class _PlantDatabaseScreenState extends State<PlantDatabaseScreen> {
                 padding: const EdgeInsets.all(12),
                 child: TextField(
                   decoration: InputDecoration(
-                    hintText: 'Sök växt…',
+                    hintText: l10n.plantDatabaseSearchHint,
                     prefixIcon: const Icon(Icons.search),
                     border: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(12),
@@ -47,7 +49,7 @@ class _PlantDatabaseScreenState extends State<PlantDatabaseScreen> {
                   padding: const EdgeInsets.symmetric(horizontal: 12),
                   scrollDirection: Axis.horizontal,
                   children: [
-                    _categoryChip(null, 'Alla'),
+                    _categoryChip(null, l10n.myGardenFilterAll),
                     ...PlantCategory.values.map(
                       (c) => _categoryChip(c, '${c.emoji} ${c.label}'),
                     ),
@@ -57,7 +59,7 @@ class _PlantDatabaseScreenState extends State<PlantDatabaseScreen> {
               const SizedBox(height: 6),
               Expanded(
                 child: list.isEmpty
-                    ? const Center(child: Text('Inga växter matchar'))
+                    ? Center(child: Text(l10n.myGardenNoResults))
                     : ListView.builder(
                         itemCount: list.length,
                         itemBuilder: (_, i) => PlantCard(

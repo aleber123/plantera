@@ -1,0 +1,622 @@
+{
+  "@@locale": "de",
+  "appName": "Plantera",
+  "appSubtitle": "Dein digitaler Gartenbegleiter",
+  "tabHome": "Start",
+  "tabCalendar": "Kalender",
+  "tabPlants": "Pflanzen",
+  "tabMyGarden": "Meine Pflanzen",
+  "tabSettings": "Einstellungen",
+  "tabOverview": "Übersicht",
+  "tabMyPlant": "Meine Pflanze",
+  "tabCare": "Pflege",
+  "homeWelcomeTitle": "Beginnen wir mit deiner ersten Pflanze",
+  "homeWelcomeBody": "Durchsuche die Pflanzendatenbank und tippe + bei dem, was du anbaust — wir begleiten sie von der Aussaat bis zur Ernte.",
+  "homeWelcomeCta": "Pflanzen durchsuchen",
+  "gardenOverviewTitle": "Nächste Ernte",
+  "gardenSeeAll": "Alle ansehen",
+  "gardenStatTotal": "Im Garten",
+  "gardenStatHarvestSoon": "Bald Ernte",
+  "gardenStatReadyNow": "Jetzt bereit",
+  "gardenMore": "+{count} weitere",
+  "@gardenMore": {
+    "placeholders": {
+      "count": {}
+    }
+  },
+  "dailyInsightsTitle": "Heute im Garten",
+  "dailyInsightsAllGood": "Alles unter Kontrolle. Nichts Dringendes — genieße den Garten.",
+  "upcomingCareTitle": "Anstehende Pflege",
+  "upcomingCareSubtitle": "Was diesen und nächsten Monat zu tun ist.",
+  "seasonPlannerTitle": "Meine Saison {year}",
+  "@seasonPlannerTitle": {
+    "placeholders": {
+      "year": {}
+    }
+  },
+  "seasonPlannerSubtitle": "Was du dieses Jahr anbauen möchtest. Wir benachrichtigen dich, wenn es Zeit zur Aussaat ist.",
+  "seasonPlannerEmptyTitle": "Saison {year} planen",
+  "@seasonPlannerEmptyTitle": {
+    "placeholders": {
+      "year": {}
+    }
+  },
+  "seasonPlannerEmptyBody": "Was möchtest du dieses Jahr anbauen? Wir erinnern dich, wenn es Zeit zur Aussaat ist.",
+  "seasonPlannerEmptyCta": "Auswählen",
+  "seasonPlannerAddCta": "Pflanze hinzufügen",
+  "seasonPlannerCount": "{count} Stück",
+  "@seasonPlannerCount": {
+    "placeholders": {
+      "count": {}
+    }
+  },
+  "seasonRowSowNow": "Jetzt säen",
+  "seasonRowDaysAway": "In {days} Tagen",
+  "@seasonRowDaysAway": {
+    "placeholders": {
+      "days": {}
+    }
+  },
+  "seasonRowInSeason": "In Saison",
+  "weatherUnavailable": "Wetter nicht verfügbar",
+  "weatherSetLocation": "Standort in Einstellungen festlegen",
+  "dryPeriodTitle": "Trockenperiode läuft",
+  "frostCardTitle": "❄️ Vor Frost schützen",
+  "premiumTeaserTitle": "Plantera Premium",
+  "premiumTeaserBody": "Unbegrenzter Garten und keine Werbung",
+  "calendarTitle": "Pflanzkalender",
+  "calendarMonthGuide": "Monatsleitfaden",
+  "calendarTaskCount": "{count} Aufgaben",
+  "@calendarTaskCount": {
+    "placeholders": {
+      "count": {}
+    }
+  },
+  "calendarPhasePresow": "INNEN VORZIEHEN",
+  "calendarPhaseDirectsow": "DIREKTSAAT",
+  "calendarPhasePlantout": "AUSPFLANZEN",
+  "calendarPhaseHarvest": "ERNTE",
+  "calendarPhaseCount": "{count} Pflanzen",
+  "@calendarPhaseCount": {
+    "placeholders": {
+      "count": {}
+    }
+  },
+  "calendarEmptyTitle": "Nichts zu säen oder ernten im {month}",
+  "@calendarEmptyTitle": {
+    "placeholders": {
+      "month": {}
+    }
+  },
+  "calendarEmptyBody": "Nutze den Monat zur Planung — bestelle Samen, plane Beete oder lies den Monatsleitfaden.",
+  "myGardenTitle": "Meine Pflanzen",
+  "myGardenSearchHint": "Pflanze oder Standort suchen",
+  "myGardenFilterAll": "Alle",
+  "myGardenGroupByStatus": "Nach Status gruppieren",
+  "myGardenGroupByLocation": "Nach Standort gruppieren",
+  "myGardenGroupByCategory": "Nach Kategorie gruppieren",
+  "myGardenShowingCount": "Zeige {shown} von {total}",
+  "@myGardenShowingCount": {
+    "placeholders": {
+      "shown": {},
+      "total": {}
+    }
+  },
+  "myGardenEmptyTitle": "Dein Garten ist leer",
+  "myGardenEmptyBody": "Füge Pflanzen aus der Datenbank hinzu, um deinen Garten aufzubauen.",
+  "myGardenEmptyCta": "Pflanzendatenbank durchsuchen",
+  "myGardenAddPlant": "Pflanze hinzufügen",
+  "myGardenNoResults": "Keine passenden Pflanzen",
+  "myGardenNoResultsBody": "Versuche eine andere Suche oder lösche die Filter.",
+  "myGardenWateredNow": "Eben gegossen",
+  "myGardenWateredToday": "Heute gegossen",
+  "myGardenWateredYesterday": "Gestern gegossen",
+  "plantDatabaseTitle": "Pflanzendatenbank",
+  "plantDatabaseSearchHint": "Pflanze suchen",
+  "plantCategoryAll": "Alle",
+  "addPlantNow": "Jetzt zum Garten hinzufügen",
+  "addPlantNowBody": "Du hast gesät oder gepflanzt — wir begleiten ab heute",
+  "addPlantSeason": "Zur Aussaatliste hinzufügen",
+  "addPlantSeasonBody": "Du planst den Anbau — wir melden uns zur Aussaatzeit",
+  "addPlantRemoveSeason": "Von Aussaatliste entfernen",
+  "addPlantRemoveSeasonBody": "Wir hören auf, an das Aussaatfenster zu erinnern",
+  "addedToGardenTitle": "{plant} ist in deinem Garten",
+  "@addedToGardenTitle": {
+    "placeholders": {
+      "plant": {}
+    }
+  },
+  "addedToGardenBodyPlain": "Wir begleiten ab heute und erinnern an Wasser und Ernte.",
+  "addedToGardenBodyScheduled": "Wir begleiten ab heute. Benachrichtigungen geplant für: {list}.",
+  "@addedToGardenBodyScheduled": {
+    "placeholders": {
+      "list": {}
+    }
+  },
+  "addedToGardenCta": "Zu meinem Garten",
+  "phasePickerTitleNew": "Wo bist du im Prozess?",
+  "phasePickerTitleEdit": "Status ändern",
+  "phaseShowSimple": "Einfachere Optionen anzeigen",
+  "phaseShowMore": "Mehr Optionen (für Erfahrene)",
+  "phaseSimplePlanned": "Geplanter Anbau",
+  "phaseSimplePlannedBody": "Nur auf der Liste — wir erinnern dich, wenn die Saison beginnt.",
+  "phaseSimpleGrowing": "Wächst gerade",
+  "phaseSimpleGrowingBody": "Pflanzen sind unterwegs. Wir begleiten sie bis zur Ernte.",
+  "phaseSimpleHarvested": "Bereits geerntet",
+  "phaseSimpleHarvestedBody": "Saison für diese Pflanze beendet.",
+  "perennialEstablishedTitle": "Seit wann hast du sie?",
+  "perennialEstablishedBody": "Muss nicht exakt sein – wir verwenden nur das Jahr.",
+  "perennialThisYear": "Dieses Jahr ({year})",
+  "@perennialThisYear": {
+    "placeholders": {
+      "year": {}
+    }
+  },
+  "perennialLastYear": "Letztes Jahr ({year})",
+  "@perennialLastYear": {
+    "placeholders": {
+      "year": {}
+    }
+  },
+  "perennialTwoYearsAgo": "Vor zwei Jahren ({year})",
+  "@perennialTwoYearsAgo": {
+    "placeholders": {
+      "year": {}
+    }
+  },
+  "perennialEarlier": "Früher (vor einigen Jahren)",
+  "statusPlanning": "Geplant",
+  "statusGrowingIndoors": "Vorzucht innen",
+  "statusDirectSown": "Direkt gesät",
+  "statusHardening": "Abhärten",
+  "statusOutdoors": "Im Freien",
+  "statusReadyToHarvest": "Erntereif",
+  "statusHarvested": "Geerntet",
+  "statusDormant": "Ruhend",
+  "sowingIndoors": "Innen",
+  "sowingDirect": "Direkt",
+  "sowingPlanta": "Setzling",
+  "sunFull": "Volle Sonne",
+  "sunPartial": "Halbschatten",
+  "sunShade": "Schatten",
+  "waterSparse": "Sparsam",
+  "waterRegular": "Regelmäßig",
+  "waterAbundant": "Reichlich",
+  "fertilizerLow": "Niedrig",
+  "fertilizerMedium": "Mittel",
+  "fertilizerHigh": "Hoch",
+  "lifecycleAnnual": "Einjährig",
+  "lifecycleBiennial": "Zweijährig",
+  "lifecyclePerennial": "Mehrjährig",
+  "lifecycleTree": "Baum",
+  "lifecycleShrub": "Strauch",
+  "categoryVegetables": "Gemüse",
+  "categoryHerbs": "Kräuter & Gewürze",
+  "categoryFlowers": "Blumen",
+  "categoryBerries": "Beeren",
+  "categoryFruitTrees": "Obstbäume",
+  "categoryOther": "Sonstiges",
+  "wateredNow": "Gegossen",
+  "wateredConfirmation": "Gegossen ✓",
+  "notWateredYet": "Noch nicht gegossen",
+  "wateredJustNow": "Eben gegossen",
+  "wateredDaysAgo": "Vor {days} Tagen gegossen",
+  "@wateredDaysAgo": {
+    "placeholders": {
+      "days": {}
+    }
+  },
+  "wateredWeeksAgo": "Vor {weeks} Wochen gegossen",
+  "@wateredWeeksAgo": {
+    "placeholders": {
+      "weeks": {}
+    }
+  },
+  "journalTitle": "Tagebuch",
+  "journalCount": "{count}",
+  "@journalCount": {
+    "placeholders": {
+      "count": {}
+    }
+  },
+  "journalAdd": "Hinzufügen",
+  "journalEmpty": "Noch keine Einträge — beginne, das Wachstum mit Fotos und kurzen Notizen zu dokumentieren.",
+  "journalNoteTitle": "Notiz",
+  "journalNoteBody": "Was ist heute passiert? Blattläuse, erste Blüte, Beschneiden…",
+  "journalNoteHint": "Kurze Notiz schreiben…",
+  "journalSave": "Speichern",
+  "journalDeletePhoto": "Foto löschen?",
+  "journalDeletePhotoBody": "Das Bild wird vom Gerät entfernt.",
+  "journalDeleteNote": "Notiz löschen?",
+  "journalDeleteNoteBody": "Die Notiz wird entfernt.",
+  "journalManage": "Eintrag verwalten",
+  "actionTakePhoto": "Foto aufnehmen",
+  "actionPickFromLibrary": "Aus Mediathek wählen",
+  "actionWriteNote": "Notiz schreiben",
+  "harvestTitle": "Ernte",
+  "harvestLog": "Ernte protokollieren",
+  "harvestEmpty": "Protokolliere, was du erntest, und die App baut Statistik Jahr für Jahr auf.",
+  "harvestTotalLabel": "Gesamt: {amount} {unit}",
+  "@harvestTotalLabel": {
+    "placeholders": {
+      "amount": {},
+      "unit": {}
+    }
+  },
+  "harvestEstimatedSek": "~{amount} kr",
+  "@harvestEstimatedSek": {
+    "placeholders": {
+      "amount": {}
+    }
+  },
+  "nextStepBecomeIndoor": "Ich habe innen vorgezogen",
+  "nextStepBecomeDirect": "Ich habe direktgesät",
+  "nextStepBecomePlanted": "Ich habe ausgepflanzt",
+  "nextStepHardenedToPlanted": "Pflanzen sind draußen",
+  "nextStepReadyForHarvest": "Erntereif",
+  "nextStepHarvested": "Geerntet",
+  "secondaryChangeStatus": "Status ändern",
+  "secondaryRemove": "Entfernen",
+  "secondaryRemoveConfirmTitle": "Aus dem Garten entfernen?",
+  "secondaryRemoveConfirmBody": "{plant} und alle Erinnerungen werden entfernt. Dies kann nicht rückgängig gemacht werden.",
+  "@secondaryRemoveConfirmBody": {
+    "placeholders": {
+      "plant": {}
+    }
+  },
+  "buttonCancel": "Abbrechen",
+  "buttonRemove": "Entfernen",
+  "buttonSave": "Speichern",
+  "buttonNext": "Weiter",
+  "buttonStart": "Loslegen",
+  "buttonSkip": "Überspringen",
+  "locationLabel": "Standort",
+  "locationAdd": "Standort hinzufügen",
+  "locationPickerTitle": "Wo steht sie?",
+  "locationPickerBody": "Z.B. \"Nordbeet\", \"Gewächshaus\", \"Balkon\".",
+  "locationReuse": "Erneut verwenden",
+  "settingsTitle": "Einstellungen",
+  "settingsPremiumActive": "Premium aktiv",
+  "settingsPremiumUpgrade": "Auf Premium upgraden",
+  "settingsPremiumUnlock": "Alle Funktionen freischalten",
+  "settingsMyGardens": "Meine Gärten",
+  "settingsMyGardensSubtitle": "Aktiv: {emoji} {name}",
+  "@settingsMyGardensSubtitle": {
+    "placeholders": {
+      "emoji": {},
+      "name": {}
+    }
+  },
+  "settingsMyGardensEmpty": "Erstelle deinen ersten Garten",
+  "settingsNotifications": "Erinnerungen",
+  "settingsNotificationsBody": "Frostwarnungen und Pflanzzeiten",
+  "settingsMorningHour": "Morgenzeit für Erinnerungen",
+  "settingsMorningHourBody": "Garten-Morgen-Pings um {hour}:00",
+  "@settingsMorningHourBody": {
+    "placeholders": {
+      "hour": {}
+    }
+  },
+  "settingsLargeText": "Großer Text",
+  "settingsLargeTextBody": "Etwas größerer Text in der gesamten App",
+  "settingsSimpleStatus": "Einfacher Status",
+  "settingsSimpleStatusBody": "Nur 3 Hauptzustände anzeigen (Geplant / Wächst / Geerntet). Für vollen Lebenszyklus deaktivieren.",
+  "settingsPestLibrary": "Schädlinge & Krankheiten",
+  "settingsPestLibraryBody": "Bibliothek häufiger Probleme",
+  "settingsIntro": "Einführung anzeigen",
+  "settingsIntroBody": "Schnelldurchlauf der Plus-Taste, Saisonplaner und wie die App funktioniert",
+  "settingsBackup": "Sicherungskopie",
+  "settingsBackupBody": "Garten und Ernte exportieren – auf iCloud Drive speichern oder per E-Mail senden",
+  "settingsRestorePurchases": "Käufe wiederherstellen",
+  "settingsPrivacyPolicy": "Datenschutzerklärung",
+  "settingsTerms": "Nutzungsbedingungen (EULA)",
+  "settingsSupport": "Support",
+  "settingsFeedback": "Feedback senden",
+  "settingsFeedbackBody": "Bugs, Feature-Wünsche oder einfach ein freundliches Hallo",
+  "gardensTitle": "Meine Gärten",
+  "gardensActive": "AKTIV",
+  "gardensAddNew": "Neuen Garten hinzufügen",
+  "gardensEdit": "Bearbeiten",
+  "gardensNoLocation": "Kein Standort",
+  "gardensPlantCount": "{count, plural, =1{1 Pflanze} other{{count} Pflanzen}}",
+  "@gardensPlantCount": {
+    "placeholders": {
+      "count": {}
+    }
+  },
+  "gardensSwitcherTitle": "Garten wechseln",
+  "gardensManage": "Gärten verwalten",
+  "gardensZoneLine": "Zone {zone}",
+  "@gardensZoneLine": {
+    "placeholders": {
+      "zone": {}
+    }
+  },
+  "gardensNewTitle": "Neuer Garten",
+  "gardensEditTitle": "{name} bearbeiten",
+  "@gardensEditTitle": {
+    "placeholders": {
+      "name": {}
+    }
+  },
+  "gardensNamePlaceholder": "Schrebergarten, Balkon, Wochenendhaus…",
+  "gardensCityLabel": "Stadt / nächster Ort",
+  "gardensCreateButton": "Garten erstellen",
+  "gardensSaveButton": "Speichern",
+  "gardensFooterHint": "Jeder Garten hat eigene Zone, Pflanzliste und Wetter. Aktiven Garten durch Antippen wechseln – alles aktualisiert sich sofort.",
+  "gardensDeleteTitle": "{name} entfernen?",
+  "@gardensDeleteTitle": {
+    "placeholders": {
+      "name": {}
+    }
+  },
+  "gardensDeletePlainBody": "Der Garten wird entfernt.",
+  "gardensDeleteWithPlantsBody": "{count, plural, =1{1 Pflanze} other{{count} Pflanzen}} werden in deinen Standardgarten verschoben. Der Garten wird entfernt.",
+  "@gardensDeleteWithPlantsBody": {
+    "placeholders": {
+      "count": {}
+    }
+  },
+  "introPage1Title": "Pflanzen hinzufügen, die du anbaust",
+  "introPage1Body": "Tippe + bei einer Pflanze, um sie in deinen Garten aufzunehmen. Wir begleiten sie von der Aussaat bis zur Ernte und erinnern an Gießen, Beschneiden und Umpflanzen.",
+  "introPage1Hint": "Pflanze nicht gefunden? Nutze den Tab \"Pflanzen\" unten.",
+  "introPage2Title": "Saison planen",
+  "introPage2Body": "Tippe das Lesezeichen, um eine Pflanze auf die Aussaatliste zu setzen. Du erhältst im Februar/März eine Benachrichtigung, wenn es Zeit zur Innen-Aussaat ist, und im April zur Direktsaat.",
+  "introPage2Hint": "Die Aussaatliste ist auf dem Startbildschirm.",
+  "introPage3Title": "Den Garten im Griff",
+  "introPage3Body": "Start zeigt Wetter, Trockenphasen und was diesen Monat zu tun ist. Der Tab \"Meine Pflanzen\" zeigt Jahresstatistik, Fruchtfolge und geschätzten Ernte-Wert.",
+  "introPage3Hint": "Schädlinge & Krankheiten findest du in den Einstellungen.",
+  "pestLibraryTitle": "Schädlinge & Krankheiten",
+  "pestLibrarySearchHint": "Nach Symptom oder Pflanze suchen",
+  "pestLibraryFilterPests": "Schädlinge",
+  "pestLibraryFilterDiseases": "Krankheiten",
+  "pestLibraryFilterDamage": "Schaden",
+  "pestLibraryNoMatch": "Nichts gefunden. Versuche ein Symptom wie \"Flecken\" oder \"Löcher\".",
+  "pestSectionMild": "Milde Maßnahme",
+  "pestSectionStrong": "Wirksame Maßnahme",
+  "pestSectionPrevent": "Vorbeugen",
+  "pestAffects": "Betrifft",
+  "statsTitle": "Mein Garten {year}",
+  "@statsTitle": {
+    "placeholders": {
+      "year": {}
+    }
+  },
+  "statsHero1": "Du hast etwa {sek} kr an Lebensmitteln angebaut",
+  "@statsHero1": {
+    "placeholders": {
+      "sek": {}
+    }
+  },
+  "statsHero2": "Du hast {count} Pflanzen am Wachsen",
+  "@statsHero2": {
+    "placeholders": {
+      "count": {}
+    }
+  },
+  "statsHeroEmpty": "Saison wartet",
+  "statsTilePlants": "Pflanzen",
+  "statsTileSpecies": "Arten",
+  "statsTileHarvested": "Geerntet",
+  "statsHarvestPanelTitle": "Bisherige Ernte dieses Jahr",
+  "statsValueLine": "Geschätzter Wert: ~{sek} kr",
+  "@statsValueLine": {
+    "placeholders": {
+      "sek": {}
+    }
+  },
+  "statsValueDisclaimer": "Basiert auf groben Supermarktpreisen pro Kategorie. Arbeitszeit oder Saatkosten nicht enthalten.",
+  "statsTopPanelTitle": "Beste Erträge des Jahres",
+  "statsLocationPanelTitle": "Wo im Garten",
+  "statsRotationPanelTitle": "Fruchtfolge",
+  "statsRotationBody": "Was wo wuchs, pro Jahr. Wiederholungen werden markiert.",
+  "statsReflectionTitle": "Reflexion",
+  "statsEmptyTitle": "Saison hat noch nicht begonnen",
+  "statsEmptyBody": "Pflanzen hinzufügen und Ernten protokollieren – wir füllen die Seite mit den Jahresergebnissen.",
+  "tabTodo": "Aufgaben",
+  "todoSectionToday": "HEUTE",
+  "todoSectionWeek": "DIESE WOCHE",
+  "todoSectionMonth": "DIESEN MONAT",
+  "todoSectionDoneToday": "HEUTE ERLEDIGT ✓",
+  "todoStatToday": "heute",
+  "todoStatWeek": "diese Woche",
+  "todoStatDone": "erledigt",
+  "todoEmptyTitle": "Alles unter Kontrolle",
+  "todoEmptyBody": "Nichts Dringendes. Füge Pflanzen hinzu, um tägliche Aufgaben zu erhalten.",
+  "todoSwipeDone": "Erledigt",
+  "todoSwipeSnooze": "Verschieben",
+  "progressReadyToHarvest": "Erntereif",
+  "progressHarvestNow": "Jetzt ernten",
+  "progressDaysLeft": "{days} Tage übrig",
+  "@progressDaysLeft": {
+    "placeholders": {
+      "days": {}
+    }
+  },
+  "progressApproxDaysLeft": "~{days} Tage übrig",
+  "@progressApproxDaysLeft": {
+    "placeholders": {
+      "days": {}
+    }
+  },
+  "climateCardTitle": "Klima letzte 14 Tage",
+  "climateStatAvg": "Tagesmittel",
+  "climateStatMinMax": "Min/max",
+  "climateStatGdd": "GDD",
+  "climateInterpretWaking": "Der Garten erwacht.",
+  "climateInterpretEarly": "Sehr frühe Saison – nur Kältetolerante (Zwiebel, Erbse, Salat).",
+  "climateInterpretSpring": "Frühjahrssaison – direkt gesäte Gemüse etablieren sich, Wärmeliebende warten.",
+  "climateInterpretMidSpring": "Mittlerer Frühling – Tomate und Paprika unter Vlies oder ins Gewächshaus.",
+  "climateInterpretFullGrowth": "Volles Wachstum – alles reift schnell, gießen und düngen.",
+  "climateInterpretHot": "Heiße Phase – auf Bewässerung junger Pflanzen achten.",
+  "climateTeaserTitle": "Klimakarte (Premium)",
+  "climateTeaserBody": "Tagesmitteltemperatur + Growing Degree Days für besseres Timing von Aussaat und Ernte.",
+  "weatherSetLocationHint": "Standort in den Einstellungen festlegen",
+  "weatherFrostWarning": "Frostwarnung {date} – {temp}°C",
+  "dryPeriodBodyWithThirsty": "Nur {past} mm Regen in den letzten 14 Tagen und {next} mm in der kommenden Woche erwartet. Gießen Sie {names}{more} — trockenheitsverträgliche Pflanzen halten länger durch.",
+  "dryPeriodBodyGeneral": "Nur {past} mm Regen in den letzten 14 Tagen und {next} mm in der kommenden Woche erwartet. Sorgfältig gießen, besonders Neupflanzungen und Töpfe.",
+  "dryPeriodMoreSuffix": " u.a.",
+  "myGardenWaterAllTooltip": "Alle Outdoor-Pflanzen gießen",
+  "myGardenSeasonStatsTooltip": "Meine Saison {year}",
+  "myGardenGroupTooltip": "Gruppieren nach",
+  "myGardenNoOutdoorPlants": "Keine Outdoor-Pflanzen zu gießen.",
+  "myGardenWaterAllTitle": "Alle gießen?",
+  "myGardenWaterAllConfirm": "Markiert {count} Outdoor-Pflanzen als gerade gegossen.",
+  "myGardenWaterAllCancel": "Abbrechen",
+  "myGardenWaterAllAction": "Alle gießen",
+  "myGardenWaterAllDone": "{count} Pflanzen gegossen ✓",
+  "myGardenLocationNone": "Ohne Standort",
+  "myGardenCategoryOther": "Andere",
+  "myGardenStatusSince": "{status} • seit {year}",
+  "myGardenStatusOnDate": "{status} • {date}",
+  "settingsMyGardensWithCount": "Meine Gärten ({count})",
+  "settingsPlanMonthly": "Monatsabo",
+  "settingsPlanYearly": "Jahresabo",
+  "settingsPlanLifetime": "Lebenslang",
+  "settingsPlanFree": "Kostenlos",
+  "settingsStarterKit": "🛒 Starter-Kit",
+  "settingsMorningHourPickerTitle": "Wann soll der Morgenping kommen?",
+  "settingsMorningHourPickerBody": "Die Morgenübersicht und alle Pflanzerinnerungen laufen zu dieser Stunde. Nichts weckt Sie vorher.",
+  "settingsHourFormat": "{hour}:00 Uhr",
+  "settingsBackupFailed": "Backup konnte nicht erstellt werden: {error}",
+  "settingsFeedbackSubject": "Plantera-Feedback",
+  "settingsFeedbackBodyTemplate": "Hallo!\n\nFeedback / Frage / Fehlerbericht:\n\n\n— Gesendet von Plantera {version}",
+  "gardensDelete": "Löschen",
+  "gardensCancel": "Abbrechen",
+  "gardensNameLabel": "Name",
+  "gardensZoneDescription": "Zone {zone} – {description}",
+  "gardensCityFormat": "{city} · {zone}",
+  "introSkip": "Überspringen",
+  "introNext": "Weiter",
+  "introStart": "Loslegen",
+  "onboardingWelcome": "Willkommen bei Plantera",
+  "onboardingBody": "Wählen Sie Ihren Standort für maßgeschneiderte Tipps, Frostwarnungen und passende Aussaatzeiten.",
+  "onboardingUseGps": "Meinen Standort verwenden",
+  "onboardingLocating": "Standort wird ermittelt…",
+  "onboardingOrPickCity": "oder Stadt wählen",
+  "onboardingZoneSubtitle": "Zone {zone}",
+  "onboardingErrorLocationServicesOff": "Ortungsdienste sind deaktiviert",
+  "onboardingErrorLocationDenied": "Standortberechtigung verweigert",
+  "phasePerennialHaveIt": "Ich habe sie im Garten",
+  "phasePerennialHaveItBody": "Wir zeigen die erwartete Ernte und erinnern an Schnitt, Düngung und Saisonpflege.",
+  "phasePerennialPlanning": "Plane zu pflanzen",
+  "phasePerennialPlanningBody": "Nur auf der Liste, bis Sie tatsächlich pflanzen — Erinnerungen kommen rechtzeitig.",
+  "phaseDetailedPlanned": "Plane den Anbau",
+  "phaseDetailedPlannedBody": "Nur auf der Liste — Erinnerungen kommen rechtzeitig zum Saisonstart.",
+  "phaseDetailedPresow": "Vorziehen drinnen",
+  "phaseDetailedPresowBody": "Sämlinge wachsen drinnen. Abhärtungs-Erinnerung in 5 Wochen.",
+  "phaseDetailedDirectsow": "Direktsaat im Freien",
+  "phaseDetailedDirectsowBody": "Direkt am Standort gesät. Ernte-Erinnerung folgt.",
+  "phaseDetailedPlantout": "Pflanzen sind ausgesetzt",
+  "phaseDetailedPlantoutBody": "Am endgültigen Platz. Ernte-Erinnerung folgt.",
+  "phaseFinishedReady": "Erntereif",
+  "phaseFinishedReadyBody": "Wird jetzt als erntereif markiert.",
+  "phaseFinishedHarvested": "Geerntet",
+  "phaseFinishedHarvestedBody": "Saison vorbei — Erinnerungen pausiert.",
+  "phaseFinishedDormant": "Ruhend",
+  "phaseFinishedDormantBody": "Die Pflanze ist gerade nicht aktiv.",
+  "phaseDateHelpPresow": "Wann haben Sie diese Pflanze gestartet?",
+  "phaseDateHelpDirectsow": "Wann haben Sie direktgesät?",
+  "phaseDateHelpPlantout": "Wann kamen die Sämlinge nach draußen?",
+  "phaseDateHelpDefault": "Datum",
+  "phasePerennialYearTitle": "Seit wann haben Sie sie?",
+  "phasePerennialYearBody": "Muss nicht exakt sein — wir nutzen nur das Jahr.",
+  "phasePerennialYearThis": "Dieses Jahr ({year})",
+  "phasePerennialYearLast": "Letztes Jahr ({year})",
+  "phasePerennialYearTwo": "Vor zwei Jahren ({year})",
+  "phasePerennialYearOlder": "Früher (vor einigen Jahren)",
+  "plantDetailTabOverview": "Übersicht",
+  "plantDetailTabMyPlant": "Meine Pflanze",
+  "plantDetailTabCare": "Pflege",
+  "plantDetailAddCta": "Zu meinem Garten hinzufügen",
+  "plantDetailRemoveCta": "Aus dem Garten entfernen",
+  "plantDetailRemoveTitle": "Aus dem Garten entfernen?",
+  "plantDetailRemoveBody": "Dies kann nicht rückgängig gemacht werden.",
+  "plantDetailCancel": "Abbrechen",
+  "plantDetailDelete": "Löschen",
+  "plantDetailSave": "Speichern",
+  "plantDetailReset": "Zurücksetzen",
+  "plantDetailReuse": "Wiederverwenden",
+  "plantDetailWaterNowSuffix": "Jetzt gegossen",
+  "plantDetailWaterTapHint": "Tippen, wenn Sie gießen, um den Überblick zu behalten",
+  "plantDetailWaterDoneSnack": "Gegossen ✓",
+  "plantDetailWaterNotYet": "Noch nicht gegossen",
+  "plantDetailWaterJust": "Gerade gegossen",
+  "plantDetailWaterToday": "Heute gegossen",
+  "plantDetailWaterYesterday": "Gestern gegossen",
+  "plantDetailUpcomingCareTitle": "📅  ANSTEHENDE PFLEGE",
+  "plantDetailDueNow": "Jetzt fällig",
+  "plantDetailEditPostsTooltip": "Beiträge verwalten",
+  "plantDetailNoteHint": "Kurze Notiz schreiben…",
+  "plantDetailNoteTitle": "Notiz",
+  "plantDetailNoteSubtitle": "Was ist heute passiert? Blattläuse, erste Blüte, Schnitt…",
+  "plantDetailTakePhoto": "Foto aufnehmen",
+  "plantDetailPickLibrary": "Aus Bibliothek wählen",
+  "plantDetailWriteNote": "Notiz schreiben",
+  "plantDetailUseEmojiAgain": "Emoji erneut verwenden",
+  "plantDetailSaveImageError": "Bild konnte nicht gespeichert werden: {error}",
+  "plantDetailSavePhotoError": "Foto konnte nicht gespeichert werden: {error}",
+  "plantDetailDeletePhotoTitle": "Foto löschen?",
+  "plantDetailDeleteNoteTitle": "Notiz löschen?",
+  "plantDetailDeletePhotoBody": "Das Foto wird vom Gerät gelöscht.",
+  "plantDetailDeleteNoteBody": "Die Notiz wird entfernt.",
+  "plantDetailAdd": "Hinzufügen",
+  "plantDetailNoPostsBody": "Noch keine Beiträge — beginnen Sie mit Fotos und kurzen Notizen.",
+  "plantDetailChangeStatus": "Status ändern",
+  "plantDetailLocationLabel": "Standort",
+  "plantDetailSowingMethodChip": "Saat: {method}",
+  "plantDetailSowingMethodSnack": "Saatmethode: {method}",
+  "plantDetailDateHelp": "Welches Datum?",
+  "plantDetailHowSowTitle": "Wie säen Sie?",
+  "plantDetailHowSowBody": "Bestimmt, welche Erinnerungen Sie erhalten.",
+  "plantDetailLocationTitle": "Wo steht sie?",
+  "plantDetailLocationBody": "Z. B. \"Nordbeet\", \"Gewächshaus\", \"Balkon\".",
+  "plantDetailHarvestOffsetTitle": "Erntezeit anpassen",
+  "plantDetailHarvestOffsetBody": "Zähler falsch? Tage hinzufügen oder abziehen — wird nur für diese Pflanze gespeichert.",
+  "plantDetailReadyToHarvest": "Erntereif",
+  "plantDetailNextStepPresow": "Ich habe drinnen vorgezogen",
+  "plantDetailNextStepDirectsow": "Ich habe direkt gesät",
+  "plantDetailNextStepPlantout": "Ich habe ausgepflanzt",
+  "plantDetailNextStepPlantedOut": "Pflanzen sind ausgepflanzt",
+  "plantDetailNextStepHarvestReady": "Erntereif",
+  "plantDetailNextStepHarvested": "Geerntet",
+  "plantDetailHowToTitle": "So geht's",
+  "plantDetailTipsTitle": "Tipps",
+  "plantDetailPestsTitle": "Schädlinge im Auge behalten",
+  "plantDetailNoCareTips": "Noch keine Pflegehinweise verfügbar.",
+  "plantDetailInfoSun": "Sonne",
+  "plantDetailInfoWater": "Wasser",
+  "plantDetailInfoFertilizer": "Dünger",
+  "plantDetailInfoFrost": "Hart bis",
+  "plantDetailInfoSpacing": "Abstand",
+  "plantDetailInfoHarvest": "Ernte",
+  "plantDetailHarvestSection": "🥕  Ernte",
+  "plantDetailToolsSection": "🛒 Werkzeuge und Zubehör",
+  "plantDetailSeasonSection": "Saison",
+  "plantDetailPhasePresow": "Vorziehen",
+  "plantDetailPhaseDirectsow": "Direktsaat",
+  "plantDetailPhasePlantout": "Auspflanzen",
+  "plantDetailPhaseHarvest": "Ernten",
+  "plantDetailZoneWarningBody": "Es kann klappen – aber Sie brauchen wahrscheinlich Winterschutz oder einen wärmeren Platz.",
+  "plantDetailDateAdded": "Hinzugefügt {date}",
+  "plantDetailDateInGardenSince": "Im Garten seit {year}",
+  "plantDetailDatePlanted": "Gepflanzt {date}",
+  "plantDetailHarvestOffsetSubtitle": "Erntezeit anpassen",
+  "plantDetailZoneWarning": "Diese Pflanze ist nicht für Zone {zone} getestet. Es kann klappen – aber Sie brauchen wahrscheinlich Winterschutz oder einen wärmeren Platz.",
+  "harvestSectionTitle": "🥕 Ernte",
+  "harvestRemoveTitle": "Eintrag entfernen?",
+  "harvestRemoveBody": "{amount} {unit} vom {date} werden entfernt.",
+  "harvestMoreEntries": "+ {count} ältere Einträge",
+  "harvestAddTitle": "Ernte erfassen — {plant}",
+  "harvestAmountLabel": "Menge",
+  "harvestUnitLabel": "Einheit",
+  "harvestNotesLabel": "Notiz (optional)",
+  "harvestErrorAmountTooLow": "Geben Sie eine Menge größer 0 ein",
+  "harvestErrorFutureDate": "Sie können keine zukünftige Ernte erfassen",
+  "commonCancel": "Abbrechen",
+  "commonDelete": "Löschen",
+  "commonSave": "Speichern",
+  "pestTypeLabelDisease": "KRANKHEIT",
+  "pestTypeLabelDamage": "SCHADEN",
+  "pestTypeLabelPest": "SCHÄDLING"
+}

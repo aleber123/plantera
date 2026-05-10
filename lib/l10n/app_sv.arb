@@ -1,0 +1,858 @@
+{
+  "@@locale": "sv",
+  "appName": "Plantera",
+  "appSubtitle": "Din digitala trädgårdskompis",
+  "tabHome": "Hem",
+  "tabCalendar": "Kalender",
+  "tabPlants": "Växter",
+  "tabMyGarden": "Min trädgård",
+  "tabSettings": "Inställningar",
+  "tabOverview": "Översikt",
+  "tabMyPlant": "Min planta",
+  "tabCare": "Omsorg",
+  "homeWelcomeTitle": "Vi börjar med första växten",
+  "homeWelcomeBody": "Bläddra växtdatabasen och tryck + på det du odlar — sen följer vi växten från sådd till skörd.",
+  "homeWelcomeCta": "Bläddra växtdatabasen",
+  "gardenOverviewTitle": "Min trädgård just nu",
+  "gardenSeeAll": "Se alla",
+  "gardenStatTotal": "I trädgården",
+  "gardenStatHarvestSoon": "Snart skörd",
+  "gardenStatReadyNow": "Redo nu",
+  "gardenMore": "+{count} till",
+  "@gardenMore": {
+    "placeholders": {
+      "count": {}
+    }
+  },
+  "dailyInsightsTitle": "Idag i trädgården",
+  "dailyInsightsAllGood": "Allt under kontroll. Inget akut just nu — njut av trädgården.",
+  "upcomingCareTitle": "Kommande omsorg",
+  "upcomingCareSubtitle": "Det här är dags att göra denna och nästa månad.",
+  "seasonPlannerTitle": "Min säsong {year}",
+  "@seasonPlannerTitle": {
+    "placeholders": {
+      "year": {}
+    }
+  },
+  "seasonPlannerSubtitle": "Det här vill du odla i år. Du får en notis när det är dags att så.",
+  "seasonPlannerEmptyTitle": "Planera säsongen {year}",
+  "@seasonPlannerEmptyTitle": {
+    "placeholders": {
+      "year": {}
+    }
+  },
+  "seasonPlannerEmptyBody": "Vad vill du odla i år? Vi påminner dig när det är dags att så.",
+  "seasonPlannerEmptyCta": "Välj",
+  "seasonPlannerAddCta": "Lägg till växt",
+  "seasonPlannerCount": "{count} st",
+  "@seasonPlannerCount": {
+    "placeholders": {
+      "count": {}
+    }
+  },
+  "seasonRowSowNow": "Så nu",
+  "seasonRowDaysAway": "Om {days} dagar",
+  "@seasonRowDaysAway": {
+    "placeholders": {
+      "days": {}
+    }
+  },
+  "seasonRowInSeason": "I säsong",
+  "weatherUnavailable": "Väder ej tillgängligt",
+  "weatherSetLocation": "Ange plats i inställningarna",
+  "dryPeriodTitle": "Torrperiod pågår",
+  "frostCardTitle": "❄️ Skydda mot frosten",
+  "premiumTeaserTitle": "Plantera Premium",
+  "premiumTeaserBody": "Obegränsad trädgård och inga annonser",
+  "calendarTitle": "Planteringskalender",
+  "calendarMonthGuide": "Månadens guide",
+  "calendarTaskCount": "{count} uppgifter",
+  "@calendarTaskCount": {
+    "placeholders": {
+      "count": {}
+    }
+  },
+  "calendarPhasePresow": "FÖRODLA INOMHUS",
+  "calendarPhaseDirectsow": "DIREKTSÅ UTE",
+  "calendarPhasePlantout": "PLANTERA UT",
+  "calendarPhaseHarvest": "SKÖRD",
+  "calendarPhaseCount": "{count} växter",
+  "@calendarPhaseCount": {
+    "placeholders": {
+      "count": {}
+    }
+  },
+  "calendarEmptyTitle": "Inget att så eller skörda i {month}",
+  "@calendarEmptyTitle": {
+    "placeholders": {
+      "month": {}
+    }
+  },
+  "calendarEmptyBody": "Använd månaden för planering — beställ frön, planera rabatter eller läs månadens guide.",
+  "myGardenTitle": "Mina växter",
+  "myGardenSearchHint": "Sök växt eller plats",
+  "myGardenFilterAll": "Alla",
+  "myGardenGroupByStatus": "Gruppera efter status",
+  "myGardenGroupByLocation": "Gruppera efter plats",
+  "myGardenGroupByCategory": "Gruppera efter kategori",
+  "myGardenShowingCount": "Visar {shown} av {total}",
+  "@myGardenShowingCount": {
+    "placeholders": {
+      "shown": {},
+      "total": {}
+    }
+  },
+  "myGardenEmptyTitle": "Din trädgård är tom",
+  "myGardenEmptyBody": "Lägg till växter från databasen så börjar vi bygga din plantering.",
+  "myGardenEmptyCta": "Bläddra i växtdatabasen",
+  "myGardenAddPlant": "Lägg till växt",
+  "myGardenNoResults": "Inga växter matchar",
+  "myGardenNoResultsBody": "Pröva en annan sökning eller rensa filtren.",
+  "myGardenWateredNow": "Vattnad nyss",
+  "myGardenWateredToday": "Vattnad idag",
+  "myGardenWateredYesterday": "Vattnad igår",
+  "plantDatabaseTitle": "Växtdatabas",
+  "plantDatabaseSearchHint": "Sök växt",
+  "plantCategoryAll": "Alla",
+  "addPlantNow": "Lägg till i trädgården nu",
+  "addPlantNowBody": "Du har sått eller planterat — vi följer den från idag",
+  "addPlantSeason": "Lägg till i såningslistan",
+  "addPlantSeasonBody": "Du planerar att odla — vi pingar när det är dags att så",
+  "addPlantRemoveSeason": "Ta bort från såningslistan",
+  "addPlantRemoveSeasonBody": "Vi slutar påminna om sånings-fönstret",
+  "addedToGardenTitle": "{plant} är i din trädgård",
+  "@addedToGardenTitle": {
+    "placeholders": {
+      "plant": {}
+    }
+  },
+  "addedToGardenBodyPlain": "Vi följer den från idag och påminner om vatten och skörd.",
+  "addedToGardenBodyScheduled": "Vi följer den från idag. Notiser inkommande för: {list}.",
+  "@addedToGardenBodyScheduled": {
+    "placeholders": {
+      "list": {}
+    }
+  },
+  "addedToGardenCta": "Ta mig till min trädgård",
+  "phasePickerTitleNew": "Var är du i processen?",
+  "phasePickerTitleEdit": "Ändra status",
+  "phaseShowSimple": "Visa enklare alternativ",
+  "phaseShowMore": "Fler alternativ (för den vana odlaren)",
+  "phaseSimplePlanned": "Planerar att odla",
+  "phaseSimplePlannedBody": "Bara på listan — vi påminner när säsongen startar.",
+  "phaseSimpleGrowing": "Växer just nu",
+  "phaseSimpleGrowingBody": "Plantorna är på gång. Vi följer dem fram till skörd.",
+  "phaseSimpleHarvested": "Färdigskördad",
+  "phaseSimpleHarvestedBody": "Säsongen är klar för den här plantan.",
+  "perennialEstablishedTitle": "Sedan när har du den?",
+  "perennialEstablishedBody": "Behöver inte vara exakt – vi använder bara året.",
+  "perennialThisYear": "I år ({year})",
+  "@perennialThisYear": {
+    "placeholders": {
+      "year": {}
+    }
+  },
+  "perennialLastYear": "Förra året ({year})",
+  "@perennialLastYear": {
+    "placeholders": {
+      "year": {}
+    }
+  },
+  "perennialTwoYearsAgo": "Två år sedan ({year})",
+  "@perennialTwoYearsAgo": {
+    "placeholders": {
+      "year": {}
+    }
+  },
+  "perennialEarlier": "Tidigare (några år sedan)",
+  "statusPlanning": "Planerar",
+  "statusGrowingIndoors": "Förodlar inomhus",
+  "statusDirectSown": "Direktsådd ute",
+  "statusHardening": "Härdar av",
+  "statusOutdoors": "Står ute",
+  "statusReadyToHarvest": "Skördeklar",
+  "statusHarvested": "Skördad",
+  "statusDormant": "Vilande",
+  "sowingIndoors": "Inomhus",
+  "sowingDirect": "Direkt",
+  "sowingPlanta": "Planta",
+  "sunFull": "Full sol",
+  "sunPartial": "Halvskugga",
+  "sunShade": "Skugga",
+  "waterSparse": "Sparsam",
+  "waterRegular": "Regelbunden",
+  "waterAbundant": "Riklig",
+  "fertilizerLow": "Lågt",
+  "fertilizerMedium": "Medel",
+  "fertilizerHigh": "Högt",
+  "lifecycleAnnual": "Annuell",
+  "lifecycleBiennial": "Tvåårig",
+  "lifecyclePerennial": "Perenn",
+  "lifecycleTree": "Träd",
+  "lifecycleShrub": "Buske",
+  "categoryVegetables": "Grönsaker",
+  "categoryHerbs": "Kryddor & örter",
+  "categoryFlowers": "Blommor",
+  "categoryBerries": "Bär",
+  "categoryFruitTrees": "Fruktträd",
+  "categoryOther": "Övrigt",
+  "wateredNow": "Vattnad nu",
+  "wateredConfirmation": "Vattnad ✓",
+  "notWateredYet": "Inte vattnad än",
+  "wateredJustNow": "Nyss vattnad",
+  "wateredDaysAgo": "Vattnad för {days} dagar sedan",
+  "@wateredDaysAgo": {
+    "placeholders": {
+      "days": {}
+    }
+  },
+  "wateredWeeksAgo": "Vattnad för {weeks} veckor sedan",
+  "@wateredWeeksAgo": {
+    "placeholders": {
+      "weeks": {}
+    }
+  },
+  "journalTitle": "Dagbok",
+  "journalCount": "{count}",
+  "@journalCount": {
+    "placeholders": {
+      "count": {}
+    }
+  },
+  "journalAdd": "Lägg till",
+  "journalEmpty": "Inga inlägg ännu — börja dokumentera tillväxten med foton och korta anteckningar.",
+  "journalNoteTitle": "Anteckning",
+  "journalNoteBody": "Vad hände idag? Bladlöss, första blomman, beskärning…",
+  "journalNoteHint": "Skriv en kort anteckning…",
+  "journalSave": "Spara",
+  "journalDeletePhoto": "Ta bort foto?",
+  "journalDeletePhotoBody": "Bilden raderas från enheten.",
+  "journalDeleteNote": "Ta bort anteckning?",
+  "journalDeleteNoteBody": "Anteckningen försvinner.",
+  "journalManage": "Hantera inlägg",
+  "actionTakePhoto": "Ta foto",
+  "actionPickFromLibrary": "Välj från bibliotek",
+  "actionWriteNote": "Skriv anteckning",
+  "harvestTitle": "Skörd",
+  "harvestLog": "Logga skörd",
+  "harvestEmpty": "Logga vad du skördar så bygger appen statistik år för år.",
+  "harvestTotalLabel": "Total: {amount} {unit}",
+  "@harvestTotalLabel": {
+    "placeholders": {
+      "amount": {},
+      "unit": {}
+    }
+  },
+  "harvestEstimatedSek": "~{amount} kr",
+  "@harvestEstimatedSek": {
+    "placeholders": {
+      "amount": {}
+    }
+  },
+  "nextStepBecomeIndoor": "Jag har förodlat inomhus",
+  "nextStepBecomeDirect": "Jag har direktsått",
+  "nextStepBecomePlanted": "Jag har utplanterat",
+  "nextStepHardenedToPlanted": "Plantorna är utplanterade",
+  "nextStepReadyForHarvest": "Klar för skörd",
+  "nextStepHarvested": "Skördad",
+  "secondaryChangeStatus": "Ändra status",
+  "secondaryRemove": "Ta bort",
+  "secondaryRemoveConfirmTitle": "Ta bort från trädgården?",
+  "secondaryRemoveConfirmBody": "{plant} och alla påminnelser tas bort. Detta kan inte ångras.",
+  "@secondaryRemoveConfirmBody": {
+    "placeholders": {
+      "plant": {}
+    }
+  },
+  "buttonCancel": "Avbryt",
+  "buttonRemove": "Ta bort",
+  "buttonSave": "Spara",
+  "buttonNext": "Nästa",
+  "buttonStart": "Sätt igång",
+  "buttonSkip": "Hoppa över",
+  "locationLabel": "Plats",
+  "locationAdd": "Lägg till plats",
+  "locationPickerTitle": "Var står den?",
+  "locationPickerBody": "T.ex. \"norra rabatten\", \"växthuset\", \"balkongen\".",
+  "locationReuse": "Använd igen",
+  "settingsTitle": "Inställningar",
+  "settingsPremiumActive": "Premium aktivt",
+  "settingsPremiumUpgrade": "Uppgradera till Premium",
+  "settingsPremiumUnlock": "Lås upp alla funktioner",
+  "settingsMyGardens": "Mina trädgårdar",
+  "settingsMyGardensSubtitle": "Aktiv: {emoji} {name}",
+  "@settingsMyGardensSubtitle": {
+    "placeholders": {
+      "emoji": {},
+      "name": {}
+    }
+  },
+  "settingsMyGardensEmpty": "Lägg till din första trädgård",
+  "settingsNotifications": "Påminnelser",
+  "settingsNotificationsBody": "Frostvarningar och planteringstider",
+  "settingsMorningHour": "Morgon-tid för påminnelser",
+  "settingsMorningHourBody": "Trädgårdsmorgon-pingar fyrar kl {hour}:00",
+  "@settingsMorningHourBody": {
+    "placeholders": {
+      "hour": {}
+    }
+  },
+  "settingsLargeText": "Stor text",
+  "settingsLargeTextBody": "Lite större text i hela appen",
+  "settingsSimpleStatus": "Enkel status",
+  "settingsSimpleStatusBody": "Visa endast 3 huvudtillstånd (planerar / växer / skördad). Stäng av för fullständig livscykel.",
+  "settingsPestLibrary": "Skadedjur & sjukdomar",
+  "settingsPestLibraryBody": "Bibliotek över vanliga problem",
+  "settingsIntro": "Visa introduktion",
+  "settingsIntroBody": "Snabbgenomgång av Pluss-knappen, säsongsplaneraren och hur appen jobbar",
+  "settingsBackup": "Säkerhetskopia",
+  "settingsBackupBody": "Exportera trädgården och skörden – spara på iCloud Drive eller mejla till dig själv",
+  "settingsRestorePurchases": "Återställ köp",
+  "settingsPrivacyPolicy": "Integritetspolicy",
+  "settingsTerms": "Användarvillkor (EULA)",
+  "settingsSupport": "Support",
+  "settingsFeedback": "Skicka feedback",
+  "settingsFeedbackBody": "Buggar, funktionsönskemål eller bara ett vänligt hej",
+  "gardensTitle": "Mina trädgårdar",
+  "gardensActive": "AKTIV",
+  "gardensAddNew": "Lägg till ny trädgård",
+  "gardensEdit": "Redigera",
+  "gardensNoLocation": "Ingen plats",
+  "gardensPlantCount": "{count, plural, =1{1 växt} other{{count} växter}}",
+  "@gardensPlantCount": {
+    "placeholders": {
+      "count": {}
+    }
+  },
+  "gardensSwitcherTitle": "Byt trädgård",
+  "gardensManage": "Hantera trädgårdar",
+  "gardensZoneLine": "Zon {zone}",
+  "@gardensZoneLine": {
+    "placeholders": {
+      "zone": {}
+    }
+  },
+  "gardensNewTitle": "Ny trädgård",
+  "gardensEditTitle": "Redigera {name}",
+  "@gardensEditTitle": {
+    "placeholders": {
+      "name": {}
+    }
+  },
+  "gardensNamePlaceholder": "Kolonilotten, Balkongen, Sommarstället…",
+  "gardensCityLabel": "Stad / närmsta ort",
+  "gardensCreateButton": "Skapa trädgård",
+  "gardensSaveButton": "Spara",
+  "gardensFooterHint": "Varje trädgård har egen zon, växtlista och väder. Byt aktiv trädgård genom att trycka på den i listan – allt anpassas direkt.",
+  "gardensDeleteTitle": "Ta bort {name}?",
+  "@gardensDeleteTitle": {
+    "placeholders": {
+      "name": {}
+    }
+  },
+  "gardensDeletePlainBody": "Trädgården tas bort.",
+  "gardensDeleteWithPlantsBody": "{count, plural, =1{1 växt} other{{count} växter}} flyttas till din standard-trädgård. Trädgården tas bort.",
+  "@gardensDeleteWithPlantsBody": {
+    "placeholders": {
+      "count": {}
+    }
+  },
+  "introPage1Title": "Lägg till växter du odlar",
+  "introPage1Body": "Tryck + på en växt för att lägga till den i din trädgård. Vi följer den från sådd till skörd och påminner när det är dags att vattna, beskära eller plantera om.",
+  "introPage1Hint": "Hittar du växten? Använd \"Växter\"-fliken i botten.",
+  "introPage2Title": "Planera årets säsong",
+  "introPage2Body": "Tryck på bokmärket för att lägga växten på din säsongs-lista. Du får en notis i februari/mars när det är dags att börja förodla, och i april när det är dags att direktså.",
+  "introPage2Hint": "Säsongs-listan ser du på startsidan.",
+  "introPage3Title": "Stenkoll på din trädgård",
+  "introPage3Body": "Hem-sidan visar väder, torrperioder och vad du ska göra denna månad. På \"Min trädgård\"-fliken kan du se årets statistik, växtföljd och uppskattat värde av din skörd.",
+  "introPage3Hint": "Skadedjur & sjukdomar finns i Inställningar när du behöver dem.",
+  "pestLibraryTitle": "Skadedjur & sjukdomar",
+  "pestLibrarySearchHint": "Sök efter symptom eller växt",
+  "pestLibraryFilterPests": "Skadedjur",
+  "pestLibraryFilterDiseases": "Sjukdomar",
+  "pestLibraryFilterDamage": "Skada",
+  "pestLibraryNoMatch": "Inget matchade. Prova med ett symptom som \"fläckar\" eller \"hål\".",
+  "pestSectionMild": "Mild åtgärd",
+  "pestSectionStrong": "Effektiv åtgärd",
+  "pestSectionPrevent": "Förebygg",
+  "pestAffects": "Drabbar",
+  "statsTitle": "Min trädgård {year}",
+  "@statsTitle": {
+    "placeholders": {
+      "year": {}
+    }
+  },
+  "statsHero1": "Du har odlat fram ungefär {sek} kr i mat",
+  "@statsHero1": {
+    "placeholders": {
+      "sek": {}
+    }
+  },
+  "statsHero2": "Du har {count} växter på gång",
+  "@statsHero2": {
+    "placeholders": {
+      "count": {}
+    }
+  },
+  "statsHeroEmpty": "Säsongen väntar",
+  "statsTilePlants": "Växter",
+  "statsTileSpecies": "Olika arter",
+  "statsTileHarvested": "Skördade",
+  "statsHarvestPanelTitle": "Skörd hittills i år",
+  "statsValueLine": "Estimerat värde: ~{sek} kr",
+  "@statsValueLine": {
+    "placeholders": {
+      "sek": {}
+    }
+  },
+  "statsValueDisclaimer": "Baserat på ungefärliga svenska butikspriser per kategori. Inkluderar inte arbetstid eller frökostnader.",
+  "statsTopPanelTitle": "Årets bästa avkastning",
+  "statsLocationPanelTitle": "Var i trädgården",
+  "statsRotationPanelTitle": "Växtföljd",
+  "statsRotationBody": "Vad som odlats var, per år. Repetitioner markeras.",
+  "statsReflectionTitle": "Reflektion",
+  "statsEmptyTitle": "Säsongen har inte startat än",
+  "statsEmptyBody": "Lägg till växter och registrera skördar – så fyller vi den här sidan med årets resultat.",
+  "tabTodo": "Att göra",
+  "todoSectionToday": "IDAG",
+  "todoSectionWeek": "DENNA VECKA",
+  "todoSectionMonth": "DENNA MÅNAD",
+  "todoSectionDoneToday": "KLART IDAG ✓",
+  "todoStatToday": "idag",
+  "todoStatWeek": "denna vecka",
+  "todoStatDone": "klart",
+  "todoEmptyTitle": "Allt under kontroll",
+  "todoEmptyBody": "Inget akut just nu. Lägg till växter i din trädgård för att börja få dagliga uppgifter.",
+  "todoSwipeDone": "Klar",
+  "todoSwipeSnooze": "Skjut upp",
+  "progressReadyToHarvest": "Redo att skördas",
+  "progressHarvestNow": "Skörda nu",
+  "progressDaysLeft": "{days} dagar kvar",
+  "@progressDaysLeft": {
+    "placeholders": {
+      "days": {}
+    }
+  },
+  "progressApproxDaysLeft": "~{days} dagar kvar",
+  "@progressApproxDaysLeft": {
+    "placeholders": {
+      "days": {}
+    }
+  },
+  "climateCardTitle": "Klimat senaste 14 dagar",
+  "climateStatAvg": "Medeldygn",
+  "climateStatMinMax": "Min/max",
+  "climateStatGdd": "GDD",
+  "climateInterpretWaking": "Trädgården vaknar.",
+  "climateInterpretEarly": "Mycket tidig säsong – bara köldtåligt växer (lök, ärtor, sallad).",
+  "climateInterpretSpring": "Vårsäsong – direktsådd grönsaker etablerar sig, värmekänsliga ska vänta.",
+  "climateInterpretMidSpring": "Mid-vår – tomat och paprika kan ut med fiberduk eller i växthus.",
+  "climateInterpretFullGrowth": "Fullt växttryck – allt mognar snabbt, vattna och gödsla.",
+  "climateInterpretHot": "Het period – var noga med vatten på unga plantor.",
+  "climateTeaserTitle": "Klimatkort (Premium)",
+  "climateTeaserBody": "Medel-dygnstemp + Growing Degree Days för bättre tajming av sådd och skörd.",
+  "weatherSetLocationHint": "Ange plats i inställningarna",
+  "weatherFrostWarning": "Frostvarning {date} – {temp}°C",
+  "dryPeriodBodyWithThirsty": "Bara {past} mm regn senaste 14 dagarna och {next} mm väntas kommande veckan. Vattna {names}{more} — torrkänsliga växter klarar sig längre.",
+  "dryPeriodBodyGeneral": "Bara {past} mm regn senaste 14 dagarna och {next} mm väntas kommande veckan. Vattna noga, särskilt nyplanterade och i krukor.",
+  "dryPeriodMoreSuffix": " m.fl.",
+  "@weatherFrostWarning": {
+    "placeholders": {
+      "date": {
+        "type": "String"
+      },
+      "temp": {
+        "type": "String"
+      }
+    }
+  },
+  "@dryPeriodBodyWithThirsty": {
+    "placeholders": {
+      "past": {
+        "type": "String"
+      },
+      "next": {
+        "type": "String"
+      },
+      "names": {
+        "type": "String"
+      },
+      "more": {
+        "type": "String"
+      }
+    }
+  },
+  "@dryPeriodBodyGeneral": {
+    "placeholders": {
+      "past": {
+        "type": "String"
+      },
+      "next": {
+        "type": "String"
+      }
+    }
+  },
+  "myGardenWaterAllTooltip": "Vattna alla utomhus-växter",
+  "myGardenSeasonStatsTooltip": "Min säsong {year}",
+  "myGardenGroupTooltip": "Gruppera efter",
+  "myGardenNoOutdoorPlants": "Inga utomhus-växter att vattna just nu.",
+  "myGardenWaterAllTitle": "Vattna alla?",
+  "myGardenWaterAllConfirm": "Markerar {count} utomhus-växter som vattnade just nu.",
+  "myGardenWaterAllCancel": "Avbryt",
+  "myGardenWaterAllAction": "Vattna alla",
+  "myGardenWaterAllDone": "{count} växter vattnade ✓",
+  "myGardenLocationNone": "Utan plats",
+  "myGardenCategoryOther": "Övrigt",
+  "myGardenStatusSince": "{status} • sedan {year}",
+  "myGardenStatusOnDate": "{status} • {date}",
+  "@myGardenSeasonStatsTooltip": {
+    "placeholders": {
+      "year": {
+        "type": "String"
+      }
+    }
+  },
+  "@myGardenWaterAllConfirm": {
+    "placeholders": {
+      "count": {
+        "type": "String"
+      }
+    }
+  },
+  "@myGardenWaterAllDone": {
+    "placeholders": {
+      "count": {
+        "type": "String"
+      }
+    }
+  },
+  "@myGardenStatusSince": {
+    "placeholders": {
+      "status": {
+        "type": "String"
+      },
+      "year": {
+        "type": "String"
+      }
+    }
+  },
+  "@myGardenStatusOnDate": {
+    "placeholders": {
+      "status": {
+        "type": "String"
+      },
+      "date": {
+        "type": "String"
+      }
+    }
+  },
+  "settingsMyGardensWithCount": "Mina trädgårdar ({count})",
+  "settingsPlanMonthly": "Månadsprenumeration",
+  "settingsPlanYearly": "Årsprenumeration",
+  "settingsPlanLifetime": "Livstidsköp",
+  "settingsPlanFree": "Gratis",
+  "settingsStarterKit": "🛒 Nybörjarkit",
+  "settingsMorningHourPickerTitle": "När vill du få morgon-pingen?",
+  "settingsMorningHourPickerBody": "Trädgårdsmorgon-summeringen och alla planteringstider fyrar denna timme. Ingenting väcker dig innan.",
+  "settingsHourFormat": "Kl {hour}:00",
+  "settingsBackupFailed": "Kunde inte skapa backup: {error}",
+  "settingsFeedbackSubject": "Plantera feedback",
+  "settingsFeedbackBodyTemplate": "Hej!\n\nFeedback / fråga / buggrapport:\n\n\n— Skickat från Plantera {version}",
+  "@settingsMyGardensWithCount": {
+    "placeholders": {
+      "count": {
+        "type": "String"
+      }
+    }
+  },
+  "@settingsHourFormat": {
+    "placeholders": {
+      "hour": {
+        "type": "String"
+      }
+    }
+  },
+  "@settingsBackupFailed": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "@settingsFeedbackBodyTemplate": {
+    "placeholders": {
+      "version": {
+        "type": "String"
+      }
+    }
+  },
+  "gardensDelete": "Ta bort",
+  "gardensCancel": "Avbryt",
+  "gardensNameLabel": "Namn",
+  "gardensZoneDescription": "Zon {zone} – {description}",
+  "gardensCityFormat": "{city} · {zone}",
+  "@gardensZoneDescription": {
+    "placeholders": {
+      "zone": {
+        "type": "String"
+      },
+      "description": {
+        "type": "String"
+      }
+    }
+  },
+  "@gardensCityFormat": {
+    "placeholders": {
+      "city": {
+        "type": "String"
+      },
+      "zone": {
+        "type": "String"
+      }
+    }
+  },
+  "introSkip": "Hoppa över",
+  "introNext": "Nästa",
+  "introStart": "Sätt igång",
+  "onboardingWelcome": "Välkommen till Plantera",
+  "onboardingBody": "Välj din plats för personliga råd, frostvarningar och rätt såtider för just din odlingszon.",
+  "onboardingUseGps": "Använd min plats",
+  "onboardingLocating": "Hämtar plats…",
+  "onboardingOrPickCity": "eller välj stad",
+  "onboardingZoneSubtitle": "Zon {zone}",
+  "onboardingErrorLocationServicesOff": "Platstjänster är avstängda",
+  "onboardingErrorLocationDenied": "Platsbehörighet nekad",
+  "@onboardingZoneSubtitle": {
+    "placeholders": {
+      "zone": {
+        "type": "String"
+      }
+    }
+  },
+  "phasePerennialHaveIt": "Jag har den i trädgården",
+  "phasePerennialHaveItBody": "Vi visar förväntad skörd och påminner om beskärning, gödning och annan säsongs-omsorg.",
+  "phasePerennialPlanning": "Planerar att plantera",
+  "phasePerennialPlanningBody": "Bara på listan tills du faktiskt planterar — påminnelser kommer i god tid.",
+  "phaseDetailedPlanned": "Planerar att odla",
+  "phaseDetailedPlannedBody": "Bara för listan — påminnelser kommer i god tid när säsongen startar.",
+  "phaseDetailedPresow": "Jag förodlar inomhus",
+  "phaseDetailedPresowBody": "Plantorna växer inomhus. Få härda av-påminnelse om 5 veckor.",
+  "phaseDetailedDirectsow": "Jag har direktsått ute",
+  "phaseDetailedDirectsowBody": "Sått direkt på växtplats. Skördepåminnelse återstår.",
+  "phaseDetailedPlantout": "Plantorna är utplanterade",
+  "phaseDetailedPlantoutBody": "Står på sin slutliga växtplats. Skördepåminnelse återstår.",
+  "phaseFinishedReady": "Klar för skörd",
+  "phaseFinishedReadyBody": "Markeras som skördeklar nu.",
+  "phaseFinishedHarvested": "Skördad",
+  "phaseFinishedHarvestedBody": "Säsongen är klar — påminnelser pausas.",
+  "phaseFinishedDormant": "Vilande",
+  "phaseFinishedDormantBody": "Plantan är inte aktiv just nu.",
+  "phaseDateHelpPresow": "Vilket datum började du odla denna planta?",
+  "phaseDateHelpDirectsow": "Vilket datum direktsådde du?",
+  "phaseDateHelpPlantout": "Vilket datum kom plantorna ut?",
+  "phaseDateHelpDefault": "Datum",
+  "phasePerennialYearTitle": "Sedan när har du den?",
+  "phasePerennialYearBody": "Behöver inte vara exakt – vi använder bara året.",
+  "phasePerennialYearThis": "I år ({year})",
+  "phasePerennialYearLast": "Förra året ({year})",
+  "phasePerennialYearTwo": "Två år sedan ({year})",
+  "phasePerennialYearOlder": "Tidigare (några år sedan)",
+  "@phasePerennialYearThis": {
+    "placeholders": {
+      "year": {
+        "type": "String"
+      }
+    }
+  },
+  "@phasePerennialYearLast": {
+    "placeholders": {
+      "year": {
+        "type": "String"
+      }
+    }
+  },
+  "@phasePerennialYearTwo": {
+    "placeholders": {
+      "year": {
+        "type": "String"
+      }
+    }
+  },
+  "plantDetailTabOverview": "Översikt",
+  "plantDetailTabMyPlant": "Min planta",
+  "plantDetailTabCare": "Omsorg",
+  "plantDetailAddCta": "Lägg till i min trädgård",
+  "plantDetailRemoveCta": "Ta bort från trädgården",
+  "plantDetailRemoveTitle": "Ta bort från trädgården?",
+  "plantDetailRemoveBody": "Detta kan inte ångras.",
+  "plantDetailCancel": "Avbryt",
+  "plantDetailDelete": "Ta bort",
+  "plantDetailSave": "Spara",
+  "plantDetailReset": "Återställ",
+  "plantDetailReuse": "Använd igen",
+  "plantDetailWaterNowSuffix": "Vattnad nu",
+  "plantDetailWaterTapHint": "Tryck när du vattnar för att hålla koll",
+  "plantDetailWaterDoneSnack": "Vattnad ✓",
+  "plantDetailWaterNotYet": "Inte vattnad än",
+  "plantDetailWaterJust": "Nyss vattnad",
+  "plantDetailWaterToday": "Vattnad idag",
+  "plantDetailWaterYesterday": "Vattnad igår",
+  "plantDetailUpcomingCareTitle": "📅  KOMMANDE OMSORG",
+  "plantDetailDueNow": "Dags nu",
+  "plantDetailEditPostsTooltip": "Hantera inlägg",
+  "plantDetailNoteHint": "Skriv en kort anteckning…",
+  "plantDetailNoteTitle": "Anteckning",
+  "plantDetailNoteSubtitle": "Vad hände idag? Bladlöss, första blomman, beskärning…",
+  "plantDetailTakePhoto": "Ta foto",
+  "plantDetailPickLibrary": "Välj från bibliotek",
+  "plantDetailWriteNote": "Skriv anteckning",
+  "plantDetailUseEmojiAgain": "Använd emoji igen",
+  "plantDetailSaveImageError": "Kunde inte spara bild: {error}",
+  "plantDetailSavePhotoError": "Kunde inte spara foto: {error}",
+  "plantDetailDeletePhotoTitle": "Ta bort foto?",
+  "plantDetailDeleteNoteTitle": "Ta bort anteckning?",
+  "plantDetailDeletePhotoBody": "Bilden raderas från enheten.",
+  "plantDetailDeleteNoteBody": "Anteckningen försvinner.",
+  "plantDetailAdd": "Lägg till",
+  "plantDetailNoPostsBody": "Inga inlägg ännu — börja dokumentera tillväxten med foton och korta anteckningar.",
+  "plantDetailChangeStatus": "Ändra status",
+  "plantDetailLocationLabel": "Plats",
+  "plantDetailSowingMethodChip": "Sår: {method}",
+  "plantDetailSowingMethodSnack": "Sårmetod: {method}",
+  "plantDetailDateHelp": "Vilket datum?",
+  "plantDetailHowSowTitle": "Hur sår du?",
+  "plantDetailHowSowBody": "Avgör vilka påminnelser du får.",
+  "plantDetailLocationTitle": "Var står den?",
+  "plantDetailLocationBody": "T.ex. \"norra rabatten\", \"växthuset\", \"balkongen\".",
+  "plantDetailHarvestOffsetTitle": "Justera skördetid",
+  "plantDetailHarvestOffsetBody": "Räknaren ligger fel? Lägg till eller dra av dagar — sparas på just denna planta.",
+  "plantDetailReadyToHarvest": "Redo att skördas",
+  "plantDetailNextStepPresow": "Jag har förodlat inomhus",
+  "plantDetailNextStepDirectsow": "Jag har direktsått",
+  "plantDetailNextStepPlantout": "Jag har utplanterat",
+  "plantDetailNextStepPlantedOut": "Plantorna är utplanterade",
+  "plantDetailNextStepHarvestReady": "Klar för skörd",
+  "plantDetailNextStepHarvested": "Skördad",
+  "plantDetailHowToTitle": "Så här gör du",
+  "plantDetailTipsTitle": "Tips",
+  "plantDetailPestsTitle": "Skadedjur att bevaka",
+  "plantDetailNoCareTips": "Inga skötselråd tillgängliga ännu.",
+  "plantDetailInfoSun": "Sol",
+  "plantDetailInfoWater": "Vatten",
+  "plantDetailInfoFertilizer": "Gödsel",
+  "plantDetailInfoFrost": "Tål till",
+  "plantDetailInfoSpacing": "Avstånd",
+  "plantDetailInfoHarvest": "Skörd",
+  "plantDetailHarvestSection": "🥕  Skörd",
+  "plantDetailToolsSection": "🛒 Verktyg och tillbehör",
+  "plantDetailSeasonSection": "Säsong",
+  "plantDetailPhasePresow": "Förodla",
+  "plantDetailPhaseDirectsow": "Direktså",
+  "plantDetailPhasePlantout": "Plantera ut",
+  "plantDetailPhaseHarvest": "Skörd",
+  "plantDetailZoneWarningBody": "Det kan gå – men du behöver troligen vinterskydd eller en varmare plats.",
+  "@plantDetailSaveImageError": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "@plantDetailSavePhotoError": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "@plantDetailSowingMethodChip": {
+    "placeholders": {
+      "method": {
+        "type": "String"
+      }
+    }
+  },
+  "@plantDetailSowingMethodSnack": {
+    "placeholders": {
+      "method": {
+        "type": "String"
+      }
+    }
+  },
+  "plantDetailDateAdded": "Tillagd {date}",
+  "plantDetailDateInGardenSince": "I trädgården sedan {year}",
+  "plantDetailDatePlanted": "Planterad {date}",
+  "plantDetailHarvestOffsetSubtitle": "Justera skördetid",
+  "@plantDetailDateAdded": {
+    "placeholders": {
+      "date": {
+        "type": "String"
+      }
+    }
+  },
+  "@plantDetailDateInGardenSince": {
+    "placeholders": {
+      "year": {
+        "type": "String"
+      }
+    }
+  },
+  "@plantDetailDatePlanted": {
+    "placeholders": {
+      "date": {
+        "type": "String"
+      }
+    }
+  },
+  "plantDetailZoneWarning": "Den här växten är inte testad för zon {zone}. Det kan gå – men du behöver troligen vinterskydd eller en varmare plats.",
+  "@plantDetailZoneWarning": {
+    "placeholders": {
+      "zone": {
+        "type": "String"
+      }
+    }
+  },
+  "harvestSectionTitle": "🥕 Skörd",
+  "harvestRemoveTitle": "Ta bort post?",
+  "harvestRemoveBody": "{amount} {unit} från {date} tas bort.",
+  "harvestMoreEntries": "+ {count} äldre poster",
+  "harvestAddTitle": "Logga skörd — {plant}",
+  "harvestAmountLabel": "Mängd",
+  "harvestUnitLabel": "Enhet",
+  "harvestNotesLabel": "Anteckning (valfritt)",
+  "harvestErrorAmountTooLow": "Ange en mängd större än 0",
+  "harvestErrorFutureDate": "Du kan inte logga skörd i framtiden",
+  "commonCancel": "Avbryt",
+  "commonDelete": "Ta bort",
+  "commonSave": "Spara",
+  "@harvestRemoveBody": {
+    "placeholders": {
+      "amount": {
+        "type": "String"
+      },
+      "unit": {
+        "type": "String"
+      },
+      "date": {
+        "type": "String"
+      }
+    }
+  },
+  "@harvestMoreEntries": {
+    "placeholders": {
+      "count": {
+        "type": "String"
+      }
+    }
+  },
+  "@harvestAddTitle": {
+    "placeholders": {
+      "plant": {
+        "type": "String"
+      }
+    }
+  },
+  "pestTypeLabelDisease": "SJUKDOM",
+  "pestTypeLabelDamage": "SKADA",
+  "pestTypeLabelPest": "SKADEDJUR"
+}

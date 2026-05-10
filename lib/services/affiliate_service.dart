@@ -77,7 +77,7 @@ class AffiliateService {
   /// Returns contextual products for a specific plant.
   static List<AffiliateProduct> productsForPlant(Plant plant) {
     final seeds = AffiliateProduct(
-      plant.kategori.emoji,
+      plant.emoji,
       '${plant.namnSv} – frön',
       plant.amazonSokord,
     );

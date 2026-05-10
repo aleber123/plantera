@@ -48,6 +48,8 @@ class AdService {
   AppOpenAd? _appOpenAd;
   bool _isShowingAppOpenAd = false;
   DateTime? _appOpenAdLoadTime;
+  bool _showAppOpenAdOnLoad = false;
+  DateTime? _lastAppOpenAdShown;
 
   Future<void> initialize() async {
     if (kIsWeb) return;
@@ -249,13 +251,31 @@ class AdService {
         onAdLoaded: (ad) {
           _appOpenAd = ad;
           _appOpenAdLoadTime = DateTime.now();
+          if (_showAppOpenAdOnLoad) {
+            _showAppOpenAdOnLoad = false;
+            showAppOpenAd();
+          }
         },
         onAdFailedToLoad: (error) {
           debugPrint('[AdService] App open failed: ${error.message}');
           _appOpenAd = null;
+          _showAppOpenAdOnLoad = false;
         },
       ),
     );
+  }
+
+  /// Show now if loaded; otherwise queue to fire as soon as the ad loads.
+  /// This is the cold-start path — most sessions are cold starts and the
+  /// resume-only trigger pattern misses them entirely.
+  void showAppOpenAdWhenReady() {
+    if (kIsWeb) return;
+    if (_isAppOpenAdAvailable) {
+      showAppOpenAd();
+    } else {
+      _showAppOpenAdOnLoad = true;
+      loadAppOpenAd();
+    }
   }
 
   bool get _isAppOpenAdAvailable {
@@ -263,14 +283,23 @@ class AdService {
     return DateTime.now().difference(_appOpenAdLoadTime!).inHours < 4;
   }
 
+  /// Apple/Google guideline: don't show on every brief resume (control
+  /// center, notification center). Skip if shown within last 30s.
+  static const Duration _appOpenMinGap = Duration(seconds: 30);
+
   Future<void> showAppOpenAd() async {
     if (kIsWeb) return;
     if (_isShowingAppOpenAd) return;
+    if (_lastAppOpenAdShown != null &&
+        DateTime.now().difference(_lastAppOpenAdShown!) < _appOpenMinGap) {
+      return;
+    }
     if (!_isAppOpenAdAvailable) {
       loadAppOpenAd();
       return;
     }
     _isShowingAppOpenAd = true;
+    _lastAppOpenAdShown = DateTime.now();
     _appOpenAd!.fullScreenContentCallback = FullScreenContentCallback(
       onAdDismissedFullScreenContent: (ad) {
         ad.dispose();

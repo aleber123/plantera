@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
+import '../l10n/app_localizations.dart';
 import '../models/weather.dart';
 import '../services/weather_service.dart';
 import '../services/zone_service.dart';
-import '../utils/constants.dart';
 
 class WeatherCard extends StatelessWidget {
   final WeatherService weather;
@@ -21,13 +22,15 @@ class WeatherCard extends StatelessWidget {
         ),
       );
     }
+    final l10n = AppLocalizations.of(context);
+    final localeName = Localizations.localeOf(context).toLanguageTag();
     if (weather.forecast.isEmpty) {
       return Card(
         margin: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
         child: ListTile(
           leading: const Icon(Icons.cloud_off),
-          title: const Text('Väder ej tillgängligt'),
-          subtitle: Text(weather.error ?? 'Ange plats i inställningarna'),
+          title: Text(l10n.weatherUnavailable),
+          subtitle: Text(weather.error ?? l10n.weatherSetLocationHint),
         ),
       );
     }
@@ -82,8 +85,10 @@ class WeatherCard extends StatelessWidget {
                     const SizedBox(width: 8),
                     Expanded(
                       child: Text(
-                        'Frostvarning ${_shortDate(frost.date)} – '
-                        '${frost.minTempC.toStringAsFixed(0)}°C',
+                        l10n.weatherFrostWarning(
+                          DateFormat('d MMM', localeName).format(frost.date),
+                          frost.minTempC.toStringAsFixed(0),
+                        ),
                         style: const TextStyle(fontSize: 13),
                       ),
                     ),
@@ -98,7 +103,8 @@ class WeatherCard extends StatelessWidget {
                 scrollDirection: Axis.horizontal,
                 itemCount: weather.forecast.length,
                 separatorBuilder: (ctx, i) => const SizedBox(width: 10),
-                itemBuilder: (ctx, i) => _dayTile(weather.forecast[i]),
+                itemBuilder: (ctx, i) =>
+                    _dayTile(weather.forecast[i], localeName),
               ),
             ),
           ],
@@ -107,7 +113,7 @@ class WeatherCard extends StatelessWidget {
     );
   }
 
-  Widget _dayTile(WeatherDay d) {
+  Widget _dayTile(WeatherDay d, String localeName) {
     return Container(
       width: 58,
       padding: const EdgeInsets.symmetric(vertical: 6, horizontal: 4),
@@ -118,7 +124,7 @@ class WeatherCard extends StatelessWidget {
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          Text(_weekdayShort(d.date),
+          Text(DateFormat.E(localeName).format(d.date).toLowerCase(),
               style: const TextStyle(fontSize: 11, fontWeight: FontWeight.w600)),
           const SizedBox(height: 2),
           Icon(_iconFor(d.smhiSymbolCode), size: 18),
@@ -129,14 +135,6 @@ class WeatherCard extends StatelessWidget {
       ),
     );
   }
-
-  static String _weekdayShort(DateTime d) {
-    const days = ['mån', 'tis', 'ons', 'tor', 'fre', 'lör', 'sön'];
-    return days[d.weekday - 1];
-  }
-
-  static String _shortDate(DateTime d) =>
-      '${d.day} ${AppConstants.monthShortSv[d.month]}';
 
   static IconData _iconFor(int symbol) {
     if (symbol <= 2) return Icons.wb_sunny;

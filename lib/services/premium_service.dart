@@ -15,6 +15,16 @@ class PremiumService extends ChangeNotifier {
 
   static const String _premiumKey = 'is_premium_lifetime';
   static const String _planKey = 'premium_plan';
+  static const String _subPlanKey = 'sub_plan';
+  static const String _subActivatedAtKey = 'sub_activated_at_ms';
+
+  /// Local-clock grace window for subscriptions. StoreKit remains the
+  /// source of truth — every launch we re-call restorePurchases so
+  /// renewals refresh the activation stamp and cancellations stop
+  /// extending it. The grace prevents premium from flipping to free if
+  /// the user is offline for a few days.
+  static const Duration _monthlyGrace = Duration(days: 32);
+  static const Duration _yearlyGrace = Duration(days: 367);
   static const String _tempPremiumExpiryKey = 'temp_premium_expiry';
 
   static const String monthlyId =
@@ -33,8 +43,8 @@ class PremiumService extends ChangeNotifier {
   // Fallback prices in SEK – real prices from App Store Connect.
   static const Map<PremiumPlan, double> _fallbackPricesSek = {
     PremiumPlan.monthly: 39,
-    PremiumPlan.yearly: 249,
-    PremiumPlan.lifetime: 499,
+    PremiumPlan.yearly: 199,
+    PremiumPlan.lifetime: 399,
   };
 
   final InAppPurchase _iap = InAppPurchase.instance;
@@ -47,11 +57,45 @@ class PremiumService extends ChangeNotifier {
   bool _purchaseInProgress = false;
   String? _purchaseError;
   DateTime? _tempPremiumExpiry;
+  Timer? _tempExpiryTicker;
+  PremiumPlan? _activeSubPlan;
+  DateTime? _subActivatedAt;
 
-  bool get isPremium => _isPremium || _isTempPremium;
+  bool get isPremium =>
+      _isPremium || _isTempPremium || _hasActiveSubscription;
   bool get _isTempPremium {
     if (_tempPremiumExpiry == null) return false;
     return DateTime.now().isBefore(_tempPremiumExpiry!);
+  }
+
+  /// True when a previously-confirmed monthly/yearly purchase is still
+  /// inside its grace window. Set by [_verifyAndActivate] (called on
+  /// fresh purchase + on every restore on app launch). If the user
+  /// cancels and the next launch's restorePurchases doesn't refresh
+  /// the stamp, this expires automatically once the grace runs out.
+  bool get _hasActiveSubscription {
+    final plan = _activeSubPlan;
+    final at = _subActivatedAt;
+    if (plan == null || at == null) return false;
+    final grace = plan == PremiumPlan.yearly ? _yearlyGrace : _monthlyGrace;
+    return DateTime.now().isBefore(at.add(grace));
+  }
+
+  /// Schedules a single-shot timer that fires precisely when the temp
+  /// premium expires, so widgets get a refresh notification at the
+  /// flip-over instant — otherwise UI showing premium state goes stale
+  /// until the next user action.
+  void _scheduleTempExpiryNotify() {
+    _tempExpiryTicker?.cancel();
+    _tempExpiryTicker = null;
+    final expiry = _tempPremiumExpiry;
+    if (expiry == null) return;
+    final delta = expiry.difference(DateTime.now());
+    if (delta <= Duration.zero) return;
+    _tempExpiryTicker = Timer(delta, () {
+      _tempExpiryTicker = null;
+      notifyListeners();
+    });
   }
 
   PremiumPlan get currentPlan => _currentPlan;
@@ -66,6 +110,7 @@ class PremiumService extends ChangeNotifier {
     _tempPremiumExpiry = expiry;
     final prefs = await SharedPreferences.getInstance();
     await prefs.setInt(_tempPremiumExpiryKey, expiry.millisecondsSinceEpoch);
+    _scheduleTempExpiryNotify();
     notifyListeners();
   }
 
@@ -75,6 +120,21 @@ class PremiumService extends ChangeNotifier {
     final tempExpiry = prefs.getInt(_tempPremiumExpiryKey);
     if (tempExpiry != null) {
       _tempPremiumExpiry = DateTime.fromMillisecondsSinceEpoch(tempExpiry);
+      _scheduleTempExpiryNotify();
+    }
+
+    // Restore the cached subscription stamp. The grace window in
+    // [_hasActiveSubscription] prevents premium going dark while
+    // the user is offline; restorePurchases() below refreshes it on
+    // every successful launch.
+    final subPlanIndex = prefs.getInt(_subPlanKey);
+    final subAtMs = prefs.getInt(_subActivatedAtKey);
+    if (subPlanIndex != null && subAtMs != null) {
+      final plan = PremiumPlan.values[subPlanIndex];
+      if (plan == PremiumPlan.monthly || plan == PremiumPlan.yearly) {
+        _activeSubPlan = plan;
+        _subActivatedAt = DateTime.fromMillisecondsSinceEpoch(subAtMs);
+      }
     }
 
     final cachedPlanIndex = prefs.getInt(_planKey) ?? 0;
@@ -119,6 +179,19 @@ class PremiumService extends ChangeNotifier {
     }
     _products = response.productDetails;
     notifyListeners();
+  }
+
+  /// Manually re-fetch product details. Called from the paywall when the
+  /// user opens it — covers the case where the initial app-launch fetch
+  /// happened before StoreKit was warm (common in sandbox / TestFlight /
+  /// App Review environments where products propagate slowly).
+  Future<bool> reloadProducts() async {
+    if (!_storeAvailable) {
+      _storeAvailable = await _iap.isAvailable();
+      if (!_storeAvailable) return false;
+    }
+    await _loadProducts();
+    return _products.isNotEmpty;
   }
 
   void _onPurchaseUpdated(List<PurchaseDetails> purchases) async {
@@ -170,13 +243,23 @@ class PremiumService extends ChangeNotifier {
     }
 
     if (plan != PremiumPlan.free) {
-      _isPremium = true;
       _currentPlan = plan;
+      final prefs = await SharedPreferences.getInstance();
 
       if (plan == PremiumPlan.lifetime) {
-        final prefs = await SharedPreferences.getInstance();
+        _isPremium = true;
         await prefs.setBool(_premiumKey, true);
         await prefs.setInt(_planKey, plan.index);
+      } else {
+        // monthly / yearly: stamp activation so the grace window
+        // counts from now. Restoring an already-active sub on a fresh
+        // device launch refreshes this stamp every time, so a happy
+        // user is always inside the window.
+        _activeSubPlan = plan;
+        _subActivatedAt = DateTime.now();
+        await prefs.setInt(_subPlanKey, plan.index);
+        await prefs.setInt(
+            _subActivatedAtKey, _subActivatedAt!.millisecondsSinceEpoch);
       }
     }
 
@@ -287,12 +370,25 @@ class PremiumService extends ChangeNotifier {
   // --- Purchase ---
   Future<bool> purchase(PremiumPlan plan) async {
     if (!_storeAvailable) {
-      _purchaseError = 'store_not_available';
-      notifyListeners();
-      return false;
+      // StoreKit may not have been ready when the service first
+      // initialized — try probing again before giving up.
+      _storeAvailable = await _iap.isAvailable();
+      if (!_storeAvailable) {
+        _purchaseError = 'store_not_available';
+        notifyListeners();
+        return false;
+      }
     }
     final productId = _planToProductId(plan);
-    final product = _products.where((p) => p.id == productId).firstOrNull;
+    var product = _products.where((p) => p.id == productId).firstOrNull;
+    if (product == null) {
+      // Sandbox / TestFlight / App Review environments often deliver IAP
+      // metadata after the app has already loaded. Give StoreKit one
+      // more chance before reporting back to the UI.
+      debugPrint('IAP product missing — retrying queryProductDetails');
+      await _loadProducts();
+      product = _products.where((p) => p.id == productId).firstOrNull;
+    }
     if (product == null) {
       _purchaseError = 'product_not_found';
       notifyListeners();

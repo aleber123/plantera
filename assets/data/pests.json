@@ -1,0 +1,137 @@
+{
+  "version": 1,
+  "pests": [
+    {
+      "id": "bladlus",
+      "namn": "Bladlöss",
+      "emoji": "🐛",
+      "typ": "skadedjur",
+      "symptom": "Klibbiga blad, hopkrullade skott, små gröna/svarta löss på undersidor av blad. Myror som klättrar uppåt är ett tecken.",
+      "drabbar": ["tomat", "paprika", "ros", "vinbär", "fruktträd"],
+      "atgard_milt": "Spruta av med kraftig vattenstråle. Upprepa varje 3 dag i en vecka.",
+      "atgard_starkt": "Såpvatten (1 msk vanlig diskmedel per liter) på undersidan av blad. Eller släpp ut nyckelpigor.",
+      "forebygg": "Mata småfåglar – de äter löss. Plantera ringblommor som lockar skalbaggar."
+    },
+    {
+      "id": "spinnkvalster",
+      "namn": "Spinnkvalster",
+      "emoji": "🕷️",
+      "typ": "skadedjur",
+      "symptom": "Små vita prickar på blad, fina spindelnät under blad i värmen. Bladen blir gulmarmorerade och faller av.",
+      "drabbar": ["tomat", "gurka", "växthus-grödor"],
+      "atgard_milt": "Höj luftfuktigheten – spinnkvalster avskyr fukt. Spraya plantorna dagligen.",
+      "atgard_starkt": "Rapsolje-baserade preparat enligt anvisning. I växthus släpp loss rovkvalster.",
+      "forebygg": "Vattna jämnt, undvik torkstress. Ventilera växthuset varma dagar."
+    },
+    {
+      "id": "snigel",
+      "namn": "Mördarsnigel & vanlig snigel",
+      "emoji": "🐌",
+      "typ": "skadedjur",
+      "symptom": "Hål i blad, slemspår på morgonen. Salladsplantor och nyplanterat försvinner över natten.",
+      "drabbar": ["sallad", "kål", "jordgubbe", "dahlia", "hosta"],
+      "atgard_milt": "Plocka för hand på kvällen. Ölfälla (skål nedgrävd i jord, fyll med öl).",
+      "atgard_starkt": "Järnfosfat-pellets (godkänd i ekoodling). Sprid runt utsatta plantor.",
+      "forebygg": "Räfsa bort gömställen (löv, brädor). Kopparband runt höga bäddar fungerar bra."
+    },
+    {
+      "id": "kalmal",
+      "namn": "Kålmal & kålfjäril",
+      "emoji": "🦋",
+      "typ": "skadedjur",
+      "symptom": "Hål i kålblad, gröna larver på bladens undersida. Vita fjärilar fladdrar runt kålbädden.",
+      "drabbar": ["vitkål", "broccoli", "blomkål", "brysselkål", "grönkål"],
+      "atgard_milt": "Plocka larver för hand. Skaka av fjärilar tidigt på morgonen.",
+      "atgard_starkt": "Bacillus thuringiensis (Bt) – biologiskt godkänt. Spruta varje vecka.",
+      "forebygg": "Fiberduk över kålbädden från sådd till skörd – fjärilarna kommer aldrig fram."
+    },
+    {
+      "id": "morotsfluga",
+      "namn": "Morotsfluga",
+      "emoji": "🪰",
+      "typ": "skadedjur",
+      "symptom": "Bruna gångar i moroten, blast som vissnar. Småflugor svärmar runt morotsbädden i maj-juni.",
+      "drabbar": ["morot", "palsternacka", "selleri"],
+      "atgard_milt": "Inget bra sätt att rädda angripna rötter – ta bort och kompostera ej.",
+      "atgard_starkt": "Inga – fokus är förebyggande.",
+      "forebygg": "Fiberduk över bädden från sådd. Så sent (efter midsommar) – då är flygtoppen över. Plantera lök bredvid – doften förvirrar."
+    },
+    {
+      "id": "tomatbladmogel",
+      "namn": "Tomatbladmögel",
+      "emoji": "🍅",
+      "typ": "sjukdom",
+      "symptom": "Bruna fläckar på blad, vit påväxt på undersidan, frukt med läderaktiga bruna områden. Kommer ofta efter en regnig vecka.",
+      "drabbar": ["tomat", "potatis"],
+      "atgard_milt": "Klipp bort drabbade blad direkt – bränn dem (kompostera ej).",
+      "atgard_starkt": "Ekologiskt: kopparpreparat förebyggande. Kemiskt: konsultera fackhandel.",
+      "forebygg": "Vattna vid roten, inte på bladen. Luftig plantering. Tak över tomatplantor (växthus eller plast)."
+    },
+    {
+      "id": "klumprotsjuka",
+      "namn": "Klumprotsjuka",
+      "emoji": "🥬",
+      "typ": "sjukdom",
+      "symptom": "Kålväxter vissnar mitt i sommaren trots vattning. Rötter har stora klumpiga utväxter.",
+      "drabbar": ["vitkål", "broccoli", "blomkål", "brysselkål", "rädisa", "ruccola"],
+      "atgard_milt": "Inga – sjukdomen sitter i jorden i upp till 7 år.",
+      "atgard_starkt": "Inga.",
+      "forebygg": "Växtföljd! Aldrig kålväxter på samma plats två år i rad. Höj pH med kalk till 7.0+."
+    },
+    {
+      "id": "mjoldagg",
+      "namn": "Mjöldagg",
+      "emoji": "❄️",
+      "typ": "sjukdom",
+      "symptom": "Vit mjölaktig hinna på blad, börjar med fläckar, breder ut sig över hela bladet. Vanligt i augusti.",
+      "drabbar": ["gurka", "squash", "ros", "rödbeta", "krusbär"],
+      "atgard_milt": "Klipp bort mest drabbade blad. Spreja med utspädd mjölk (1 dl per liter vatten) varannan dag.",
+      "atgard_starkt": "Bikarbonat-lösning eller köpta svampmedel.",
+      "forebygg": "God luftcirkulation – glesa ut. Vattna på morgonen så bladen torkar i solen."
+    },
+    {
+      "id": "fagelpa-bar",
+      "namn": "Fåglar på bär",
+      "emoji": "🐦",
+      "typ": "skadedjur",
+      "symptom": "Halva bär i sjukan, fjädrar runt buskarna. Bästa sorterna alltid värst drabbade.",
+      "drabbar": ["körsbär", "blåbär", "vinbär", "krusbär", "jordgubbe"],
+      "atgard_milt": "Skrämselband, blanka cd-skivor. Effekt avtar snabbt när fåglarna lär sig.",
+      "atgard_starkt": "Fågelnät över hela busken/trädet. Sätt upp 2 veckor INNAN bären mognar.",
+      "forebygg": "Plantera flera buskar – då räcker det till både dig och fåglarna."
+    },
+    {
+      "id": "rosenmjoldagg",
+      "namn": "Rosrost & rosfläcksjuka",
+      "emoji": "🌹",
+      "typ": "sjukdom",
+      "symptom": "Orange-bruna fläckar på rosblad, blad faller av i förtid. Försvagar plantan inför vintern.",
+      "drabbar": ["ros"],
+      "atgard_milt": "Plocka och bränn drabbade blad. Räfsa noga under busken.",
+      "atgard_starkt": "Ekologiska svampmedel enligt instruktion.",
+      "forebygg": "Vattna vid roten. Beskär luftigt. Mata med kalium på hösten."
+    },
+    {
+      "id": "vinbarsgallkvalster",
+      "namn": "Vinbärsgallkvalster",
+      "emoji": "🫐",
+      "typ": "skadedjur",
+      "symptom": "Knoppar på svarta vinbär sväller upp till runda bollar och slår aldrig ut. Sprider virus.",
+      "drabbar": ["svarta vinbär", "röda vinbär"],
+      "atgard_milt": "Plocka drabbade knoppar för hand i april och bränn dem.",
+      "atgard_starkt": "Beskär kraftigt – ta bort hela grenar med många angripna knoppar.",
+      "forebygg": "Köp friskt plantmaterial. Vid kraftig spridning: gräv upp och ersätt med ny planta på ny plats."
+    },
+    {
+      "id": "frostskada",
+      "namn": "Frostskada",
+      "emoji": "❄️",
+      "typ": "skada",
+      "symptom": "Mörka, slappa blad efter en kall natt. Kan se ut som vissnat – men plantorna är redan döda.",
+      "drabbar": ["tomat", "gurka", "basilika", "squash", "alla värmekänsliga"],
+      "atgard_milt": "Klipp bort skadade delar. Vattna varsamt – nya skott kan komma.",
+      "atgard_starkt": "Inga – döda plantor måste ersättas.",
+      "forebygg": "Plantera inte ut förrän efter sista frosten i din zon. Bevaka prognosen och täck med fiberduk vid frostnätter."
+    }
+  ]
+}

@@ -4,18 +4,22 @@ class MonthRange {
   const MonthRange(this.startMonth, this.endMonth);
 
   bool includes(int month) {
-    if (startMonth <= endMonth) {
-      return month >= startMonth && month <= endMonth;
-    }
-    return month >= startMonth || month <= endMonth;
+    // Defensive — corrupt JSON or stale data could pass invalid values.
+    // Out-of-range queries always miss; out-of-range fields are normalised.
+    if (month < 1 || month > 12) return false;
+    final s = startMonth.clamp(1, 12);
+    final e = endMonth.clamp(1, 12);
+    if (s <= e) return month >= s && month <= e;
+    return month >= s || month <= e;
   }
 
   static MonthRange? fromJson(Map<String, dynamic>? json) {
     if (json == null) return null;
-    return MonthRange(
-      json['start_manad'] as int,
-      json['slut_manad'] as int,
-    );
+    final s = (json['start_manad'] as int?) ?? 0;
+    final e = (json['slut_manad'] as int?) ?? 0;
+    // Reject obviously broken ranges instead of letting them crash later.
+    if (s < 1 || s > 12 || e < 1 || e > 12) return null;
+    return MonthRange(s, e);
   }
 }
 
@@ -36,13 +40,35 @@ enum PlantCategory {
         PlantCategory.ovriga => 'Övrigt',
       };
 
+  /// Generic fallback emoji for the whole category.
+  /// Prefer [Plant.emoji] which gives a per-plant icon.
   String get emoji => switch (this) {
-        PlantCategory.gronsaker => '🥕',
+        PlantCategory.gronsaker => '🥬',
         PlantCategory.kryddor => '🌿',
         PlantCategory.blommor => '🌸',
         PlantCategory.bar => '🫐',
         PlantCategory.frukttrad => '🍎',
         PlantCategory.ovriga => '🌱',
+      };
+
+  /// Soft category tint used for cards & avatars.
+  int get tintArgb => switch (this) {
+        PlantCategory.gronsaker => 0xFFE8F2DC, // sage
+        PlantCategory.kryddor => 0xFFE3EFE2, // mint
+        PlantCategory.blommor => 0xFFFCE7EE, // blush
+        PlantCategory.bar => 0xFFE8E2F2, // lilac
+        PlantCategory.frukttrad => 0xFFFFE9D6, // peach
+        PlantCategory.ovriga => 0xFFEFEFE8, // stone
+      };
+
+  /// Stronger accent matching [tintArgb] for borders / badges.
+  int get accentArgb => switch (this) {
+        PlantCategory.gronsaker => 0xFF558B2F,
+        PlantCategory.kryddor => 0xFF2E7D32,
+        PlantCategory.blommor => 0xFFD81B60,
+        PlantCategory.bar => 0xFF6A1B9A,
+        PlantCategory.frukttrad => 0xFFEF6C00,
+        PlantCategory.ovriga => 0xFF6D4C41,
       };
 
   static PlantCategory fromString(String s) =>
@@ -98,11 +124,91 @@ enum FertilizerNeed {
           orElse: () => FertilizerNeed.medel);
 }
 
+/// Plant lifecycle classifies how a plant lives over time. Drives
+/// progress-bar logic, harvest expectations and notification cadence.
+///
+/// - `annual`: lives one season, harvest within ~30-180 days. Progress
+///   bar makes sense (planted → harvest).
+/// - `biennial`: two seasons (e.g. carrots over winter for seed). We
+///   treat similarly to annuals for progress purposes.
+/// - `perennial`: returns each year (rabarber, hallon, pioner). Progress
+///   bar shows season-progress within the active year, not lifetime.
+/// - `tree`: long-lived; no meaningful "harvest progress" — the user
+///   wants seasonal care reminders (prune, fertilize, thin fruit).
+/// - `shrub`: similar to tree but lower (krusbär, lavendel).
+enum PlantLifecycle {
+  annual,
+  biennial,
+  perennial,
+  tree,
+  shrub;
+
+  String get label => switch (this) {
+        PlantLifecycle.annual => 'Annuell',
+        PlantLifecycle.biennial => 'Tvåårig',
+        PlantLifecycle.perennial => 'Perenn',
+        PlantLifecycle.tree => 'Träd',
+        PlantLifecycle.shrub => 'Buske',
+      };
+
+  bool get isLongLived =>
+      this == PlantLifecycle.tree || this == PlantLifecycle.shrub;
+
+  static PlantLifecycle fromString(String? s, {PlantCategory? category}) {
+    if (s != null) {
+      for (final l in PlantLifecycle.values) {
+        if (l.name == s) return l;
+      }
+    }
+    // Sensible defaults derived from category when the JSON omits a
+    // lifecycle value — keeps backward compatibility with existing
+    // plant data while letting us add the field gradually.
+    return switch (category) {
+      PlantCategory.frukttrad => PlantLifecycle.tree,
+      PlantCategory.bar => PlantLifecycle.shrub,
+      _ => PlantLifecycle.annual,
+    };
+  }
+}
+
+/// Recurring seasonal care task for a perennial/tree/shrub. Used to
+/// schedule notifications + render the "Kommande omsorg"-section
+/// on the home screen.
+class CareTask {
+  /// Stable id for notification de-dupe. Slug-style: "prune", "thin",
+  /// "fertilize-spring", etc.
+  final String id;
+  final MonthRange month;
+  final String title;
+  final String description;
+  /// 'low' | 'medium' | 'high' — drives notification importance and
+  /// visual emphasis on the home card.
+  final String severity;
+
+  const CareTask({
+    required this.id,
+    required this.month,
+    required this.title,
+    required this.description,
+    this.severity = 'medium',
+  });
+
+  factory CareTask.fromJson(Map<String, dynamic> j) => CareTask(
+        id: j['id'] as String,
+        month: MonthRange.fromJson(j['manad'] as Map<String, dynamic>?) ??
+            const MonthRange(1, 12),
+        title: j['titel'] as String,
+        description: j['beskrivning'] as String? ?? '',
+        severity: j['allvar'] as String? ?? 'medium',
+      );
+}
+
 class Plant {
   final String id;
   final String namnSv;
   final String namnLat;
   final PlantCategory kategori;
+  final PlantLifecycle livscykel;
   final String beskrivning;
   final List<int> zoner;
   final MonthRange? forsadatum;
@@ -121,12 +227,16 @@ class Plant {
   final String? tips;
   final List<String> skadedjur;
   final String amazonSokord;
+  /// Recurring seasonal care tasks. Empty for annuals; populated for
+  /// perennials/trees/shrubs ("beskär äppleträd jan-feb", etc.).
+  final List<CareTask> omsorg;
 
   const Plant({
     required this.id,
     required this.namnSv,
     required this.namnLat,
     required this.kategori,
+    required this.livscykel,
     required this.beskrivning,
     required this.zoner,
     this.forsadatum,
@@ -145,14 +255,20 @@ class Plant {
     this.tips,
     this.skadedjur = const [],
     required this.amazonSokord,
+    this.omsorg = const [],
   });
 
   factory Plant.fromJson(Map<String, dynamic> j) {
+    final kategori = PlantCategory.fromString(j['kategori'] as String);
     return Plant(
       id: j['id'] as String,
       namnSv: j['namn_sv'] as String,
       namnLat: j['namn_lat'] as String,
-      kategori: PlantCategory.fromString(j['kategori'] as String),
+      kategori: kategori,
+      livscykel: PlantLifecycle.fromString(
+        j['livscykel'] as String?,
+        category: kategori,
+      ),
       beskrivning: j['beskrivning'] as String? ?? '',
       zoner: List<int>.from(j['zoner'] as List? ?? const []),
       forsadatum: MonthRange.fromJson(j['forsadatum'] as Map<String, dynamic>?),
@@ -175,6 +291,9 @@ class Plant {
       tips: j['tips'] as String?,
       skadedjur: List<String>.from(j['skadedjur'] as List? ?? const []),
       amazonSokord: j['amazon_sokord'] as String? ?? j['namn_sv'] as String,
+      omsorg: ((j['omsorg'] as List?) ?? const [])
+          .map((e) => CareTask.fromJson(e as Map<String, dynamic>))
+          .toList(),
     );
   }
 
@@ -183,4 +302,134 @@ class Plant {
     final threshold = kallighetC ?? 0;
     return forecastLowC <= threshold;
   }
+
+  /// Per-plant emoji. Falls back to the category emoji for ids we haven't
+  /// mapped — keeps things sane if the JSON gains new entries.
+  String get emoji => _plantEmojis[id] ?? kategori.emoji;
 }
+
+const Map<String, String> _plantEmojis = {
+  // Grönsaker
+  'tomat': '🍅',
+  'gurka': '🥒',
+  'morot': '🥕',
+  'potatis': '🥔',
+  'lok': '🧅',
+  'vitlok': '🧄',
+  'purjolok': '🧅',
+  'schalottenlok': '🧅',
+  'isbergssallad': '🥬',
+  'plocksallad': '🥬',
+  'faltsallat': '🥬',
+  'spenat': '🥬',
+  'ruccola': '🌿',
+  'radisa': '🌶️',
+  'rodbeta': '🍠',
+  'vitkal': '🥬',
+  'gronkal': '🥬',
+  'brysselkal': '🥬',
+  'mangold': '🥬',
+  'pak_choi': '🥬',
+  'broccoli': '🥦',
+  'blomkal': '🥦',
+  'grusbonor': '🫛',
+  'sockerart': '🫛',
+  'vaxbona': '🫛',
+  'majs': '🌽',
+  'squash': '🎃',
+  'zucchini': '🥒',
+  'pumpa': '🎃',
+  'paprika': '🫑',
+  'chili': '🌶️',
+  'grona_sparris': '🌱',
+  'aubergine': '🍆',
+  'palsternacka': '🥕',
+  'svartrot': '🥕',
+  'fankal': '🌿',
+  'kronartskocka': '🌿',
+  'kal_fransk_kronartskocka': '🌿',
+  'physalis': '🍅',
+  // Kryddor & örter
+  'basilika': '🌿',
+  'persilja': '🌿',
+  'dill': '🌿',
+  'gräslök': '🌿',
+  'mynta': '🌿',
+  'timjan': '🌿',
+  'rosmarin': '🌿',
+  'oregano': '🌿',
+  'koriander': '🌿',
+  'salvia': '🌿',
+  'libsticka': '🌿',
+  'lavendel': '💜',
+  // Blommor
+  'solros': '🌻',
+  'tagetes': '🌼',
+  'pion': '🌸',
+  'dahlia': '💮',
+  'tulpan': '🌷',
+  'narciss': '🌼',
+  'ringblomma': '🌼',
+  'pelargon': '🌺',
+  'jatteverbena': '💜',
+  'lejongap': '🌸',
+  'luktart': '🌸',
+  'blaklint': '💙',
+  'prastkrage': '🌼',
+  'vallmo': '🌺',
+  'rosmarin_rosor': '🌹',
+  'lagerhortensia': '🌸',
+  // Perenner & sommarblommor (utökat)
+  'hosta': '🌿',
+  'daglilja': '🌺',
+  'riddarsporre': '💙',
+  'stockros': '🌸',
+  'karleksort': '🌷',
+  'akleja': '💜',
+  'iris': '🌸',
+  'solhatt_rod': '🌺',
+  'lupin': '💜',
+  'fingerborgsblomma': '🌸',
+  'hostaster': '🌼',
+  'petunia': '🌸',
+  'lobelia': '💙',
+  'begonia': '🌺',
+  'zinnia': '🌼',
+  'cosmos': '🌸',
+  'krasse': '🌼',
+  'blaklocka': '💙',
+  // Vårlökar
+  'krokus': '🌷',
+  'snodroppe': '🤍',
+  'hyacint': '🌷',
+  'parlhyacint': '💙',
+  'vintergack': '🌼',
+  'liljekonvalj': '🤍',
+  // Buskar & klätterväxter
+  'syren': '💜',
+  'hortensia': '🌸',
+  'forsythia': '🌼',
+  'spirea': '🌸',
+  'klematis': '💜',
+  'kaprifol': '🌼',
+  // Bär
+  'jordgubbe': '🍓',
+  'smultron': '🍓',
+  'hallon': '🍒',
+  'bjornbar': '🫐',
+  'svarta_vinbar': '🫐',
+  'roda_vinbar': '🍒',
+  'krusbar': '🍇',
+  'blabar': '🫐',
+  'havtorn': '🍊',
+  'vindruva': '🍇',
+  'rabarber': '🌱',
+  // Fruktträd
+  'aple': '🍎',
+  'päron': '🍐',
+  'plommon': '🟣',
+  'korsbar': '🍒',
+  'lagroskar': '🍑',
+  // Övrigt
+  'kompost': '🍂',
+};

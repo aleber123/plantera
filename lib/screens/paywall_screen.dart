@@ -5,8 +5,40 @@ import '../services/premium_service.dart';
 import '../utils/constants.dart';
 import '../utils/theme.dart';
 
-class PaywallScreen extends StatelessWidget {
+class PaywallScreen extends StatefulWidget {
   const PaywallScreen({super.key});
+
+  @override
+  State<PaywallScreen> createState() => _PaywallScreenState();
+}
+
+class _PaywallScreenState extends State<PaywallScreen> {
+  @override
+  void initState() {
+    super.initState();
+    // Force a fresh product fetch when the paywall opens so the buy
+    // button never silently no-ops just because the initial app-launch
+    // fetch missed (common in sandbox / TestFlight / App Review).
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      context.read<PremiumService>().reloadProducts();
+    });
+  }
+
+  Future<void> _onBuy(PremiumService premium, PremiumPlan plan) async {
+    final messenger = ScaffoldMessenger.of(context);
+    final ok = await premium.purchase(plan);
+    if (!mounted) return;
+    if (!ok) {
+      final reason = switch (premium.purchaseError) {
+        'store_not_available' =>
+          'App Store är inte tillgängligt just nu — försök igen om en stund.',
+        'product_not_found' =>
+          'Köpet kunde inte laddas från App Store. Stäng paywallen och öppna igen.',
+        _ => 'Köpet misslyckades. Försök igen.',
+      };
+      messenger.showSnackBar(SnackBar(content: Text(reason)));
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -113,6 +145,14 @@ class PaywallScreen extends StatelessWidget {
   }) {
     final price = premium.getPrice(plan, 'sv');
     final intro = premium.introOfferText(plan, 'sv');
+    // When an intro free-trial exists, swap the headline to a trial-CTA
+    // — the upgrade copy ("Starta 7 dagars gratis prov") is the single
+    // biggest paywall conversion lever in Apple's playbook. Falls back
+    // to the regular "title • price" when no offer is configured.
+    final headline = intro != null
+        ? 'Starta ${_introCtaLabel(intro)}'
+        : '$title • $price';
+    final supporting = intro != null ? 'Sedan $price' : null;
     return SizedBox(
       width: double.infinity,
       child: ElevatedButton(
@@ -124,16 +164,18 @@ class PaywallScreen extends StatelessWidget {
         ),
         onPressed: premium.purchaseInProgress
             ? null
-            : () => premium.purchase(plan),
+            : () => _onBuy(premium, plan),
         child: Column(
           children: [
-            Text('$title • $price',
-                style: const TextStyle(
-                    fontSize: 16, fontWeight: FontWeight.w600)),
-            if (intro != null)
+            Text(
+              headline,
+              style: const TextStyle(
+                  fontSize: 16, fontWeight: FontWeight.w700),
+            ),
+            if (supporting != null)
               Padding(
                 padding: const EdgeInsets.only(top: 2),
-                child: Text(intro, style: const TextStyle(fontSize: 12)),
+                child: Text(supporting, style: const TextStyle(fontSize: 12)),
               ),
             if (subtitle != null)
               Padding(
@@ -144,6 +186,21 @@ class PaywallScreen extends StatelessWidget {
         ),
       ),
     );
+  }
+
+  /// Strips the "gratis" suffix off the intro offer text so we can
+  /// inject it into a "Starta ___ gratis prov" sentence cleanly.
+  /// Examples: "7 dagar gratis" → "7 dagars gratis prov".
+  String _introCtaLabel(String intro) {
+    final lower = intro.toLowerCase().trim();
+    // "7 dagar gratis" / "1 vecka gratis" / "14 dagar gratis"
+    if (lower.endsWith(' gratis')) {
+      final period = lower.substring(0, lower.length - ' gratis'.length).trim();
+      // Add "s" for genitive feel ("7 dagar" → "7 dagars prov")
+      final genitive = period.endsWith('s') ? period : '${period}s';
+      return '$genitive gratis prov';
+    }
+    return intro;
   }
 
   Future<void> _open(String url) async {

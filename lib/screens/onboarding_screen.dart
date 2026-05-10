@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:provider/provider.dart';
+import '../l10n/app_localizations.dart';
 import '../services/notification_service.dart';
 import '../services/weather_service.dart';
 import '../services/zone_service.dart';
@@ -17,17 +18,18 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
   bool _locating = false;
 
   Future<void> _useGps() async {
+    final l10n = AppLocalizations.of(context);
     setState(() => _locating = true);
     try {
       final enabled = await Geolocator.isLocationServiceEnabled();
-      if (!enabled) throw 'Platstjänster är avstängda';
+      if (!enabled) throw l10n.onboardingErrorLocationServicesOff;
       var perm = await Geolocator.checkPermission();
       if (perm == LocationPermission.denied) {
         perm = await Geolocator.requestPermission();
       }
       if (perm == LocationPermission.denied ||
           perm == LocationPermission.deniedForever) {
-        throw 'Platsbehörighet nekad';
+        throw l10n.onboardingErrorLocationDenied;
       }
       final pos = await Geolocator.getCurrentPosition();
       if (!mounted) return;
@@ -53,6 +55,11 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
 
   Future<void> _finish() async {
     final zone = context.read<ZoneService>();
+    // Multi-garden: create the first "Min trädgård" using the picked
+    // zone/coords. Idempotent — does nothing if a garden already
+    // exists (e.g. user re-opened onboarding from settings).
+    await zone.ensureFirstGarden();
+    if (!mounted) return;
     if (zone.lat != null && zone.lon != null) {
       context.read<WeatherService>().fetch(zone.lat!, zone.lon!);
     }
@@ -61,6 +68,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context);
     final cities = SwedishZones.cityCoords.keys.toList()..sort();
     return Scaffold(
       body: SafeArea(
@@ -74,11 +82,12 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                   style: TextStyle(fontSize: 64),
                   textAlign: TextAlign.center),
               const SizedBox(height: 12),
-              const Text('Välkommen till Plantera',
-                  style: TextStyle(fontSize: 26, fontWeight: FontWeight.bold)),
+              Text(l10n.onboardingWelcome,
+                  style: const TextStyle(
+                      fontSize: 26, fontWeight: FontWeight.bold)),
               const SizedBox(height: 8),
               Text(
-                'Välj din plats för personliga råd, frostvarningar och rätt såtider för just din odlingszon.',
+                l10n.onboardingBody,
                 style: TextStyle(fontSize: 15, color: Colors.grey.shade700),
               ),
               const SizedBox(height: 24),
@@ -87,11 +96,13 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                 child: ElevatedButton.icon(
                   onPressed: _locating ? null : _useGps,
                   icon: const Icon(Icons.my_location),
-                  label: Text(_locating ? 'Hämtar plats…' : 'Använd min plats'),
+                  label: Text(_locating
+                      ? l10n.onboardingLocating
+                      : l10n.onboardingUseGps),
                 ),
               ),
               const SizedBox(height: 16),
-              const Center(child: Text('eller välj stad')),
+              Center(child: Text(l10n.onboardingOrPickCity)),
               const SizedBox(height: 12),
               Expanded(
                 child: ListView.builder(
@@ -107,7 +118,8 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                             style: const TextStyle(color: Colors.white)),
                       ),
                       title: Text(c),
-                      subtitle: Text('Zon $z'),
+                      subtitle:
+                          Text(l10n.onboardingZoneSubtitle(z.toString())),
                       onTap: () => _pickCity(c),
                     );
                   },

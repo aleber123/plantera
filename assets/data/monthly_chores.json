@@ -1,0 +1,53 @@
+{
+  "version": 1,
+  "chores": [
+    {"id": "jan-bestall-fro", "manad": 1, "titel": "Beställ frön", "beskrivning": "Gå igenom förra årets förråd, planera årets odling, beställ tidigt så slipper du slut-i-lager.", "emoji": "📦"},
+    {"id": "jan-vinterbeskar", "manad": 1, "titel": "Vinterbeskär fruktträd", "beskrivning": "Frostfri dag (-5°C eller varmare). Ta bort döda, korsande och inåtväxande grenar.", "emoji": "✂️"},
+    {"id": "jan-skotsel-redskap", "manad": 1, "titel": "Sköt om redskap", "beskrivning": "Slipa sekatörer och spadar, olja in träskaft. Bättre redskap, mindre skador på växter.", "emoji": "🧰"},
+
+    {"id": "feb-fortsatt-beskar", "manad": 2, "titel": "Fortsätt beskärningen", "beskrivning": "Sista chansen att beskära äpple och päron innan saven börjar stiga i mars.", "emoji": "✂️"},
+    {"id": "feb-forso-chili", "manad": 2, "titel": "Förså chili och paprika", "beskrivning": "Behöver lång säsong – starta inomhus i februari för skörd hela sommaren.", "emoji": "🌶️"},
+    {"id": "feb-planera-radding", "manad": 2, "titel": "Skissa rabatten", "beskrivning": "Rita upp året: vad ska var? Tänk växtföljd – inte samma kålväxt på samma plats två år i rad.", "emoji": "📐"},
+
+    {"id": "mar-forso-tomat", "manad": 3, "titel": "Förså tomater", "beskrivning": "I mitten av månaden, fönsterbänk eller växtljus. Plantera om till större kruka när plantorna är 10cm.", "emoji": "🍅"},
+    {"id": "mar-rensa-lov", "manad": 3, "titel": "Rensa höstlöv", "beskrivning": "Räfsa bort gamla löv från rabatter när snön gått. Solen ska nå fram till lökarna.", "emoji": "🍂"},
+    {"id": "mar-godsla-perenner", "manad": 3, "titel": "Gödsla perennrabatter", "beskrivning": "Strö över kompost eller hönsgödsel. Vattnas in vid nästa regn.", "emoji": "🌱"},
+
+    {"id": "apr-direktsa-morot", "manad": 4, "titel": "Direktsår morot och rödbeta", "beskrivning": "När jorden är 8°C och smulig. Glesa ut till 5cm avstånd när plantorna är 5cm höga.", "emoji": "🥕"},
+    {"id": "apr-rensa-rabatter", "manad": 4, "titel": "Rensa rabatter", "beskrivning": "Bort med ogräs innan de hinner blomma och så sig. En timme nu sparar tjugo i juli.", "emoji": "🌿"},
+    {"id": "apr-godsla-trad", "manad": 4, "titel": "Gödsla fruktträd och bär", "beskrivning": "Lägg ut kompost eller näringsrik gödsel runt droppzonen. Vattna in noga.", "emoji": "🌳"},
+    {"id": "apr-tackodling", "manad": 4, "titel": "Lägg ut täckmaterial", "beskrivning": "Halm, gräsklipp eller flis runt jordgubbar och buskar – håller fukten och kväver ogräs.", "emoji": "🌾"},
+
+    {"id": "maj-plantera-ut", "manad": 5, "titel": "Plantera ut förkultiverat", "beskrivning": "Efter sista frostnatten – tomater, gurka, squash, basilika. Härda av en vecka först.", "emoji": "🌱"},
+    {"id": "maj-direktsa", "manad": 5, "titel": "Direktsår bönor och majs", "beskrivning": "Behöver minst 12°C jord. Lägg fröna djupare än du tror.", "emoji": "🌽"},
+    {"id": "maj-rensa-runt", "manad": 5, "titel": "Rensa runt buskar", "beskrivning": "Ogräs konkurrerar mest om kväve i maj-juni. Håll cirkeln runt varje buske ren.", "emoji": "🌿"},
+
+    {"id": "jun-vattna-noga", "manad": 6, "titel": "Vattna djupare, mer sällan", "beskrivning": "5-10 minuter dagligen är värre än 30 minuter två gånger i veckan – rötterna går djupare av sällan vattning.", "emoji": "💧"},
+    {"id": "jun-bind-tomat", "manad": 6, "titel": "Bind upp tomater", "beskrivning": "Knyt med mjukt band, inte snöre. Tjuvar (skott i bladvecken) plockas bort var 7-10:e dag.", "emoji": "🍅"},
+    {"id": "jun-gallra-frukt", "manad": 6, "titel": "Gallra äpple och plommon", "beskrivning": "En frukt per klase, ca 10 cm mellan. Större frukt, mindre risk att grenar bryts.", "emoji": "🍎"},
+
+    {"id": "jul-vatten-vatten", "manad": 7, "titel": "Vattning är jobb nr 1", "beskrivning": "Krukor och nyplanterat dagligen vid värme. Resten 2-3 ggr/v om det inte regnat ordentligt.", "emoji": "💦"},
+    {"id": "jul-skorda-ofta", "manad": 7, "titel": "Skörda ofta", "beskrivning": "Sallad, bönor, ärtor, zucchini – plocka unga och ofta. Gamla frukter signalerar plantan att sluta producera.", "emoji": "🥒"},
+    {"id": "jul-rensa-utlopare", "manad": 7, "titel": "Klipp jordgubbsutlöpare", "beskrivning": "Efter skörd – så lägger plantan kraft på rötter inför nästa år.", "emoji": "🍓"},
+
+    {"id": "aug-spara-fro", "manad": 8, "titel": "Spara egna frön", "beskrivning": "Tomat, ärt, böna, blommor som ringblomma och solros – torka väl och spara i papperskuvert.", "emoji": "🌻"},
+    {"id": "aug-skorda-frukt", "manad": 8, "titel": "Skörda äpple och päron", "beskrivning": "Lyft och vrid 90°. Lossnar de lätt är de mogna. Sena sorter lagras svalt; tidiga äts direkt.", "emoji": "🍎"},
+    {"id": "aug-fagelnat", "manad": 8, "titel": "Skydda mot fåglar", "beskrivning": "Nät över bär och körsbär. Två veckor före mognad – inte dagen innan.", "emoji": "🐦"},
+
+    {"id": "sep-skorda-pumpa", "manad": 9, "titel": "Skörda pumpor och squash", "beskrivning": "När stjälken har torkat och skalet inte trycks in med tumnageln. Lagra svalt och torrt.", "emoji": "🎃"},
+    {"id": "sep-satta-lokar", "manad": 9, "titel": "Sätt vårblommande lökar", "beskrivning": "Tulpan, narciss, krokus – senast oktober. Djup = 2-3 ggr lökens höjd.", "emoji": "🌷"},
+    {"id": "sep-beskar-hallon", "manad": 9, "titel": "Beskär gamla hallonskott", "beskrivning": "Skär av allt som bar frukt i år ända ner – ger plats åt nästa års skott.", "emoji": "🌿"},
+
+    {"id": "okt-tack-rabatter", "manad": 10, "titel": "Täck rabatter inför vintern", "beskrivning": "Granris eller löv över perenner som rabarber och jordgubbe. Mindre frostskador.", "emoji": "🍂"},
+    {"id": "okt-grav-poltatis", "manad": 10, "titel": "Gräv upp potatisen", "beskrivning": "När blasten har vissnat. Låt knölarna lufttorka en timme innan du lagrar dem mörkt och svalt.", "emoji": "🥔"},
+    {"id": "okt-kompostera", "manad": 10, "titel": "Lägg upp kompost", "beskrivning": "Höstens löv, gamla plantor och köksavfall – varva grönt och brunt. Klart till våren.", "emoji": "♻️"},
+
+    {"id": "nov-torna-redskap", "manad": 11, "titel": "Töm slangar och vattenkannor", "beskrivning": "Innan första frosten. Förvara inomhus eller hängande tomma så de inte spricker.", "emoji": "💧"},
+    {"id": "nov-ros-vinterskydd", "manad": 11, "titel": "Vinterkupa rosor", "beskrivning": "Höj upp jord ca 20 cm runt basen på de mest känsliga sorterna.", "emoji": "🌹"},
+    {"id": "nov-planera-2027", "manad": 11, "titel": "Reflektera över året", "beskrivning": "Vad gick bra? Vad ska bort? Skriv ner – minnet sviker till våren.", "emoji": "📓"},
+
+    {"id": "dec-mata-faglar", "manad": 12, "titel": "Mata fåglarna", "beskrivning": "De äter skadeinsekter resten av året – få dem att stanna i din trädgård.", "emoji": "🐦"},
+    {"id": "dec-koll-lager", "manad": 12, "titel": "Kontrollera lagrad skörd", "beskrivning": "Plocka ut äpplen och rotsaker som börjat rutna innan de smittar resten.", "emoji": "📦"},
+    {"id": "dec-bla-julstamning", "manad": 12, "titel": "Hugg eget granris", "beskrivning": "Från egen skog eller gata – fyller adventslyktor och täcker rabatter samtidigt.", "emoji": "🎄"}
+  ]
+}

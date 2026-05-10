@@ -1,0 +1,622 @@
+{
+  "@@locale": "nb",
+  "appName": "Plantera",
+  "appSubtitle": "Din digitale hagekompis",
+  "tabHome": "Hjem",
+  "tabCalendar": "Kalender",
+  "tabPlants": "Planter",
+  "tabMyGarden": "Mine planter",
+  "tabSettings": "Innstillinger",
+  "tabOverview": "Oversikt",
+  "tabMyPlant": "Min plante",
+  "tabCare": "Stell",
+  "homeWelcomeTitle": "La oss begynne med din første plante",
+  "homeWelcomeBody": "Bla i plantedatabasen og trykk + på det du dyrker — vi følger den fra såing til høsting.",
+  "homeWelcomeCta": "Bla i planter",
+  "gardenOverviewTitle": "Nærmeste høst",
+  "gardenSeeAll": "Se alle",
+  "gardenStatTotal": "I hagen",
+  "gardenStatHarvestSoon": "Snart høst",
+  "gardenStatReadyNow": "Klar nå",
+  "gardenMore": "+{count} til",
+  "@gardenMore": {
+    "placeholders": {
+      "count": {}
+    }
+  },
+  "dailyInsightsTitle": "I dag i hagen",
+  "dailyInsightsAllGood": "Alt under kontroll. Ingenting akutt — nyt hagen.",
+  "upcomingCareTitle": "Kommende stell",
+  "upcomingCareSubtitle": "Ting å gjøre denne og neste måned.",
+  "seasonPlannerTitle": "Min sesong {year}",
+  "@seasonPlannerTitle": {
+    "placeholders": {
+      "year": {}
+    }
+  },
+  "seasonPlannerSubtitle": "Det du vil dyrke i år. Vi varsler deg når det er på tide å så.",
+  "seasonPlannerEmptyTitle": "Planlegg sesongen {year}",
+  "@seasonPlannerEmptyTitle": {
+    "placeholders": {
+      "year": {}
+    }
+  },
+  "seasonPlannerEmptyBody": "Hva vil du dyrke i år? Vi minner deg på når det er tid for å så.",
+  "seasonPlannerEmptyCta": "Velg",
+  "seasonPlannerAddCta": "Legg til plante",
+  "seasonPlannerCount": "{count} stk",
+  "@seasonPlannerCount": {
+    "placeholders": {
+      "count": {}
+    }
+  },
+  "seasonRowSowNow": "Så nå",
+  "seasonRowDaysAway": "Om {days} dager",
+  "@seasonRowDaysAway": {
+    "placeholders": {
+      "days": {}
+    }
+  },
+  "seasonRowInSeason": "I sesong",
+  "weatherUnavailable": "Vær utilgjengelig",
+  "weatherSetLocation": "Sett din plassering i innstillinger",
+  "dryPeriodTitle": "Tørkeperiode pågår",
+  "frostCardTitle": "❄️ Beskytt mot frost",
+  "premiumTeaserTitle": "Plantera Premium",
+  "premiumTeaserBody": "Ubegrenset hage og ingen annonser",
+  "calendarTitle": "Plantingskalender",
+  "calendarMonthGuide": "Månedens guide",
+  "calendarTaskCount": "{count} oppgaver",
+  "@calendarTaskCount": {
+    "placeholders": {
+      "count": {}
+    }
+  },
+  "calendarPhasePresow": "FORSÅ INNE",
+  "calendarPhaseDirectsow": "DIREKTESÅING UTE",
+  "calendarPhasePlantout": "PLANT UT",
+  "calendarPhaseHarvest": "HØST",
+  "calendarPhaseCount": "{count} planter",
+  "@calendarPhaseCount": {
+    "placeholders": {
+      "count": {}
+    }
+  },
+  "calendarEmptyTitle": "Ingenting å så eller høste i {month}",
+  "@calendarEmptyTitle": {
+    "placeholders": {
+      "month": {}
+    }
+  },
+  "calendarEmptyBody": "Bruk måneden til planlegging — bestill frø, planlegg bed eller les månedens guide.",
+  "myGardenTitle": "Mine planter",
+  "myGardenSearchHint": "Søk plante eller plassering",
+  "myGardenFilterAll": "Alle",
+  "myGardenGroupByStatus": "Grupper etter status",
+  "myGardenGroupByLocation": "Grupper etter plassering",
+  "myGardenGroupByCategory": "Grupper etter kategori",
+  "myGardenShowingCount": "Viser {shown} av {total}",
+  "@myGardenShowingCount": {
+    "placeholders": {
+      "shown": {},
+      "total": {}
+    }
+  },
+  "myGardenEmptyTitle": "Hagen din er tom",
+  "myGardenEmptyBody": "Legg til planter fra databasen for å bygge hagen din.",
+  "myGardenEmptyCta": "Bla i plantedatabasen",
+  "myGardenAddPlant": "Legg til plante",
+  "myGardenNoResults": "Ingen planter samsvarer",
+  "myGardenNoResultsBody": "Prøv et annet søk eller fjern filtre.",
+  "myGardenWateredNow": "Vannet nå",
+  "myGardenWateredToday": "Vannet i dag",
+  "myGardenWateredYesterday": "Vannet i går",
+  "plantDatabaseTitle": "Plantedatabase",
+  "plantDatabaseSearchHint": "Søk plante",
+  "plantCategoryAll": "Alle",
+  "addPlantNow": "Legg til i hagen nå",
+  "addPlantNowBody": "Du har sådd eller plantet — vi følger den fra i dag",
+  "addPlantSeason": "Legg til på såingslisten",
+  "addPlantSeasonBody": "Du planlegger å dyrke — vi varsler når det er tid for å så",
+  "addPlantRemoveSeason": "Fjern fra såingslisten",
+  "addPlantRemoveSeasonBody": "Vi slutter å minne om såvinduet",
+  "addedToGardenTitle": "{plant} er i hagen din",
+  "@addedToGardenTitle": {
+    "placeholders": {
+      "plant": {}
+    }
+  },
+  "addedToGardenBodyPlain": "Vi følger den fra i dag og minner om vann og høst.",
+  "addedToGardenBodyScheduled": "Vi følger den fra i dag. Varsler kommer for: {list}.",
+  "@addedToGardenBodyScheduled": {
+    "placeholders": {
+      "list": {}
+    }
+  },
+  "addedToGardenCta": "Ta meg til hagen min",
+  "phasePickerTitleNew": "Hvor er du i prosessen?",
+  "phasePickerTitleEdit": "Endre status",
+  "phaseShowSimple": "Vis enklere alternativer",
+  "phaseShowMore": "Flere alternativer (for erfarne)",
+  "phaseSimplePlanned": "Planlegger å dyrke",
+  "phaseSimplePlannedBody": "Bare på listen — vi minner når sesongen starter.",
+  "phaseSimpleGrowing": "Vokser akkurat nå",
+  "phaseSimpleGrowingBody": "Plantene er i gang. Vi følger dem til høst.",
+  "phaseSimpleHarvested": "Allerede høstet",
+  "phaseSimpleHarvestedBody": "Sesongen er ferdig for denne planten.",
+  "perennialEstablishedTitle": "Siden når har du den?",
+  "perennialEstablishedBody": "Trenger ikke være eksakt – vi bruker bare året.",
+  "perennialThisYear": "I år ({year})",
+  "@perennialThisYear": {
+    "placeholders": {
+      "year": {}
+    }
+  },
+  "perennialLastYear": "I fjor ({year})",
+  "@perennialLastYear": {
+    "placeholders": {
+      "year": {}
+    }
+  },
+  "perennialTwoYearsAgo": "To år siden ({year})",
+  "@perennialTwoYearsAgo": {
+    "placeholders": {
+      "year": {}
+    }
+  },
+  "perennialEarlier": "Tidligere (noen år tilbake)",
+  "statusPlanning": "Planlegger",
+  "statusGrowingIndoors": "Forsår inne",
+  "statusDirectSown": "Direkte sådd ute",
+  "statusHardening": "Herder av",
+  "statusOutdoors": "Står ute",
+  "statusReadyToHarvest": "Klar for høst",
+  "statusHarvested": "Høstet",
+  "statusDormant": "Hviler",
+  "sowingIndoors": "Inne",
+  "sowingDirect": "Direkte",
+  "sowingPlanta": "Plante",
+  "sunFull": "Full sol",
+  "sunPartial": "Halvskygge",
+  "sunShade": "Skygge",
+  "waterSparse": "Sparsom",
+  "waterRegular": "Regelmessig",
+  "waterAbundant": "Rikelig",
+  "fertilizerLow": "Lav",
+  "fertilizerMedium": "Middels",
+  "fertilizerHigh": "Høy",
+  "lifecycleAnnual": "Ettårig",
+  "lifecycleBiennial": "Toårig",
+  "lifecyclePerennial": "Flerårig",
+  "lifecycleTree": "Tre",
+  "lifecycleShrub": "Busk",
+  "categoryVegetables": "Grønnsaker",
+  "categoryHerbs": "Krydder & urter",
+  "categoryFlowers": "Blomster",
+  "categoryBerries": "Bær",
+  "categoryFruitTrees": "Frukttrær",
+  "categoryOther": "Annet",
+  "wateredNow": "Vannet",
+  "wateredConfirmation": "Vannet ✓",
+  "notWateredYet": "Ikke vannet ennå",
+  "wateredJustNow": "Vannet nettopp",
+  "wateredDaysAgo": "Vannet for {days} dager siden",
+  "@wateredDaysAgo": {
+    "placeholders": {
+      "days": {}
+    }
+  },
+  "wateredWeeksAgo": "Vannet for {weeks} uker siden",
+  "@wateredWeeksAgo": {
+    "placeholders": {
+      "weeks": {}
+    }
+  },
+  "journalTitle": "Dagbok",
+  "journalCount": "{count}",
+  "@journalCount": {
+    "placeholders": {
+      "count": {}
+    }
+  },
+  "journalAdd": "Legg til",
+  "journalEmpty": "Ingen oppføringer ennå — begynn å dokumentere veksten med foto og korte notater.",
+  "journalNoteTitle": "Notat",
+  "journalNoteBody": "Hva skjedde i dag? Bladlus, første blomst, beskjæring…",
+  "journalNoteHint": "Skriv et kort notat…",
+  "journalSave": "Lagre",
+  "journalDeletePhoto": "Slett foto?",
+  "journalDeletePhotoBody": "Bildet fjernes fra enheten.",
+  "journalDeleteNote": "Slett notat?",
+  "journalDeleteNoteBody": "Notatet fjernes.",
+  "journalManage": "Administrer oppføring",
+  "actionTakePhoto": "Ta foto",
+  "actionPickFromLibrary": "Velg fra biblioteket",
+  "actionWriteNote": "Skriv et notat",
+  "harvestTitle": "Høst",
+  "harvestLog": "Loggfør høst",
+  "harvestEmpty": "Loggfør hva du høster så bygger appen statistikk år for år.",
+  "harvestTotalLabel": "Totalt: {amount} {unit}",
+  "@harvestTotalLabel": {
+    "placeholders": {
+      "amount": {},
+      "unit": {}
+    }
+  },
+  "harvestEstimatedSek": "~{amount} kr",
+  "@harvestEstimatedSek": {
+    "placeholders": {
+      "amount": {}
+    }
+  },
+  "nextStepBecomeIndoor": "Jeg har sådd inne",
+  "nextStepBecomeDirect": "Jeg har direktesådd",
+  "nextStepBecomePlanted": "Jeg har plantet ut",
+  "nextStepHardenedToPlanted": "Plantene er ute",
+  "nextStepReadyForHarvest": "Klar for høst",
+  "nextStepHarvested": "Høstet",
+  "secondaryChangeStatus": "Endre status",
+  "secondaryRemove": "Fjern",
+  "secondaryRemoveConfirmTitle": "Fjerne fra hagen?",
+  "secondaryRemoveConfirmBody": "{plant} og alle påminnelser fjernes. Dette kan ikke angres.",
+  "@secondaryRemoveConfirmBody": {
+    "placeholders": {
+      "plant": {}
+    }
+  },
+  "buttonCancel": "Avbryt",
+  "buttonRemove": "Fjern",
+  "buttonSave": "Lagre",
+  "buttonNext": "Neste",
+  "buttonStart": "Sett i gang",
+  "buttonSkip": "Hopp over",
+  "locationLabel": "Plassering",
+  "locationAdd": "Legg til plassering",
+  "locationPickerTitle": "Hvor står den?",
+  "locationPickerBody": "F.eks. \"nordbedet\", \"drivhus\", \"balkong\".",
+  "locationReuse": "Bruk igjen",
+  "settingsTitle": "Innstillinger",
+  "settingsPremiumActive": "Premium aktivt",
+  "settingsPremiumUpgrade": "Oppgrader til Premium",
+  "settingsPremiumUnlock": "Lås opp alle funksjoner",
+  "settingsMyGardens": "Mine hager",
+  "settingsMyGardensSubtitle": "Aktiv: {emoji} {name}",
+  "@settingsMyGardensSubtitle": {
+    "placeholders": {
+      "emoji": {},
+      "name": {}
+    }
+  },
+  "settingsMyGardensEmpty": "Legg til din første hage",
+  "settingsNotifications": "Påminnelser",
+  "settingsNotificationsBody": "Frostvarsler og plantingstider",
+  "settingsMorningHour": "Morgentid for påminnelser",
+  "settingsMorningHourBody": "Hagemorgen-pings fyrer kl {hour}:00",
+  "@settingsMorningHourBody": {
+    "placeholders": {
+      "hour": {}
+    }
+  },
+  "settingsLargeText": "Stor tekst",
+  "settingsLargeTextBody": "Litt større tekst i hele appen",
+  "settingsSimpleStatus": "Enkel status",
+  "settingsSimpleStatusBody": "Vis kun 3 hovedtilstander (planlegger / vokser / høstet). Slå av for full livssyklus.",
+  "settingsPestLibrary": "Skadedyr & sykdommer",
+  "settingsPestLibraryBody": "Bibliotek over vanlige problemer",
+  "settingsIntro": "Vis introduksjon",
+  "settingsIntroBody": "Rask gjennomgang av Pluss-knappen, sesongplanleggeren og hvordan appen fungerer",
+  "settingsBackup": "Sikkerhetskopi",
+  "settingsBackupBody": "Eksporter hagen og høsten – lagre på iCloud Drive eller send til deg selv",
+  "settingsRestorePurchases": "Gjenopprett kjøp",
+  "settingsPrivacyPolicy": "Personvernerklæring",
+  "settingsTerms": "Brukervilkår (EULA)",
+  "settingsSupport": "Support",
+  "settingsFeedback": "Send tilbakemelding",
+  "settingsFeedbackBody": "Feil, funksjonsønsker eller bare et hyggelig hei",
+  "gardensTitle": "Mine hager",
+  "gardensActive": "AKTIV",
+  "gardensAddNew": "Legg til ny hage",
+  "gardensEdit": "Rediger",
+  "gardensNoLocation": "Ingen plassering",
+  "gardensPlantCount": "{count, plural, =1{1 plante} other{{count} planter}}",
+  "@gardensPlantCount": {
+    "placeholders": {
+      "count": {}
+    }
+  },
+  "gardensSwitcherTitle": "Bytt hage",
+  "gardensManage": "Administrer hager",
+  "gardensZoneLine": "Sone {zone}",
+  "@gardensZoneLine": {
+    "placeholders": {
+      "zone": {}
+    }
+  },
+  "gardensNewTitle": "Ny hage",
+  "gardensEditTitle": "Rediger {name}",
+  "@gardensEditTitle": {
+    "placeholders": {
+      "name": {}
+    }
+  },
+  "gardensNamePlaceholder": "Kolonihage, balkong, hytte…",
+  "gardensCityLabel": "By / nærmeste tettsted",
+  "gardensCreateButton": "Opprett hage",
+  "gardensSaveButton": "Lagre",
+  "gardensFooterHint": "Hver hage har sin egen sone, planteliste og vær. Bytt aktiv hage ved å trykke på den – alt oppdateres umiddelbart.",
+  "gardensDeleteTitle": "Fjerne {name}?",
+  "@gardensDeleteTitle": {
+    "placeholders": {
+      "name": {}
+    }
+  },
+  "gardensDeletePlainBody": "Hagen fjernes.",
+  "gardensDeleteWithPlantsBody": "{count, plural, =1{1 plante} other{{count} planter}} flyttes til standardhagen din. Hagen fjernes.",
+  "@gardensDeleteWithPlantsBody": {
+    "placeholders": {
+      "count": {}
+    }
+  },
+  "introPage1Title": "Legg til planter du dyrker",
+  "introPage1Body": "Trykk + på en plante for å legge den til i hagen din. Vi følger den fra såing til høst og minner om vann, beskjæring og omplanting.",
+  "introPage1Hint": "Finner du ikke planten? Bruk \"Planter\"-fanen nederst.",
+  "introPage2Title": "Planlegg sesongen",
+  "introPage2Body": "Trykk på bokmerket for å legge planten på såingslisten. Du får varsel i februar/mars når det er tid for å så inne, og i april for direktesåing.",
+  "introPage2Hint": "Såingslisten vises på hjemmesiden.",
+  "introPage3Title": "Full kontroll på hagen",
+  "introPage3Body": "Hjem viser vær, tørreperioder og hva du skal gjøre denne måneden. \"Mine planter\"-fanen viser årets statistikk, vekstrotasjon og estimert høstverdi.",
+  "introPage3Hint": "Skadedyr & sykdommer ligger i Innstillinger når du trenger dem.",
+  "pestLibraryTitle": "Skadedyr & sykdommer",
+  "pestLibrarySearchHint": "Søk på symptom eller plante",
+  "pestLibraryFilterPests": "Skadedyr",
+  "pestLibraryFilterDiseases": "Sykdommer",
+  "pestLibraryFilterDamage": "Skade",
+  "pestLibraryNoMatch": "Ingen treff. Prøv et symptom som \"flekker\" eller \"hull\".",
+  "pestSectionMild": "Mild handling",
+  "pestSectionStrong": "Effektiv handling",
+  "pestSectionPrevent": "Forebygg",
+  "pestAffects": "Rammer",
+  "statsTitle": "Min hage {year}",
+  "@statsTitle": {
+    "placeholders": {
+      "year": {}
+    }
+  },
+  "statsHero1": "Du har dyrket frem omtrent {sek} kr i mat",
+  "@statsHero1": {
+    "placeholders": {
+      "sek": {}
+    }
+  },
+  "statsHero2": "Du har {count} planter på gang",
+  "@statsHero2": {
+    "placeholders": {
+      "count": {}
+    }
+  },
+  "statsHeroEmpty": "Sesongen venter",
+  "statsTilePlants": "Planter",
+  "statsTileSpecies": "Arter",
+  "statsTileHarvested": "Høstet",
+  "statsHarvestPanelTitle": "Høst hittil i år",
+  "statsValueLine": "Estimert verdi: ~{sek} kr",
+  "@statsValueLine": {
+    "placeholders": {
+      "sek": {}
+    }
+  },
+  "statsValueDisclaimer": "Basert på omtrentlige svenske butikkpriser per kategori. Inkluderer ikke arbeidstid eller frøkostnader.",
+  "statsTopPanelTitle": "Årets beste avkastning",
+  "statsLocationPanelTitle": "Hvor i hagen",
+  "statsRotationPanelTitle": "Vekstrotasjon",
+  "statsRotationBody": "Hva som vokste hvor, per år. Gjentakelser markeres.",
+  "statsReflectionTitle": "Refleksjon",
+  "statsEmptyTitle": "Sesongen har ikke startet ennå",
+  "statsEmptyBody": "Legg til planter og logg høst – vi fyller siden med årets resultater.",
+  "tabTodo": "Gjøremål",
+  "todoSectionToday": "I DAG",
+  "todoSectionWeek": "DENNE UKEN",
+  "todoSectionMonth": "DENNE MÅNEDEN",
+  "todoSectionDoneToday": "FERDIG I DAG ✓",
+  "todoStatToday": "i dag",
+  "todoStatWeek": "denne uken",
+  "todoStatDone": "ferdig",
+  "todoEmptyTitle": "Alt under kontroll",
+  "todoEmptyBody": "Ingenting akutt. Legg til planter for å begynne å få daglige oppgaver.",
+  "todoSwipeDone": "Ferdig",
+  "todoSwipeSnooze": "Utsett",
+  "progressReadyToHarvest": "Klar for høst",
+  "progressHarvestNow": "Høst nå",
+  "progressDaysLeft": "{days} dager igjen",
+  "@progressDaysLeft": {
+    "placeholders": {
+      "days": {}
+    }
+  },
+  "progressApproxDaysLeft": "~{days} dager igjen",
+  "@progressApproxDaysLeft": {
+    "placeholders": {
+      "days": {}
+    }
+  },
+  "climateCardTitle": "Klima siste 14 dager",
+  "climateStatAvg": "Middel/døgn",
+  "climateStatMinMax": "Min/maks",
+  "climateStatGdd": "GDD",
+  "climateInterpretWaking": "Hagen våkner.",
+  "climateInterpretEarly": "Veldig tidlig sesong – bare kuldetålende vekster (løk, erter, salat).",
+  "climateInterpretSpring": "Vårsesong – direktesådde grønnsaker etablerer seg, varmekrevende bør vente.",
+  "climateInterpretMidSpring": "Midt-vår – tomat og paprika kan ut med fiberduk eller i veksthus.",
+  "climateInterpretFullGrowth": "Full vekst – alt modnes raskt, vann og gjødsle.",
+  "climateInterpretHot": "Het periode – pass på vanning av unge planter.",
+  "climateTeaserTitle": "Klimakort (Premium)",
+  "climateTeaserBody": "Middel-døgntemp + Growing Degree Days for bedre timing av såing og høsting.",
+  "weatherSetLocationHint": "Angi sted i innstillingene",
+  "weatherFrostWarning": "Frostvarsel {date} – {temp}°C",
+  "dryPeriodBodyWithThirsty": "Bare {past} mm regn siste 14 dager og {next} mm ventes neste uke. Vann {names}{more} — tørketolerante planter klarer seg lenger.",
+  "dryPeriodBodyGeneral": "Bare {past} mm regn siste 14 dager og {next} mm ventes neste uke. Vann grundig, særlig nyplantede og i potter.",
+  "dryPeriodMoreSuffix": " m.fl.",
+  "myGardenWaterAllTooltip": "Vann alle utendørsplanter",
+  "myGardenSeasonStatsTooltip": "Min sesong {year}",
+  "myGardenGroupTooltip": "Grupper etter",
+  "myGardenNoOutdoorPlants": "Ingen utendørsplanter å vanne akkurat nå.",
+  "myGardenWaterAllTitle": "Vanne alle?",
+  "myGardenWaterAllConfirm": "Markerer {count} utendørsplanter som vannet nå.",
+  "myGardenWaterAllCancel": "Avbryt",
+  "myGardenWaterAllAction": "Vann alle",
+  "myGardenWaterAllDone": "{count} planter vannet ✓",
+  "myGardenLocationNone": "Uten sted",
+  "myGardenCategoryOther": "Annet",
+  "myGardenStatusSince": "{status} • siden {year}",
+  "myGardenStatusOnDate": "{status} • {date}",
+  "settingsMyGardensWithCount": "Mine hager ({count})",
+  "settingsPlanMonthly": "Månedsabonnement",
+  "settingsPlanYearly": "Årsabonnement",
+  "settingsPlanLifetime": "Livstidskjøp",
+  "settingsPlanFree": "Gratis",
+  "settingsStarterKit": "🛒 Startpakke",
+  "settingsMorningHourPickerTitle": "Når vil du ha morgenvarslet?",
+  "settingsMorningHourPickerBody": "Hagemorgen-oppsummeringen og alle plantepåminnelser går av denne timen. Ingenting vekker deg før.",
+  "settingsHourFormat": "Kl. {hour}:00",
+  "settingsBackupFailed": "Kunne ikke lage sikkerhetskopi: {error}",
+  "settingsFeedbackSubject": "Plantera tilbakemelding",
+  "settingsFeedbackBodyTemplate": "Hei!\n\nTilbakemelding / spørsmål / feilrapport:\n\n\n— Sendt fra Plantera {version}",
+  "gardensDelete": "Slett",
+  "gardensCancel": "Avbryt",
+  "gardensNameLabel": "Navn",
+  "gardensZoneDescription": "Sone {zone} – {description}",
+  "gardensCityFormat": "{city} · {zone}",
+  "introSkip": "Hopp over",
+  "introNext": "Neste",
+  "introStart": "Sett i gang",
+  "onboardingWelcome": "Velkommen til Plantera",
+  "onboardingBody": "Velg sted for tilpassede råd, frostvarsler og riktige såtider for din sone.",
+  "onboardingUseGps": "Bruk min plassering",
+  "onboardingLocating": "Henter plassering…",
+  "onboardingOrPickCity": "eller velg by",
+  "onboardingZoneSubtitle": "Sone {zone}",
+  "onboardingErrorLocationServicesOff": "Stedstjenester er av",
+  "onboardingErrorLocationDenied": "Stedstilgang nektet",
+  "phasePerennialHaveIt": "Jeg har den i hagen",
+  "phasePerennialHaveItBody": "Vi viser forventet høst og minner om beskjæring, gjødsling og sesongstell.",
+  "phasePerennialPlanning": "Planlegger å plante",
+  "phasePerennialPlanningBody": "På listen til du faktisk planter — påminnelser kommer i tide.",
+  "phaseDetailedPlanned": "Planlegger å dyrke",
+  "phaseDetailedPlannedBody": "Bare på listen — påminnelser kommer i tide når sesongen starter.",
+  "phaseDetailedPresow": "Jeg forsår inne",
+  "phaseDetailedPresowBody": "Plantene vokser inne. Avherding-påminnelse om 5 uker.",
+  "phaseDetailedDirectsow": "Jeg har direktesådd ute",
+  "phaseDetailedDirectsowBody": "Sådd direkte. Høstepåminnelse gjenstår.",
+  "phaseDetailedPlantout": "Plantene er plantet ut",
+  "phaseDetailedPlantoutBody": "På endelig plass. Høstepåminnelse gjenstår.",
+  "phaseFinishedReady": "Klar til høsting",
+  "phaseFinishedReadyBody": "Markeres som høsteklar nå.",
+  "phaseFinishedHarvested": "Høstet",
+  "phaseFinishedHarvestedBody": "Sesongen er ferdig — påminnelser pauses.",
+  "phaseFinishedDormant": "Hvilende",
+  "phaseFinishedDormantBody": "Planten er ikke aktiv akkurat nå.",
+  "phaseDateHelpPresow": "Hvilken dato startet du denne planten?",
+  "phaseDateHelpDirectsow": "Hvilken dato direktesådde du?",
+  "phaseDateHelpPlantout": "Hvilken dato kom plantene ut?",
+  "phaseDateHelpDefault": "Dato",
+  "phasePerennialYearTitle": "Siden når har du den?",
+  "phasePerennialYearBody": "Trenger ikke være eksakt – vi bruker bare året.",
+  "phasePerennialYearThis": "I år ({year})",
+  "phasePerennialYearLast": "I fjor ({year})",
+  "phasePerennialYearTwo": "For to år siden ({year})",
+  "phasePerennialYearOlder": "Tidligere (noen år siden)",
+  "plantDetailTabOverview": "Oversikt",
+  "plantDetailTabMyPlant": "Min plante",
+  "plantDetailTabCare": "Stell",
+  "plantDetailAddCta": "Legg til i min hage",
+  "plantDetailRemoveCta": "Fjern fra hagen",
+  "plantDetailRemoveTitle": "Fjern fra hagen?",
+  "plantDetailRemoveBody": "Dette kan ikke angres.",
+  "plantDetailCancel": "Avbryt",
+  "plantDetailDelete": "Slett",
+  "plantDetailSave": "Lagre",
+  "plantDetailReset": "Tilbakestill",
+  "plantDetailReuse": "Bruk igjen",
+  "plantDetailWaterNowSuffix": "Vannet nå",
+  "plantDetailWaterTapHint": "Trykk når du vanner for å holde styr",
+  "plantDetailWaterDoneSnack": "Vannet ✓",
+  "plantDetailWaterNotYet": "Ikke vannet ennå",
+  "plantDetailWaterJust": "Nylig vannet",
+  "plantDetailWaterToday": "Vannet i dag",
+  "plantDetailWaterYesterday": "Vannet i går",
+  "plantDetailUpcomingCareTitle": "📅  KOMMENDE STELL",
+  "plantDetailDueNow": "På tide",
+  "plantDetailEditPostsTooltip": "Administrer innlegg",
+  "plantDetailNoteHint": "Skriv et kort notat…",
+  "plantDetailNoteTitle": "Notat",
+  "plantDetailNoteSubtitle": "Hva skjedde i dag? Bladlus, første blomst, beskjæring…",
+  "plantDetailTakePhoto": "Ta bilde",
+  "plantDetailPickLibrary": "Velg fra bibliotek",
+  "plantDetailWriteNote": "Skriv notat",
+  "plantDetailUseEmojiAgain": "Bruk emoji igjen",
+  "plantDetailSaveImageError": "Kunne ikke lagre bilde: {error}",
+  "plantDetailSavePhotoError": "Kunne ikke lagre foto: {error}",
+  "plantDetailDeletePhotoTitle": "Slett bilde?",
+  "plantDetailDeleteNoteTitle": "Slett notat?",
+  "plantDetailDeletePhotoBody": "Bildet slettes fra enheten.",
+  "plantDetailDeleteNoteBody": "Notatet forsvinner.",
+  "plantDetailAdd": "Legg til",
+  "plantDetailNoPostsBody": "Ingen innlegg ennå — begynn å dokumentere veksten med bilder og korte notater.",
+  "plantDetailChangeStatus": "Endre status",
+  "plantDetailLocationLabel": "Sted",
+  "plantDetailSowingMethodChip": "Sår: {method}",
+  "plantDetailSowingMethodSnack": "Såmetode: {method}",
+  "plantDetailDateHelp": "Hvilken dato?",
+  "plantDetailHowSowTitle": "Hvordan sår du?",
+  "plantDetailHowSowBody": "Avgjør hvilke påminnelser du får.",
+  "plantDetailLocationTitle": "Hvor står den?",
+  "plantDetailLocationBody": "F.eks. \"nordre bed\", \"veksthuset\", \"balkongen\".",
+  "plantDetailHarvestOffsetTitle": "Juster høstetid",
+  "plantDetailHarvestOffsetBody": "Telleren feil? Legg til eller trekk fra dager — lagres på akkurat denne planten.",
+  "plantDetailReadyToHarvest": "Klar til høsting",
+  "plantDetailNextStepPresow": "Jeg har forsådd inne",
+  "plantDetailNextStepDirectsow": "Jeg har direktesådd",
+  "plantDetailNextStepPlantout": "Jeg har plantet ut",
+  "plantDetailNextStepPlantedOut": "Plantene er plantet ut",
+  "plantDetailNextStepHarvestReady": "Klar for høsting",
+  "plantDetailNextStepHarvested": "Høstet",
+  "plantDetailHowToTitle": "Slik gjør du",
+  "plantDetailTipsTitle": "Tips",
+  "plantDetailPestsTitle": "Skadedyr å passe på",
+  "plantDetailNoCareTips": "Ingen stelltips tilgjengelig ennå.",
+  "plantDetailInfoSun": "Sol",
+  "plantDetailInfoWater": "Vann",
+  "plantDetailInfoFertilizer": "Gjødsel",
+  "plantDetailInfoFrost": "Tåler til",
+  "plantDetailInfoSpacing": "Avstand",
+  "plantDetailInfoHarvest": "Høst",
+  "plantDetailHarvestSection": "🥕  Høst",
+  "plantDetailToolsSection": "🛒 Verktøy og tilbehør",
+  "plantDetailSeasonSection": "Sesong",
+  "plantDetailPhasePresow": "Forså",
+  "plantDetailPhaseDirectsow": "Direktesåing",
+  "plantDetailPhasePlantout": "Plante ut",
+  "plantDetailPhaseHarvest": "Høste",
+  "plantDetailZoneWarningBody": "Det kan gå – men du trenger nok vinterbeskyttelse eller en varmere plass.",
+  "plantDetailDateAdded": "Lagt til {date}",
+  "plantDetailDateInGardenSince": "I hagen siden {year}",
+  "plantDetailDatePlanted": "Plantet {date}",
+  "plantDetailHarvestOffsetSubtitle": "Juster høstetid",
+  "plantDetailZoneWarning": "Denne planten er ikke testet for sone {zone}. Det kan gå – men du trenger nok vinterbeskyttelse eller en varmere plass.",
+  "harvestSectionTitle": "🥕 Høst",
+  "harvestRemoveTitle": "Fjerne post?",
+  "harvestRemoveBody": "{amount} {unit} fra {date} fjernes.",
+  "harvestMoreEntries": "+ {count} eldre poster",
+  "harvestAddTitle": "Logg høst — {plant}",
+  "harvestAmountLabel": "Mengde",
+  "harvestUnitLabel": "Enhet",
+  "harvestNotesLabel": "Notat (valgfritt)",
+  "harvestErrorAmountTooLow": "Angi en mengde større enn 0",
+  "harvestErrorFutureDate": "Du kan ikke logge høst i fremtiden",
+  "commonCancel": "Avbryt",
+  "commonDelete": "Slett",
+  "commonSave": "Lagre",
+  "pestTypeLabelDisease": "SYKDOM",
+  "pestTypeLabelDamage": "SKADE",
+  "pestTypeLabelPest": "SKADEDYR"
+}
