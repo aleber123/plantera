@@ -27,7 +27,15 @@ class HarvestService extends ChangeNotifier {
   Future<void> initialize() async {
     if (_db != null) return;
     final dbPath = p.join(await getDatabasesPath(), _dbName);
-    _db = await openDatabase(dbPath);
+    _db = await openDatabase(
+      dbPath,
+      // PRAGMA foreign_keys is per-connection. GardenService sets it
+      // too; we need it here so DELETE on garden_plants cascades into
+      // harvest_entries.
+      onConfigure: (db) async {
+        await db.execute('PRAGMA foreign_keys = ON');
+      },
+    );
     await _db!.execute('''
       CREATE TABLE IF NOT EXISTS $_table (
         id TEXT PRIMARY KEY,
@@ -35,9 +43,14 @@ class HarvestService extends ChangeNotifier {
         date INTEGER NOT NULL,
         amount REAL NOT NULL,
         unit TEXT NOT NULL,
-        notes TEXT
+        notes TEXT,
+        FOREIGN KEY (garden_plant_id) REFERENCES garden_plants(id) ON DELETE CASCADE
       )
     ''');
+    // Backfill: older DBs created this table without the FK. SQLite
+    // doesn't let us ADD FOREIGN KEY in place, so we just live with
+    // legacy rows getting cleaned via explicit cascade in
+    // GardenService.remove instead.
     await _reload();
   }
 

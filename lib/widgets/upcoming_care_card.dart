@@ -120,10 +120,22 @@ class UpcomingCareCard extends StatelessWidget {
       }
     }
 
-    // Generic monthly chores — drop ones already represented by a
-    // plant-specific care task with the same intent? Skip for now;
-    // the wording is different enough and we want both visible.
+    // Generic monthly chores — filtered by what the user actually grows
+    // so "Gallra äpple och plommon" doesn't show up if there are no
+    // fruit trees. Universal chores (no filter) always pass.
+    final userPlantIds = garden.plants.map((gp) => gp.plantId).toSet();
+    final userCategories = <String>{};
+    for (final gp in garden.plants) {
+      final p = db.byId(gp.plantId);
+      if (p != null) userCategories.add(p.kategori.name);
+    }
     for (final c in chores.upcoming(now: today)) {
+      if (!c.isUniversal) {
+        final matchesPlant = c.appliesToPlants.any(userPlantIds.contains);
+        final matchesCategory =
+            c.appliesToCategories.any(userCategories.contains);
+        if (!matchesPlant && !matchesCategory) continue;
+      }
       out.add(_Item.fromChore(c));
     }
 

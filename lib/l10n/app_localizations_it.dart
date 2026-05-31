@@ -1565,4 +1565,199 @@ class AppLocalizationsIt extends AppLocalizations {
 
   @override
   String get pestTypeLabelPest => 'PARASSITA';
+
+  @override
+  String get statsShareButton => 'Condividi';
+
+  @override
+  String statsShareText(String year) {
+    return 'Il mio orto $year con Plantera 🌱';
+  }
+
+  @override
+  String get statsShareFailed =>
+      'Impossibile creare l\'immagine di condivisione';
+
+  @override
+  String get paywallTitleBranded => 'Plantera Premium';
+
+  @override
+  String get paywallHeaderFrost =>
+      'Ricevi avvisi gelo prima che le piante congelino';
+
+  @override
+  String get paywallHeaderGardenLimit => 'Aggiungi tutto il giardino';
+
+  @override
+  String get paywallHeaderWaterAll => 'Annaffia tutto con un tocco';
+
+  @override
+  String get paywallHeaderPhotoLog => 'Un diario fotografico per le tue piante';
+
+  @override
+  String get paywallSubFrost =>
+      'Temperatura notturna SMHI — ti avvisiamo la sera prima della notte di gelo';
+
+  @override
+  String get paywallSubGardenLimit =>
+      'Nessun limite al numero di piante che segui';
+
+  @override
+  String get paywallSubWaterAll =>
+      'Un pulsante segna tutte le piante da esterno come annaffiate';
+
+  @override
+  String get paywallSubPhotoLog => 'Vedile crescere dal seme al raccolto';
+
+  @override
+  String get paywallSubHome =>
+      'Avvisi gelo, diario fotografico e tutto illimitato';
+
+  @override
+  String get paywallSubDefault => 'Porta il tuo giardino al livello successivo';
+
+  @override
+  String get paywallBenefitUnlimited => 'Piante illimitate nel tuo giardino';
+
+  @override
+  String get paywallBenefitReminders => 'Tutti i promemoria e gli avvisi gelo';
+
+  @override
+  String get paywallBenefitPhotos => 'Diario fotografico per ogni pianta';
+
+  @override
+  String get paywallBenefitNoAds => 'Senza pubblicità';
+
+  @override
+  String get paywallBenefitPdf => 'Esportazione PDF del diario raccolto';
+
+  @override
+  String get paywallBenefitArticles =>
+      'Accesso completo agli articoli di conoscenza';
+
+  @override
+  String get paywallPlanYearly => 'Abbonamento annuale';
+
+  @override
+  String paywallPlanYearlySavings(String percent) {
+    return 'Risparmia il $percent% rispetto al mensile';
+  }
+
+  @override
+  String get paywallPlanMonthly => 'Abbonamento mensile';
+
+  @override
+  String get paywallPlanLifetime => 'Acquisto a vita (pagamento unico)';
+
+  @override
+  String paywallTrialCta(String period) {
+    return 'Inizia la prova gratuita ($period)';
+  }
+
+  @override
+  String paywallTrialThen(String price) {
+    return 'Poi $price';
+  }
+
+  @override
+  String paywallPlanPriceFormat(String title, String price) {
+    return '$title • $price';
+  }
+
+  @override
+  String get paywallRestore => 'Ripristina acquisti precedenti';
+
+  @override
+  String get paywallDisclaimer =>
+      'Gli abbonamenti si rinnovano automaticamente finché non vengono annullati nelle impostazioni dell\'App Store. L\'addebito avviene 24 h prima del rinnovo.';
+
+  @override
+  String get paywallTerms => 'Termini (EULA)';
+
+  @override
+  String get paywallPrivacy => 'Informativa sulla privacy';
+
+  @override
+  String get paywallErrorStore =>
+      'L\'App Store non è disponibile in questo momento — riprova tra poco.';
+
+  @override
+  String get paywallErrorProduct =>
+      'Impossibile caricare l\'acquisto dall\'App Store. Chiudi la paywall e riaprila.';
+
+  @override
+  String get paywallErrorFailed => 'Acquisto fallito. Riprova.';
+
+  @override
+  String paywallErrorOpenUrl(String url) {
+    return 'Impossibile aprire $url';
+  }
+
+  @override
+  String get paywallPurchaseSuccess =>
+      'Premium attivato — grazie! Tutto è sbloccato.';
+
+  @override
+  String get paywallRestoreInProgress => 'Ricerca dei tuoi acquisti…';
+
+  @override
+  String get paywallRestoreFailed =>
+      'Impossibile contattare l\'App Store. Riprova.';
+
+  @override
+  String get paywallRestoreSuccess => 'Premium ripristinato — grazie!';
+
+  @override
+  String get paywallRestoreAlreadyActive => 'Premium è già attivo.';
+
+  @override
+  String get paywallRestoreNothingFound =>
+      'Nessun acquisto trovato per questo ID Apple.';
+
+  @override
+  String get paywallAlreadyPremiumTitle => 'Hai Premium';
+
+  @override
+  String get paywallAlreadyPremiumBody =>
+      'Tutte le funzioni sono sbloccate. Grazie per il supporto — ci aiuta a continuare.';
+
+  @override
+  String get paywallAlreadyPremiumCta => 'Torna al giardino';
+
+  @override
+  String get paywallProductsUnavailable =>
+      'Impossibile caricare i prezzi dall\'App Store. Controlla la connessione e riprova.';
+
+  @override
+  String get paywallProductsRetry => 'Riprova';
+
+  @override
+  String get onboardingSlide1Title => 'Smetti di indovinare quando seminare';
+
+  @override
+  String get onboardingSlide1Body =>
+      'Plantera conosce la tua zona climatica e ti dice esattamente quando seminare al chiuso, in pieno campo o trapiantare — pianta per pianta.';
+
+  @override
+  String get onboardingSlide2Title => 'Avvisi gelo su cui puoi agire';
+
+  @override
+  String get onboardingSlide2Body =>
+      'Quando arriva una notte fredda ricevi un avviso in tempo per coprire le piantine. Niente panico alle tre di notte.';
+
+  @override
+  String get onboardingSlide3Title => 'Un promemoria al mattino — non 50';
+
+  @override
+  String get onboardingSlide3Body =>
+      'Annaffiatura, potatura, raccolto e lavori stagionali in un riepilogo giornaliero, così ottieni davvero un raccolto.';
+
+  @override
+  String get onboardingFooterSkip => 'Salta';
+
+  @override
+  String get onboardingFooterNext => 'Avanti';
+
+  @override
+  String get onboardingFooterStart => 'Inizia';
 }

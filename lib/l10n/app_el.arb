@@ -372,5 +372,120 @@
   "commonSave": "Αποθήκευση",
   "pestTypeLabelDisease": "ΑΣΘΕΝΕΙΑ",
   "pestTypeLabelDamage": "ΖΗΜΙΑ",
-  "pestTypeLabelPest": "ΠΑΡΑΣΙΤΟ"
+  "pestTypeLabelPest": "ΠΑΡΑΣΙΤΟ",
+  "statsShareButton": "Κοινοποίηση",
+  "statsShareText": "Ο κήπος μου {year} με Plantera 🌱",
+  "statsShareFailed": "Δεν ήταν δυνατή η δημιουργία εικόνας",
+  "paywallTitleBranded": "Plantera Premium",
+  "paywallHeaderFrost": "Λάβετε προειδοποίηση παγετού πριν παγώσουν τα φυτά",
+  "paywallHeaderGardenLimit": "Προσθέστε όλο τον κήπο",
+  "paywallHeaderWaterAll": "Πότισμα όλων με ένα πάτημα",
+  "paywallHeaderPhotoLog": "Φωτογραφικό ημερολόγιο για τα φυτά σας",
+  "paywallSubFrost": "Νυχτερινές θερμοκρασίες από SMHI — σας ειδοποιούμε το βράδυ πριν τον παγετό",
+  "paywallSubGardenLimit": "Κανένα όριο στον αριθμό φυτών που παρακολουθείτε",
+  "paywallSubWaterAll": "Ένα κουμπί σημειώνει όλα τα εξωτερικά φυτά ως ποτισμένα",
+  "paywallSubPhotoLog": "Δείτε τα να μεγαλώνουν από σπόρο μέχρι συγκομιδή",
+  "paywallSubHome": "Ειδοποιήσεις παγετού, φωτογραφικό ημερολόγιο και όλα απεριόριστα",
+  "paywallSubDefault": "Ανεβάστε επίπεδο τον κήπο σας",
+  "paywallBenefitUnlimited": "Απεριόριστα φυτά στον κήπο σας",
+  "paywallBenefitReminders": "Όλες οι υπενθυμίσεις και ειδοποιήσεις παγετού",
+  "paywallBenefitPhotos": "Φωτογραφικό ημερολόγιο για κάθε φυτό",
+  "paywallBenefitNoAds": "Χωρίς διαφημίσεις",
+  "paywallBenefitPdf": "Εξαγωγή PDF του ημερολογίου συγκομιδής",
+  "paywallBenefitArticles": "Πλήρης πρόσβαση σε άρθρα γνώσης",
+  "paywallPlanYearly": "Ετήσια συνδρομή",
+  "paywallPlanYearlySavings": "Εξοικονομήστε {percent}% σε σχέση με τη μηνιαία",
+  "paywallPlanMonthly": "Μηνιαία συνδρομή",
+  "paywallPlanLifetime": "Εφ' όρου ζωής (εφάπαξ πληρωμή)",
+  "paywallTrialCta": "Έναρξη δωρεάν δοκιμής ({period})",
+  "paywallTrialThen": "Έπειτα {price}",
+  "paywallPlanPriceFormat": "{title} • {price}",
+  "paywallRestore": "Επαναφορά προηγούμενων αγορών",
+  "paywallDisclaimer": "Οι συνδρομές ανανεώνονται αυτόματα μέχρι την ακύρωση στις ρυθμίσεις του App Store. Η χρέωση γίνεται 24 ώρες πριν την ανανέωση.",
+  "paywallTerms": "Όροι (EULA)",
+  "paywallPrivacy": "Πολιτική απορρήτου",
+  "paywallErrorStore": "Το App Store δεν είναι διαθέσιμο αυτή τη στιγμή — δοκιμάστε ξανά σε λίγο.",
+  "paywallErrorProduct": "Η αγορά δεν φορτώθηκε από το App Store. Κλείστε την παρουσίαση και ανοίξτε ξανά.",
+  "paywallErrorFailed": "Η αγορά απέτυχε. Δοκιμάστε ξανά.",
+  "paywallErrorOpenUrl": "Δεν ήταν δυνατό το άνοιγμα του {url}",
+  "paywallPurchaseSuccess": "Premium ενεργοποιήθηκε — ευχαριστούμε! Όλα είναι ξεκλειδωμένα.",
+  "@paywallPurchaseSuccess": {
+    "description": "Paywall UX feedback strings (added 2026-05)"
+  },
+  "paywallRestoreInProgress": "Αναζήτηση για τις αγορές σας…",
+  "@paywallRestoreInProgress": {
+    "description": "Paywall UX feedback strings (added 2026-05)"
+  },
+  "paywallRestoreFailed": "Δεν ήταν δυνατή η σύνδεση με το App Store. Δοκιμάστε ξανά.",
+  "@paywallRestoreFailed": {
+    "description": "Paywall UX feedback strings (added 2026-05)"
+  },
+  "paywallRestoreSuccess": "Το Premium αποκαταστάθηκε — ευχαριστούμε!",
+  "@paywallRestoreSuccess": {
+    "description": "Paywall UX feedback strings (added 2026-05)"
+  },
+  "paywallRestoreAlreadyActive": "Το Premium είναι ήδη ενεργό.",
+  "@paywallRestoreAlreadyActive": {
+    "description": "Paywall UX feedback strings (added 2026-05)"
+  },
+  "paywallRestoreNothingFound": "Δεν βρέθηκαν αγορές σε αυτό το Apple ID.",
+  "@paywallRestoreNothingFound": {
+    "description": "Paywall UX feedback strings (added 2026-05)"
+  },
+  "paywallAlreadyPremiumTitle": "Έχετε Premium",
+  "@paywallAlreadyPremiumTitle": {
+    "description": "Paywall UX feedback strings (added 2026-05)"
+  },
+  "paywallAlreadyPremiumBody": "Όλες οι λειτουργίες είναι ξεκλειδωμένες. Ευχαριστούμε για την υποστήριξη.",
+  "@paywallAlreadyPremiumBody": {
+    "description": "Paywall UX feedback strings (added 2026-05)"
+  },
+  "paywallAlreadyPremiumCta": "Πίσω στον κήπο",
+  "@paywallAlreadyPremiumCta": {
+    "description": "Paywall UX feedback strings (added 2026-05)"
+  },
+  "paywallProductsUnavailable": "Δεν ήταν δυνατή η φόρτωση τιμών από το App Store. Ελέγξτε τη σύνδεσή σας και δοκιμάστε ξανά.",
+  "@paywallProductsUnavailable": {
+    "description": "Paywall UX feedback strings (added 2026-05)"
+  },
+  "paywallProductsRetry": "Δοκιμή ξανά",
+  "@paywallProductsRetry": {
+    "description": "Paywall UX feedback strings (added 2026-05)"
+  },
+  "onboardingSlide1Title": "Σταμάτα να μαντεύεις πότε να σπείρεις",
+  "@onboardingSlide1Title": {
+    "description": "Onboarding value-prop slide (added 2026-05)"
+  },
+  "onboardingSlide1Body": "Το Plantera γνωρίζει τη ζώνη σου και σου λέει ακριβώς πότε να σπείρεις εσωτερικά, απευθείας ή να φυτέψεις — φυτό προς φυτό.",
+  "@onboardingSlide1Body": {
+    "description": "Onboarding value-prop slide (added 2026-05)"
+  },
+  "onboardingSlide2Title": "Προειδοποιήσεις παγετού",
+  "@onboardingSlide2Title": {
+    "description": "Onboarding value-prop slide (added 2026-05)"
+  },
+  "onboardingSlide2Body": "Όταν έρχεται κρύα νύχτα ειδοποιείσαι έγκαιρα για να σκεπάσεις τα φυτά. Καμία πανικός στις τρεις τη νύχτα.",
+  "@onboardingSlide2Body": {
+    "description": "Onboarding value-prop slide (added 2026-05)"
+  },
+  "onboardingSlide3Title": "Μία πρωινή υπενθύμιση — όχι 50",
+  "@onboardingSlide3Title": {
+    "description": "Onboarding value-prop slide (added 2026-05)"
+  },
+  "onboardingSlide3Body": "Πότισμα, κλάδεμα, συγκομιδή και εποχιακές εργασίες σε μία ημερήσια σύνοψη ώστε να έχεις πραγματικά σοδειά.",
+  "@onboardingSlide3Body": {
+    "description": "Onboarding value-prop slide (added 2026-05)"
+  },
+  "onboardingFooterSkip": "Παράλειψη",
+  "@onboardingFooterSkip": {
+    "description": "Onboarding value-prop slide (added 2026-05)"
+  },
+  "onboardingFooterNext": "Επόμενο",
+  "@onboardingFooterNext": {
+    "description": "Onboarding value-prop slide (added 2026-05)"
+  },
+  "onboardingFooterStart": "Ξεκίνα",
+  "@onboardingFooterStart": {
+    "description": "Onboarding value-prop slide (added 2026-05)"
+  }
 }

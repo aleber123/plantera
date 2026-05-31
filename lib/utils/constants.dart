@@ -35,6 +35,18 @@ class AppConstants {
         '&timezone=auto';
   }
 
+  /// 10-day daily forecast from Open-Meteo. Used as the global fallback
+  /// when SMHI is unavailable (outside Nordic + N-Europe coverage box).
+  static String openMeteoForecastUrl(double lat, double lon) {
+    final latS = lat.toStringAsFixed(4);
+    final lonS = lon.toStringAsFixed(4);
+    return '$openMeteoForecastBase?latitude=$latS&longitude=$lonS'
+        '&forecast_days=10'
+        '&daily=temperature_2m_max,temperature_2m_min,'
+        'precipitation_sum,weathercode'
+        '&timezone=auto';
+  }
+
   static String amazonUrl(String query) {
     final q = Uri.encodeComponent(query);
     return 'https://www.amazon.se/s?k=$q&tag=$amazonAffiliateTag';

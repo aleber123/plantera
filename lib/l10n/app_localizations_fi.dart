@@ -1562,4 +1562,198 @@ class AppLocalizationsFi extends AppLocalizations {
 
   @override
   String get pestTypeLabelPest => 'TUHOLAINEN';
+
+  @override
+  String get statsShareButton => 'Jaa';
+
+  @override
+  String statsShareText(String year) {
+    return 'Puutarhani $year – Plantera 🌱';
+  }
+
+  @override
+  String get statsShareFailed => 'Jakokuvaa ei voitu luoda';
+
+  @override
+  String get paywallTitleBranded => 'Plantera Premium';
+
+  @override
+  String get paywallHeaderFrost =>
+      'Saa hallavaroitus ennen kuin kasvit jäätyvät';
+
+  @override
+  String get paywallHeaderGardenLimit => 'Lisää koko puutarha';
+
+  @override
+  String get paywallHeaderWaterAll => 'Kastele kaikki yhdellä napautuksella';
+
+  @override
+  String get paywallHeaderPhotoLog => 'Valokuvapäiväkirja kasveillesi';
+
+  @override
+  String get paywallSubFrost =>
+      'SMHI-pohjainen yölämpötila — ilmoitamme illalla ennen hallayötä';
+
+  @override
+  String get paywallSubGardenLimit =>
+      'Ei rajoitusta seuraamiesi kasvien määrälle';
+
+  @override
+  String get paywallSubWaterAll =>
+      'Yksi nappi merkitsee kaikki ulkokasvit kastelluiksi';
+
+  @override
+  String get paywallSubPhotoLog => 'Seuraa niitä siemenestä satoon';
+
+  @override
+  String get paywallSubHome =>
+      'Hallavaroitukset, valokuvapäiväkirja ja kaikki rajaton';
+
+  @override
+  String get paywallSubDefault => 'Nosta puutarhasi seuraavalle tasolle';
+
+  @override
+  String get paywallBenefitUnlimited => 'Rajaton määrä kasveja puutarhassasi';
+
+  @override
+  String get paywallBenefitReminders =>
+      'Kaikki muistutukset ja hallavaroitukset';
+
+  @override
+  String get paywallBenefitPhotos => 'Valokuvapäiväkirja jokaiselle kasville';
+
+  @override
+  String get paywallBenefitNoAds => 'Ei mainoksia';
+
+  @override
+  String get paywallBenefitPdf => 'Satopäiväkirjan PDF-vienti';
+
+  @override
+  String get paywallBenefitArticles => 'Täysi pääsy tietoartikkeleihin';
+
+  @override
+  String get paywallPlanYearly => 'Vuositilaus';
+
+  @override
+  String paywallPlanYearlySavings(String percent) {
+    return 'Säästä $percent% kuukausimaksuun verrattuna';
+  }
+
+  @override
+  String get paywallPlanMonthly => 'Kuukausitilaus';
+
+  @override
+  String get paywallPlanLifetime => 'Elinikäinen osto (kertamaksu)';
+
+  @override
+  String paywallTrialCta(String period) {
+    return 'Aloita ilmainen kokeilu ($period)';
+  }
+
+  @override
+  String paywallTrialThen(String price) {
+    return 'Sitten $price';
+  }
+
+  @override
+  String paywallPlanPriceFormat(String title, String price) {
+    return '$title • $price';
+  }
+
+  @override
+  String get paywallRestore => 'Palauta aiemmat ostot';
+
+  @override
+  String get paywallDisclaimer =>
+      'Tilaukset uusiutuvat automaattisesti, kunnes ne peruutetaan App Store -asetuksissa. Maksu veloitetaan 24 h ennen uusimista.';
+
+  @override
+  String get paywallTerms => 'Käyttöehdot (EULA)';
+
+  @override
+  String get paywallPrivacy => 'Tietosuojakäytäntö';
+
+  @override
+  String get paywallErrorStore =>
+      'App Store ei ole käytettävissä juuri nyt — yritä hetken kuluttua uudelleen.';
+
+  @override
+  String get paywallErrorProduct =>
+      'Ostoa ei voitu ladata App Storesta. Sulje maksumuuri ja avaa uudelleen.';
+
+  @override
+  String get paywallErrorFailed => 'Osto epäonnistui. Yritä uudelleen.';
+
+  @override
+  String paywallErrorOpenUrl(String url) {
+    return 'Linkkiä $url ei voitu avata';
+  }
+
+  @override
+  String get paywallPurchaseSuccess =>
+      'Premium aktivoitu — kiitos! Kaikki on auki.';
+
+  @override
+  String get paywallRestoreInProgress => 'Etsitään ostojasi…';
+
+  @override
+  String get paywallRestoreFailed =>
+      'App Storeen ei saatu yhteyttä. Yritä uudelleen.';
+
+  @override
+  String get paywallRestoreSuccess => 'Premium palautettu — kiitos!';
+
+  @override
+  String get paywallRestoreAlreadyActive => 'Premium on jo aktiivinen.';
+
+  @override
+  String get paywallRestoreNothingFound =>
+      'Tällä Apple ID:llä ei löytynyt ostoja.';
+
+  @override
+  String get paywallAlreadyPremiumTitle => 'Sinulla on Premium';
+
+  @override
+  String get paywallAlreadyPremiumBody =>
+      'Kaikki ominaisuudet ovat käytössä. Kiitos tuesta — se auttaa meitä rakentamaan eteenpäin.';
+
+  @override
+  String get paywallAlreadyPremiumCta => 'Takaisin puutarhaan';
+
+  @override
+  String get paywallProductsUnavailable =>
+      'Hintojen lataus App Storesta epäonnistui. Tarkista internet ja yritä uudelleen.';
+
+  @override
+  String get paywallProductsRetry => 'Yritä uudelleen';
+
+  @override
+  String get onboardingSlide1Title => 'Lopeta arvaaminen milloin kylvää';
+
+  @override
+  String get onboardingSlide1Body =>
+      'Plantera tuntee viljelyvyöhykkeesi ja kertoo tarkalleen milloin esikylvää, suorakylvää tai istuttaa ulos — kasvi kerrallaan.';
+
+  @override
+  String get onboardingSlide2Title => 'Hallavaroitukset joihin voit reagoida';
+
+  @override
+  String get onboardingSlide2Body =>
+      'Kun kylmä yö lähestyy saat ilmoituksen ajoissa peittääksesi taimet. Ei paniikkia kolmelta yöllä.';
+
+  @override
+  String get onboardingSlide3Title => 'Yksi aamumuistutus — ei 50';
+
+  @override
+  String get onboardingSlide3Body =>
+      'Kastelu, leikkaus, sadonkorjuu ja kausityöt yhdessä päivittäisessä yhteenvedossa, jotta saat sadon josta voit olla ylpeä.';
+
+  @override
+  String get onboardingFooterSkip => 'Ohita';
+
+  @override
+  String get onboardingFooterNext => 'Seuraava';
+
+  @override
+  String get onboardingFooterStart => 'Aloita';
 }

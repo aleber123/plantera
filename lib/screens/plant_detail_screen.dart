@@ -13,6 +13,7 @@ import '../models/plant.dart';
 import '../services/affiliate_service.dart';
 import '../services/garden_service.dart';
 import '../services/notification_service.dart';
+import '../services/premium_service.dart';
 import '../services/zone_service.dart';
 import '../utils/add_to_garden.dart';
 import '../utils/garden_progress.dart';
@@ -22,6 +23,7 @@ import '../widgets/harvest_section.dart';
 import '../widgets/phase_picker_sheet.dart';
 import '../widgets/plant_hero_avatar.dart';
 import 'circle_crop_screen.dart';
+import 'paywall_screen.dart';
 
 class PlantDetailScreen extends StatefulWidget {
   final Plant plant;
@@ -346,6 +348,17 @@ class _PlantingHeroState extends State<_PlantingHero> {
 
   Future<void> _showAvatarMenu() async {
     final l10n = AppLocalizations.of(context);
+    // Photo features are Premium per the paywall ("Fotodagbok för
+    // varje växt"). Send free users to the paywall instead of letting
+    // them silently bypass the gate.
+    final premium = context.read<PremiumService>();
+    if (!premium.canUsePhotoLog) {
+      await Navigator.of(context).push(
+        MaterialPageRoute(
+            builder: (_) => const PaywallScreen(source: 'photo_log')),
+      );
+      return;
+    }
     final hasPhoto = widget.gp.heroPhotoPath != null;
     final action = await showModalBottomSheet<String>(
       context: context,
@@ -885,6 +898,18 @@ class _PlantingJournalState extends State<_PlantingJournal> {
       ),
     );
     if (action == null || !mounted) return;
+    // Photo-attaching is Premium ("Fotodagbok" on paywall). Notes are
+    // free. Send free users picking a photo option to the paywall.
+    if (action == 'camera' || action == 'library') {
+      final premium = context.read<PremiumService>();
+      if (!premium.canUsePhotoLog) {
+        await Navigator.of(context).push(
+          MaterialPageRoute(
+              builder: (_) => const PaywallScreen(source: 'photo_log')),
+        );
+        return;
+      }
+    }
     if (action == 'camera') await _addPhoto(ImageSource.camera);
     if (action == 'library') await _addPhoto(ImageSource.gallery);
     if (action == 'note') await _addNote();
@@ -1277,7 +1302,10 @@ Future<void> _advanceTo(
       context: context,
       initialDate: DateTime.now(),
       firstDate: DateTime.now().subtract(const Duration(days: 365)),
-      lastDate: DateTime.now().add(const Duration(days: 7)),
+      // Clamped to today: a future plantedDate breaks downstream date
+      // math (negative daysGrown, water tasks never fire, harvest ETA
+      // pushed past the season).
+      lastDate: DateTime.now(),
       helpText: l10n.plantDetailDateHelp,
     );
     if (date == null || !context.mounted) return;

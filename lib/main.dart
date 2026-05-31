@@ -97,7 +97,50 @@ void main() async {
   // both "direktså" and "skörda" pushes on the same morning. The async
   // call handles its own scheduling on the platform side; no need to
   // block UI on completion.
+  //
+  // Tracks the previous garden-plant-id set across listener fires so
+  // we can detect deletions — rescheduleAllForGarden only cancels for
+  // plants still present, so a row that was deleted would otherwise
+  // leak its lifecycle notifications until the iOS 64-pending-limit
+  // shuffled them out.
+  final previousGardenPlantIds = <String>{};
   Future<void> reschedulePlantLifecycles() async {
+    // Pre-step: any plant that disappeared since the last fire was
+    // deleted by the user. rescheduleAllForGarden no longer sees it
+    // and would leave its notifications scheduled — cancel them
+    // explicitly here.
+    final currentIds = garden.plants.map((gp) => gp.id).toSet();
+    final removed = previousGardenPlantIds.difference(currentIds);
+    for (final id in removed) {
+      await notifications.cancelForGardenPlant(id);
+    }
+    previousGardenPlantIds
+      ..clear()
+      ..addAll(currentIds);
+
+
+    // Defensive cleanup for users on older builds: any wishlist row
+    // whose species is already in the garden duplicates the garden's
+    // own reminders and produces two "plantera ut X" notifications on
+    // the same morning. Prune those before scheduling — but only when
+    // the wishlist row belongs to the same garden as the matching
+    // plant; balkong-paprika in garden A must not nuke a paprika
+    // wishlist row in garden B.
+    final byGardenSpecies = <String, Set<String>>{};
+    for (final gp in garden.plants) {
+      final gid = gp.gardenId;
+      if (gid == null) continue;
+      byGardenSpecies.putIfAbsent(gid, () => <String>{}).add(gp.plantId);
+    }
+    for (final w in season.allItems.toList()) {
+      final gid = w.gardenId;
+      if (gid == null) continue;
+      if (byGardenSpecies[gid]?.contains(w.plantId) ?? false) {
+        await notifications.cancelForWishlist(w.id);
+        await season.remove(w.id);
+      }
+    }
+
     final updated = await notifications.rescheduleAllForGarden(
       garden: garden.plants,
       plantLookup: db.byId,
@@ -127,9 +170,25 @@ void main() async {
   garden.addListener(refreshWarnings);
   garden.addListener(reschedulePlantLifecycles);
 
+  // Re-schedule everything when notification settings change. This
+  // catches the morning-hour picker in Settings — without this listener
+  // the user picks 07:00, but all already-scheduled reminders keep
+  // firing at the old hour until they get re-generated for other
+  // reasons (garden edit, weather refresh).
+  notifications.addListener(() {
+    reschedulePlantLifecycles();
+    refreshWarnings();
+  });
+
   // Initial run on cold start — picks up auto-transitions from time
   // the app was closed and dedupes existing schedules.
   reschedulePlantLifecycles();
+
+  // Seasonal "peak-intent"-pushar för svenska hobby-odlare. Idempotent —
+  // varje cold start upsertar fönstret för innevarande + nästa år.
+  // Cost: 0 (gratis kanal). Driver retention och konvertering under
+  // feb-april peak-säsong utan att kräva användarinmatning.
+  notifications.scheduleSeasonalCampaign(year: DateTime.now().year);
 
   runApp(PlanteraApp(
     premium: premium,
@@ -303,6 +362,13 @@ class PlanteraApp extends StatelessWidget {
         builder: (ctx, child) {
           final ui = ctx.watch<UISettingsService>();
           final media = MediaQuery.of(ctx);
+          // Resolved locale lives downstream of localizationsDelegates,
+          // so we have to read it inside the MaterialApp builder rather
+          // than at construction. Push it into NotificationService so
+          // scheduled reminders fire in the user's language instead of
+          // hardcoded Swedish.
+          final resolved = Localizations.localeOf(ctx);
+          notifications.setLocale(resolved.toLanguageTag());
           return MediaQuery(
             data: media.copyWith(
               textScaler: TextScaler.linear(

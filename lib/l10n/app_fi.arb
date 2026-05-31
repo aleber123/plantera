@@ -372,5 +372,120 @@
   "commonSave": "Tallenna",
   "pestTypeLabelDisease": "SAIRAUS",
   "pestTypeLabelDamage": "VAURIO",
-  "pestTypeLabelPest": "TUHOLAINEN"
+  "pestTypeLabelPest": "TUHOLAINEN",
+  "statsShareButton": "Jaa",
+  "statsShareText": "Puutarhani {year} – Plantera 🌱",
+  "statsShareFailed": "Jakokuvaa ei voitu luoda",
+  "paywallTitleBranded": "Plantera Premium",
+  "paywallHeaderFrost": "Saa hallavaroitus ennen kuin kasvit jäätyvät",
+  "paywallHeaderGardenLimit": "Lisää koko puutarha",
+  "paywallHeaderWaterAll": "Kastele kaikki yhdellä napautuksella",
+  "paywallHeaderPhotoLog": "Valokuvapäiväkirja kasveillesi",
+  "paywallSubFrost": "SMHI-pohjainen yölämpötila — ilmoitamme illalla ennen hallayötä",
+  "paywallSubGardenLimit": "Ei rajoitusta seuraamiesi kasvien määrälle",
+  "paywallSubWaterAll": "Yksi nappi merkitsee kaikki ulkokasvit kastelluiksi",
+  "paywallSubPhotoLog": "Seuraa niitä siemenestä satoon",
+  "paywallSubHome": "Hallavaroitukset, valokuvapäiväkirja ja kaikki rajaton",
+  "paywallSubDefault": "Nosta puutarhasi seuraavalle tasolle",
+  "paywallBenefitUnlimited": "Rajaton määrä kasveja puutarhassasi",
+  "paywallBenefitReminders": "Kaikki muistutukset ja hallavaroitukset",
+  "paywallBenefitPhotos": "Valokuvapäiväkirja jokaiselle kasville",
+  "paywallBenefitNoAds": "Ei mainoksia",
+  "paywallBenefitPdf": "Satopäiväkirjan PDF-vienti",
+  "paywallBenefitArticles": "Täysi pääsy tietoartikkeleihin",
+  "paywallPlanYearly": "Vuositilaus",
+  "paywallPlanYearlySavings": "Säästä {percent}% kuukausimaksuun verrattuna",
+  "paywallPlanMonthly": "Kuukausitilaus",
+  "paywallPlanLifetime": "Elinikäinen osto (kertamaksu)",
+  "paywallTrialCta": "Aloita ilmainen kokeilu ({period})",
+  "paywallTrialThen": "Sitten {price}",
+  "paywallPlanPriceFormat": "{title} • {price}",
+  "paywallRestore": "Palauta aiemmat ostot",
+  "paywallDisclaimer": "Tilaukset uusiutuvat automaattisesti, kunnes ne peruutetaan App Store -asetuksissa. Maksu veloitetaan 24 h ennen uusimista.",
+  "paywallTerms": "Käyttöehdot (EULA)",
+  "paywallPrivacy": "Tietosuojakäytäntö",
+  "paywallErrorStore": "App Store ei ole käytettävissä juuri nyt — yritä hetken kuluttua uudelleen.",
+  "paywallErrorProduct": "Ostoa ei voitu ladata App Storesta. Sulje maksumuuri ja avaa uudelleen.",
+  "paywallErrorFailed": "Osto epäonnistui. Yritä uudelleen.",
+  "paywallErrorOpenUrl": "Linkkiä {url} ei voitu avata",
+  "paywallPurchaseSuccess": "Premium aktivoitu — kiitos! Kaikki on auki.",
+  "@paywallPurchaseSuccess": {
+    "description": "Paywall UX feedback strings (added 2026-05)"
+  },
+  "paywallRestoreInProgress": "Etsitään ostojasi…",
+  "@paywallRestoreInProgress": {
+    "description": "Paywall UX feedback strings (added 2026-05)"
+  },
+  "paywallRestoreFailed": "App Storeen ei saatu yhteyttä. Yritä uudelleen.",
+  "@paywallRestoreFailed": {
+    "description": "Paywall UX feedback strings (added 2026-05)"
+  },
+  "paywallRestoreSuccess": "Premium palautettu — kiitos!",
+  "@paywallRestoreSuccess": {
+    "description": "Paywall UX feedback strings (added 2026-05)"
+  },
+  "paywallRestoreAlreadyActive": "Premium on jo aktiivinen.",
+  "@paywallRestoreAlreadyActive": {
+    "description": "Paywall UX feedback strings (added 2026-05)"
+  },
+  "paywallRestoreNothingFound": "Tällä Apple ID:llä ei löytynyt ostoja.",
+  "@paywallRestoreNothingFound": {
+    "description": "Paywall UX feedback strings (added 2026-05)"
+  },
+  "paywallAlreadyPremiumTitle": "Sinulla on Premium",
+  "@paywallAlreadyPremiumTitle": {
+    "description": "Paywall UX feedback strings (added 2026-05)"
+  },
+  "paywallAlreadyPremiumBody": "Kaikki ominaisuudet ovat käytössä. Kiitos tuesta — se auttaa meitä rakentamaan eteenpäin.",
+  "@paywallAlreadyPremiumBody": {
+    "description": "Paywall UX feedback strings (added 2026-05)"
+  },
+  "paywallAlreadyPremiumCta": "Takaisin puutarhaan",
+  "@paywallAlreadyPremiumCta": {
+    "description": "Paywall UX feedback strings (added 2026-05)"
+  },
+  "paywallProductsUnavailable": "Hintojen lataus App Storesta epäonnistui. Tarkista internet ja yritä uudelleen.",
+  "@paywallProductsUnavailable": {
+    "description": "Paywall UX feedback strings (added 2026-05)"
+  },
+  "paywallProductsRetry": "Yritä uudelleen",
+  "@paywallProductsRetry": {
+    "description": "Paywall UX feedback strings (added 2026-05)"
+  },
+  "onboardingSlide1Title": "Lopeta arvaaminen milloin kylvää",
+  "@onboardingSlide1Title": {
+    "description": "Onboarding value-prop slide (added 2026-05)"
+  },
+  "onboardingSlide1Body": "Plantera tuntee viljelyvyöhykkeesi ja kertoo tarkalleen milloin esikylvää, suorakylvää tai istuttaa ulos — kasvi kerrallaan.",
+  "@onboardingSlide1Body": {
+    "description": "Onboarding value-prop slide (added 2026-05)"
+  },
+  "onboardingSlide2Title": "Hallavaroitukset joihin voit reagoida",
+  "@onboardingSlide2Title": {
+    "description": "Onboarding value-prop slide (added 2026-05)"
+  },
+  "onboardingSlide2Body": "Kun kylmä yö lähestyy saat ilmoituksen ajoissa peittääksesi taimet. Ei paniikkia kolmelta yöllä.",
+  "@onboardingSlide2Body": {
+    "description": "Onboarding value-prop slide (added 2026-05)"
+  },
+  "onboardingSlide3Title": "Yksi aamumuistutus — ei 50",
+  "@onboardingSlide3Title": {
+    "description": "Onboarding value-prop slide (added 2026-05)"
+  },
+  "onboardingSlide3Body": "Kastelu, leikkaus, sadonkorjuu ja kausityöt yhdessä päivittäisessä yhteenvedossa, jotta saat sadon josta voit olla ylpeä.",
+  "@onboardingSlide3Body": {
+    "description": "Onboarding value-prop slide (added 2026-05)"
+  },
+  "onboardingFooterSkip": "Ohita",
+  "@onboardingFooterSkip": {
+    "description": "Onboarding value-prop slide (added 2026-05)"
+  },
+  "onboardingFooterNext": "Seuraava",
+  "@onboardingFooterNext": {
+    "description": "Onboarding value-prop slide (added 2026-05)"
+  },
+  "onboardingFooterStart": "Aloita",
+  "@onboardingFooterStart": {
+    "description": "Onboarding value-prop slide (added 2026-05)"
+  }
 }

@@ -85,7 +85,8 @@ class HomeScreen extends StatelessWidget {
       padding: const EdgeInsets.fromLTRB(12, 8, 12, 0),
       child: InkWell(
         onTap: () => Navigator.of(ctx).push(
-          MaterialPageRoute(builder: (_) => const PaywallScreen()),
+          MaterialPageRoute(
+              builder: (_) => const PaywallScreen(source: 'home')),
         ),
         borderRadius: BorderRadius.circular(18),
         child: Container(
@@ -165,14 +166,14 @@ class _GardenSwitcherTitle extends StatelessWidget {
         child: Row(
           mainAxisSize: MainAxisSize.min,
           children: [
-            Text(active.emoji, style: const TextStyle(fontSize: 18)),
-            const SizedBox(width: 6),
+            Text(active.emoji, style: const TextStyle(fontSize: 22)),
+            const SizedBox(width: 8),
             Text(active.name,
                 style: const TextStyle(
-                    fontSize: 17, fontWeight: FontWeight.w800)),
+                    fontSize: 22, fontWeight: FontWeight.w700)),
             if (hasMultiple) ...[
               const SizedBox(width: 4),
-              const Icon(Icons.expand_more, size: 18),
+              const Icon(Icons.expand_more, size: 22),
             ],
           ],
         ),

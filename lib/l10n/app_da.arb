@@ -618,5 +618,120 @@
   "commonSave": "Gem",
   "pestTypeLabelDisease": "SYGDOM",
   "pestTypeLabelDamage": "SKADE",
-  "pestTypeLabelPest": "SKADEDYR"
+  "pestTypeLabelPest": "SKADEDYR",
+  "statsShareButton": "Del",
+  "statsShareText": "Min have {year} med Plantera 🌱",
+  "statsShareFailed": "Kunne ikke lave delbillede",
+  "paywallTitleBranded": "Plantera Premium",
+  "paywallHeaderFrost": "Få frostadvarsel før planterne fryser",
+  "paywallHeaderGardenLimit": "Tilføj hele haven",
+  "paywallHeaderWaterAll": "Vand alt med ét tryk",
+  "paywallHeaderPhotoLog": "Fotodagbog for dine planter",
+  "paywallSubFrost": "SMHI-baseret nattemperatur — vi pinger dig aftenen før frostnatten",
+  "paywallSubGardenLimit": "Ingen grænser for hvor mange planter du følger",
+  "paywallSubWaterAll": "Én knap markerer alle udendørsplanter vandet",
+  "paywallSubPhotoLog": "Se dem vokse fra frø til høst",
+  "paywallSubHome": "Frostvarsler, fotodagbog og alt ubegrænset",
+  "paywallSubDefault": "Løft din have",
+  "paywallBenefitUnlimited": "Ubegrænset antal planter i haven",
+  "paywallBenefitReminders": "Alle påmindelser og frostadvarsler",
+  "paywallBenefitPhotos": "Fotodagbog for hver plante",
+  "paywallBenefitNoAds": "Ingen annoncer",
+  "paywallBenefitPdf": "PDF-eksport af høstdagbogen",
+  "paywallBenefitArticles": "Fuld adgang til vidensartikler",
+  "paywallPlanYearly": "Årligt abonnement",
+  "paywallPlanYearlySavings": "Spar {percent}% sammenlignet med måned",
+  "paywallPlanMonthly": "Månedligt abonnement",
+  "paywallPlanLifetime": "Livstidskøb (engangsbetaling)",
+  "paywallTrialCta": "Start gratis prøveperiode ({period})",
+  "paywallTrialThen": "Derefter {price}",
+  "paywallPlanPriceFormat": "{title} • {price}",
+  "paywallRestore": "Gendan tidligere køb",
+  "paywallDisclaimer": "Abonnementer fornyes automatisk indtil de annulleres i App Store-indstillingerne. Beløbet trækkes 24 t før fornyelse.",
+  "paywallTerms": "Vilkår (EULA)",
+  "paywallPrivacy": "Privatlivspolitik",
+  "paywallErrorStore": "App Store er ikke tilgængelig lige nu — prøv igen om et øjeblik.",
+  "paywallErrorProduct": "Købet kunne ikke indlæses fra App Store. Luk paywallen og åbn igen.",
+  "paywallErrorFailed": "Købet mislykkedes. Prøv igen.",
+  "paywallErrorOpenUrl": "Kunne ikke åbne {url}",
+  "paywallPurchaseSuccess": "Premium aktiveret — tak! Alt er låst op.",
+  "@paywallPurchaseSuccess": {
+    "description": "Paywall UX feedback strings (added 2026-05)"
+  },
+  "paywallRestoreInProgress": "Søger efter dine køb…",
+  "@paywallRestoreInProgress": {
+    "description": "Paywall UX feedback strings (added 2026-05)"
+  },
+  "paywallRestoreFailed": "Kunne ikke kontakte App Store. Prøv igen.",
+  "@paywallRestoreFailed": {
+    "description": "Paywall UX feedback strings (added 2026-05)"
+  },
+  "paywallRestoreSuccess": "Premium gendannet — tak!",
+  "@paywallRestoreSuccess": {
+    "description": "Paywall UX feedback strings (added 2026-05)"
+  },
+  "paywallRestoreAlreadyActive": "Premium er allerede aktivt.",
+  "@paywallRestoreAlreadyActive": {
+    "description": "Paywall UX feedback strings (added 2026-05)"
+  },
+  "paywallRestoreNothingFound": "Ingen køb fundet på dette Apple-ID.",
+  "@paywallRestoreNothingFound": {
+    "description": "Paywall UX feedback strings (added 2026-05)"
+  },
+  "paywallAlreadyPremiumTitle": "Du har Premium",
+  "@paywallAlreadyPremiumTitle": {
+    "description": "Paywall UX feedback strings (added 2026-05)"
+  },
+  "paywallAlreadyPremiumBody": "Alle funktioner er låst op. Tak for støtten — det hjælper os bygge videre.",
+  "@paywallAlreadyPremiumBody": {
+    "description": "Paywall UX feedback strings (added 2026-05)"
+  },
+  "paywallAlreadyPremiumCta": "Tilbage til haven",
+  "@paywallAlreadyPremiumCta": {
+    "description": "Paywall UX feedback strings (added 2026-05)"
+  },
+  "paywallProductsUnavailable": "Kunne ikke hente priser fra App Store. Tjek internet og prøv igen.",
+  "@paywallProductsUnavailable": {
+    "description": "Paywall UX feedback strings (added 2026-05)"
+  },
+  "paywallProductsRetry": "Prøv igen",
+  "@paywallProductsRetry": {
+    "description": "Paywall UX feedback strings (added 2026-05)"
+  },
+  "onboardingSlide1Title": "Stop med at gætte hvornår du skal så",
+  "@onboardingSlide1Title": {
+    "description": "Onboarding value-prop slide (added 2026-05)"
+  },
+  "onboardingSlide1Body": "Plantera kender din hårdførhedszone og fortæller dig præcis hvornår du skal forspire, direkte så eller plante ud — plante for plante.",
+  "@onboardingSlide1Body": {
+    "description": "Onboarding value-prop slide (added 2026-05)"
+  },
+  "onboardingSlide2Title": "Frostvarsler du kan handle på",
+  "@onboardingSlide2Title": {
+    "description": "Onboarding value-prop slide (added 2026-05)"
+  },
+  "onboardingSlide2Body": "Når en kold nat nærmer sig får du besked i tide til at dække spirerne. Ingen panik klokken tre om natten.",
+  "@onboardingSlide2Body": {
+    "description": "Onboarding value-prop slide (added 2026-05)"
+  },
+  "onboardingSlide3Title": "Én morgenpåmindelse — ikke 50",
+  "@onboardingSlide3Title": {
+    "description": "Onboarding value-prop slide (added 2026-05)"
+  },
+  "onboardingSlide3Body": "Vanding, beskæring, høst og sæsonopgaver samlet i én daglig oversigt så du rent faktisk får en høst at være stolt af.",
+  "@onboardingSlide3Body": {
+    "description": "Onboarding value-prop slide (added 2026-05)"
+  },
+  "onboardingFooterSkip": "Spring over",
+  "@onboardingFooterSkip": {
+    "description": "Onboarding value-prop slide (added 2026-05)"
+  },
+  "onboardingFooterNext": "Næste",
+  "@onboardingFooterNext": {
+    "description": "Onboarding value-prop slide (added 2026-05)"
+  },
+  "onboardingFooterStart": "Kom i gang",
+  "@onboardingFooterStart": {
+    "description": "Onboarding value-prop slide (added 2026-05)"
+  }
 }

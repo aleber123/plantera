@@ -5,7 +5,7 @@
   "tabHome": "Hem",
   "tabCalendar": "Kalender",
   "tabPlants": "Växter",
-  "tabMyGarden": "Min trädgård",
+  "tabMyGarden": "Mina växter",
   "tabSettings": "Inställningar",
   "tabOverview": "Översikt",
   "tabMyPlant": "Min planta",
@@ -854,5 +854,165 @@
   },
   "pestTypeLabelDisease": "SJUKDOM",
   "pestTypeLabelDamage": "SKADA",
-  "pestTypeLabelPest": "SKADEDJUR"
+  "pestTypeLabelPest": "SKADEDJUR",
+  "statsShareButton": "Dela",
+  "statsShareText": "Min trädgård {year} med Plantera 🌱",
+  "statsShareFailed": "Kunde inte skapa delningsbild",
+  "@statsShareText": {
+    "placeholders": {
+      "year": {
+        "type": "String"
+      }
+    }
+  },
+  "paywallTitleBranded": "Plantera Premium",
+  "paywallHeaderFrost": "Få frostvarning innan plantorna fryser",
+  "paywallHeaderGardenLimit": "Lägg till hela trädgården",
+  "paywallHeaderWaterAll": "Vattna alla med ett tryck",
+  "paywallHeaderPhotoLog": "Fotodagbok för dina växter",
+  "paywallSubFrost": "SMHI-baserad nattetemp — vi pingar dig kvällen före frostnatten",
+  "paywallSubGardenLimit": "Inga gränser på antal växter du följer",
+  "paywallSubWaterAll": "En knapp markerar alla utomhusväxter vattnade",
+  "paywallSubPhotoLog": "Se hur de växer från frö till skörd",
+  "paywallSubHome": "Frostvarningar, fotodagbok och allt obegränsat",
+  "paywallSubDefault": "Växla upp din trädgård",
+  "paywallBenefitUnlimited": "Obegränsade växter i min trädgård",
+  "paywallBenefitReminders": "Alla påminnelser och frostvarningar",
+  "paywallBenefitPhotos": "Fotodagbok för varje växt",
+  "paywallBenefitNoAds": "Inga annonser",
+  "paywallBenefitPdf": "PDF-export av skördedagbok",
+  "paywallBenefitArticles": "Full tillgång till kunskapsartiklar",
+  "paywallPlanYearly": "Årsprenumeration",
+  "paywallPlanYearlySavings": "Spara {percent}% jämfört med månad",
+  "@paywallPlanYearlySavings": {
+    "placeholders": {
+      "percent": {
+        "type": "String"
+      }
+    }
+  },
+  "paywallPlanMonthly": "Månadsprenumeration",
+  "paywallPlanLifetime": "Livstidsköp (engångsbetalning)",
+  "paywallTrialCta": "Starta gratis provperiod ({period})",
+  "@paywallTrialCta": {
+    "placeholders": {
+      "period": {
+        "type": "String"
+      }
+    }
+  },
+  "paywallTrialThen": "Sedan {price}",
+  "@paywallTrialThen": {
+    "placeholders": {
+      "price": {
+        "type": "String"
+      }
+    }
+  },
+  "paywallPlanPriceFormat": "{title} • {price}",
+  "@paywallPlanPriceFormat": {
+    "placeholders": {
+      "title": {
+        "type": "String"
+      },
+      "price": {
+        "type": "String"
+      }
+    }
+  },
+  "paywallRestore": "Återställ tidigare köp",
+  "paywallDisclaimer": "Prenumerationer förnyas automatiskt tills de avslutas i App Store-inställningarna. Avgiften dras 24 h före förnyelse.",
+  "paywallTerms": "Villkor (EULA)",
+  "paywallPrivacy": "Integritetspolicy",
+  "paywallErrorStore": "App Store är inte tillgängligt just nu — försök igen om en stund.",
+  "paywallErrorProduct": "Köpet kunde inte laddas från App Store. Stäng paywallen och öppna igen.",
+  "paywallErrorFailed": "Köpet misslyckades. Försök igen.",
+  "paywallErrorOpenUrl": "Kunde inte öppna {url}",
+  "@paywallErrorOpenUrl": {
+    "placeholders": {
+      "url": {
+        "type": "String"
+      }
+    }
+  },
+  "paywallPurchaseSuccess": "Premium aktiverat — tack! Allt är upplåst.",
+  "@paywallPurchaseSuccess": {
+    "description": "Paywall UX feedback strings (added 2026-05)"
+  },
+  "paywallRestoreInProgress": "Söker efter dina köp…",
+  "@paywallRestoreInProgress": {
+    "description": "Paywall UX feedback strings (added 2026-05)"
+  },
+  "paywallRestoreFailed": "Kunde inte kontakta App Store. Försök igen.",
+  "@paywallRestoreFailed": {
+    "description": "Paywall UX feedback strings (added 2026-05)"
+  },
+  "paywallRestoreSuccess": "Premium återställd — tack!",
+  "@paywallRestoreSuccess": {
+    "description": "Paywall UX feedback strings (added 2026-05)"
+  },
+  "paywallRestoreAlreadyActive": "Premium är redan aktivt.",
+  "@paywallRestoreAlreadyActive": {
+    "description": "Paywall UX feedback strings (added 2026-05)"
+  },
+  "paywallRestoreNothingFound": "Inga köp hittades på det här Apple-ID:t.",
+  "@paywallRestoreNothingFound": {
+    "description": "Paywall UX feedback strings (added 2026-05)"
+  },
+  "paywallAlreadyPremiumTitle": "Du har Premium",
+  "@paywallAlreadyPremiumTitle": {
+    "description": "Paywall UX feedback strings (added 2026-05)"
+  },
+  "paywallAlreadyPremiumBody": "Alla funktioner är upplåsta. Tack för stödet — det hjälper oss bygga vidare.",
+  "@paywallAlreadyPremiumBody": {
+    "description": "Paywall UX feedback strings (added 2026-05)"
+  },
+  "paywallAlreadyPremiumCta": "Tillbaka till trädgården",
+  "@paywallAlreadyPremiumCta": {
+    "description": "Paywall UX feedback strings (added 2026-05)"
+  },
+  "paywallProductsUnavailable": "Kunde inte ladda priserna från App Store. Kolla din internet och försök igen.",
+  "@paywallProductsUnavailable": {
+    "description": "Paywall UX feedback strings (added 2026-05)"
+  },
+  "paywallProductsRetry": "Försök igen",
+  "@paywallProductsRetry": {
+    "description": "Paywall UX feedback strings (added 2026-05)"
+  },
+  "onboardingSlide1Title": "Sluta gissa när du ska så",
+  "@onboardingSlide1Title": {
+    "description": "Onboarding value-prop slide (added 2026-05)"
+  },
+  "onboardingSlide1Body": "Plantera vet din odlingszon och säger åt dig exakt när det är dags att förodla, direktså eller plantera ut — växt för växt.",
+  "@onboardingSlide1Body": {
+    "description": "Onboarding value-prop slide (added 2026-05)"
+  },
+  "onboardingSlide2Title": "Frostvarning från SMHI",
+  "@onboardingSlide2Title": {
+    "description": "Onboarding value-prop slide (added 2026-05)"
+  },
+  "onboardingSlide2Body": "När det blir kallt om natten får du en notis i tid att täcka över spirorna. Inte panik klockan tre på natten.",
+  "@onboardingSlide2Body": {
+    "description": "Onboarding value-prop slide (added 2026-05)"
+  },
+  "onboardingSlide3Title": "En morgonpåminnelse — inte 50",
+  "@onboardingSlide3Title": {
+    "description": "Onboarding value-prop slide (added 2026-05)"
+  },
+  "onboardingSlide3Body": "Vatten, beskärning, skörd och säsongs-sysslor samlas i en daglig översikt så du faktiskt får en skörd att vara stolt över.",
+  "@onboardingSlide3Body": {
+    "description": "Onboarding value-prop slide (added 2026-05)"
+  },
+  "onboardingFooterSkip": "Hoppa över",
+  "@onboardingFooterSkip": {
+    "description": "Onboarding value-prop slide (added 2026-05)"
+  },
+  "onboardingFooterNext": "Nästa",
+  "@onboardingFooterNext": {
+    "description": "Onboarding value-prop slide (added 2026-05)"
+  },
+  "onboardingFooterStart": "Kom igång",
+  "@onboardingFooterStart": {
+    "description": "Onboarding value-prop slide (added 2026-05)"
+  }
 }

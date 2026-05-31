@@ -12,6 +12,7 @@ import '../services/season_planner_service.dart';
 import '../services/ui_settings_service.dart';
 import '../utils/constants.dart';
 import '../widgets/affiliate_card.dart';
+import '../widgets/other_apps_section.dart';
 import '../services/affiliate_service.dart';
 import 'gardens_screen.dart';
 import 'intro_screen.dart';
@@ -42,7 +43,8 @@ class SettingsScreen extends StatelessWidget {
                 : l10n.settingsPremiumUnlock),
             trailing: const Icon(Icons.chevron_right),
             onTap: () => Navigator.of(context).push(
-              MaterialPageRoute(builder: (_) => const PaywallScreen()),
+              MaterialPageRoute(
+                  builder: (_) => const PaywallScreen(source: 'settings')),
             ),
           ),
           const Divider(),
@@ -178,6 +180,10 @@ class SettingsScreen extends StatelessWidget {
               },
             ),
           ],
+          const SizedBox(height: 24),
+          const OtherAppsSection(
+            currentBundleId: 'com.alexanderbergqvist.plantera',
+          ),
           const SizedBox(height: 30),
         ],
       ),

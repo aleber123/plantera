@@ -5,7 +5,7 @@
   "tabHome": "Home",
   "tabCalendar": "Calendar",
   "tabPlants": "Plants",
-  "tabMyGarden": "My garden",
+  "tabMyGarden": "My plants",
   "tabSettings": "Settings",
   "tabOverview": "Overview",
   "tabMyPlant": "My plant",
@@ -618,5 +618,120 @@
   "commonSave": "Save",
   "pestTypeLabelDisease": "DISEASE",
   "pestTypeLabelDamage": "DAMAGE",
-  "pestTypeLabelPest": "PEST"
+  "pestTypeLabelPest": "PEST",
+  "statsShareButton": "Share",
+  "statsShareText": "My garden {year} with Plantera 🌱",
+  "statsShareFailed": "Could not create share image",
+  "paywallTitleBranded": "Plantera Premium",
+  "paywallHeaderFrost": "Get frost warnings before plants freeze",
+  "paywallHeaderGardenLimit": "Add your whole garden",
+  "paywallHeaderWaterAll": "Water everything in one tap",
+  "paywallHeaderPhotoLog": "A photo diary for every plant",
+  "paywallSubFrost": "SMHI overnight temps — we ping you the evening before",
+  "paywallSubGardenLimit": "No limit on how many plants you track",
+  "paywallSubWaterAll": "One button marks every outdoor plant watered",
+  "paywallSubPhotoLog": "See them grow from seed to harvest",
+  "paywallSubHome": "Frost alerts, photo diary and everything unlimited",
+  "paywallSubDefault": "Level up your garden",
+  "paywallBenefitUnlimited": "Unlimited plants in your garden",
+  "paywallBenefitReminders": "All reminders and frost warnings",
+  "paywallBenefitPhotos": "Photo diary for every plant",
+  "paywallBenefitNoAds": "No ads",
+  "paywallBenefitPdf": "PDF export of your harvest journal",
+  "paywallBenefitArticles": "Full access to knowledge articles",
+  "paywallPlanYearly": "Yearly subscription",
+  "paywallPlanYearlySavings": "Save {percent}% vs monthly",
+  "paywallPlanMonthly": "Monthly subscription",
+  "paywallPlanLifetime": "Lifetime (one-time purchase)",
+  "paywallTrialCta": "Start free trial ({period})",
+  "paywallTrialThen": "Then {price}",
+  "paywallPlanPriceFormat": "{title} • {price}",
+  "paywallRestore": "Restore previous purchases",
+  "paywallDisclaimer": "Subscriptions renew automatically until cancelled in App Store settings. You will be charged 24 h before renewal.",
+  "paywallTerms": "Terms (EULA)",
+  "paywallPrivacy": "Privacy policy",
+  "paywallErrorStore": "App Store is unavailable right now — please try again in a moment.",
+  "paywallErrorProduct": "Couldn't load purchase from App Store. Close the paywall and open it again.",
+  "paywallErrorFailed": "Purchase failed. Please try again.",
+  "paywallErrorOpenUrl": "Couldn't open {url}",
+  "paywallPurchaseSuccess": "Premium activated — thank you! Everything is unlocked.",
+  "@paywallPurchaseSuccess": {
+    "description": "Paywall UX feedback strings (added 2026-05)"
+  },
+  "paywallRestoreInProgress": "Looking for your purchases…",
+  "@paywallRestoreInProgress": {
+    "description": "Paywall UX feedback strings (added 2026-05)"
+  },
+  "paywallRestoreFailed": "Couldn't reach the App Store. Try again.",
+  "@paywallRestoreFailed": {
+    "description": "Paywall UX feedback strings (added 2026-05)"
+  },
+  "paywallRestoreSuccess": "Premium restored — thank you!",
+  "@paywallRestoreSuccess": {
+    "description": "Paywall UX feedback strings (added 2026-05)"
+  },
+  "paywallRestoreAlreadyActive": "Premium is already active.",
+  "@paywallRestoreAlreadyActive": {
+    "description": "Paywall UX feedback strings (added 2026-05)"
+  },
+  "paywallRestoreNothingFound": "No purchases found on this Apple ID.",
+  "@paywallRestoreNothingFound": {
+    "description": "Paywall UX feedback strings (added 2026-05)"
+  },
+  "paywallAlreadyPremiumTitle": "You're Premium",
+  "@paywallAlreadyPremiumTitle": {
+    "description": "Paywall UX feedback strings (added 2026-05)"
+  },
+  "paywallAlreadyPremiumBody": "All features are unlocked. Thanks for the support — it helps us keep building.",
+  "@paywallAlreadyPremiumBody": {
+    "description": "Paywall UX feedback strings (added 2026-05)"
+  },
+  "paywallAlreadyPremiumCta": "Back to the garden",
+  "@paywallAlreadyPremiumCta": {
+    "description": "Paywall UX feedback strings (added 2026-05)"
+  },
+  "paywallProductsUnavailable": "Couldn't load prices from the App Store. Check your internet and try again.",
+  "@paywallProductsUnavailable": {
+    "description": "Paywall UX feedback strings (added 2026-05)"
+  },
+  "paywallProductsRetry": "Try again",
+  "@paywallProductsRetry": {
+    "description": "Paywall UX feedback strings (added 2026-05)"
+  },
+  "onboardingSlide1Title": "Stop guessing when to sow",
+  "@onboardingSlide1Title": {
+    "description": "Onboarding value-prop slide (added 2026-05)"
+  },
+  "onboardingSlide1Body": "Plantera knows your hardiness zone and tells you exactly when to start indoors, direct-sow or plant out — vegetable by vegetable.",
+  "@onboardingSlide1Body": {
+    "description": "Onboarding value-prop slide (added 2026-05)"
+  },
+  "onboardingSlide2Title": "Frost alerts you can act on",
+  "@onboardingSlide2Title": {
+    "description": "Onboarding value-prop slide (added 2026-05)"
+  },
+  "onboardingSlide2Body": "When a cold night is coming you get notified in time to cover the seedlings. No panic at three in the morning.",
+  "@onboardingSlide2Body": {
+    "description": "Onboarding value-prop slide (added 2026-05)"
+  },
+  "onboardingSlide3Title": "One morning reminder — not 50",
+  "@onboardingSlide3Title": {
+    "description": "Onboarding value-prop slide (added 2026-05)"
+  },
+  "onboardingSlide3Body": "Watering, pruning, harvest and seasonal chores gathered in one daily summary so you actually get a harvest worth bragging about.",
+  "@onboardingSlide3Body": {
+    "description": "Onboarding value-prop slide (added 2026-05)"
+  },
+  "onboardingFooterSkip": "Skip",
+  "@onboardingFooterSkip": {
+    "description": "Onboarding value-prop slide (added 2026-05)"
+  },
+  "onboardingFooterNext": "Next",
+  "@onboardingFooterNext": {
+    "description": "Onboarding value-prop slide (added 2026-05)"
+  },
+  "onboardingFooterStart": "Get started",
+  "@onboardingFooterStart": {
+    "description": "Onboarding value-prop slide (added 2026-05)"
+  }
 }

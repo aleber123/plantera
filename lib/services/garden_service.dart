@@ -76,6 +76,12 @@ class GardenService extends ChangeNotifier {
     _db = await openDatabase(
       dbPath,
       version: 6,
+      // SQLite ships with foreign keys *off* by default. Without this,
+      // every `ON DELETE CASCADE` we declared silently no-ops and we
+      // accumulate zombie notes/harvest entries after plant removal.
+      onConfigure: (db) async {
+        await db.execute('PRAGMA foreign_keys = ON');
+      },
       onCreate: (db, version) async {
         await db.execute('''
           CREATE TABLE $_tablePlants (
@@ -321,18 +327,35 @@ class GardenService extends ChangeNotifier {
     if (_gardens.length <= 1) {
       throw Exception('Du måste ha minst en trädgård.');
     }
-    // Move plants to default garden so we don't orphan rows.
+    // Move plants to default garden so we don't orphan rows. Wishlist
+    // rows need the same fix-up — they're keyed on garden_id and would
+    // otherwise become invisible after the parent garden disappears.
     final fallback = _gardens.firstWhere(
       (g) => g.id != id && g.isDefault,
       orElse: () => _gardens.firstWhere((g) => g.id != id),
     );
-    await _db!.update(_tablePlants, {'garden_id': fallback.id},
-        where: 'garden_id = ?', whereArgs: [id]);
-    await _db!.delete(_tableGardens, where: 'id = ?', whereArgs: [id]);
+    // Wrap the multi-step migration in a transaction so a partial
+    // failure (disk full mid-update, OS kill) doesn't leave the user
+    // with plants/wishlist rows pointing at the deleted garden id —
+    // those would silently disappear from every UI scope.
+    await _db!.transaction((txn) async {
+      await txn.update(_tablePlants, {'garden_id': fallback.id},
+          where: 'garden_id = ?', whereArgs: [id]);
+      final tables = await txn.rawQuery(
+          "SELECT name FROM sqlite_master WHERE type='table' AND name='wishlist_plants'");
+      if (tables.isNotEmpty) {
+        await txn.update('wishlist_plants', {'garden_id': fallback.id},
+            where: 'garden_id = ?', whereArgs: [id]);
+      }
+      await txn.delete(_tableGardens, where: 'id = ?', whereArgs: [id]);
+    });
     if (_activeGardenId == id) {
-      _activeGardenId = fallback.id;
+      // Persist active-garden pref BEFORE mutating in-memory state, so
+      // a crash between the two doesn't leave the app pointing at a
+      // deleted garden id on next launch.
       final prefs = await SharedPreferences.getInstance();
       await prefs.setString(_activeGardenKey, fallback.id);
+      _activeGardenId = fallback.id;
     }
     await _reload();
   }
@@ -403,6 +426,26 @@ class GardenService extends ChangeNotifier {
         } catch (_) {/* best effort */}
       }
     }
+    // Explicit cleanup of dependent rows. We do this even though the
+    // foreign-key cascade *should* handle notes — older databases were
+    // created with FKs off and may have orphan rows that the cascade
+    // can't reach. harvest_entries has no in-place FK on legacy DBs,
+    // so always explicit-delete. task_completions/task_snoozes are
+    // string-keyed and grow forever otherwise; clean by suffix.
+    await _db!
+        .delete(_tableNotes, where: 'garden_plant_id = ?', whereArgs: [id]);
+    await _db!
+        .delete('harvest_entries', where: 'garden_plant_id = ?', whereArgs: [id]);
+    await _db!.delete(
+      'task_completions',
+      where: "task_key LIKE ? OR task_key LIKE ?",
+      whereArgs: ['%-$id-%', '%-$id'],
+    );
+    await _db!.delete(
+      'task_snoozes',
+      where: "task_key LIKE ? OR task_key LIKE ?",
+      whereArgs: ['%-$id-%', '%-$id'],
+    );
     await _db!.delete(_tablePlants, where: 'id = ?', whereArgs: [id]);
     await _reload();
   }

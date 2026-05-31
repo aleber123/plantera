@@ -147,7 +147,7 @@ abstract class AppLocalizations {
   /// No description provided for @tabMyGarden.
   ///
   /// In sv, this message translates to:
-  /// **'Min trädgård'**
+  /// **'Mina växter'**
   String get tabMyGarden;
 
   /// No description provided for @tabSettings.
@@ -2824,6 +2824,336 @@ abstract class AppLocalizations {
   /// In sv, this message translates to:
   /// **'SKADEDJUR'**
   String get pestTypeLabelPest;
+
+  /// No description provided for @statsShareButton.
+  ///
+  /// In sv, this message translates to:
+  /// **'Dela'**
+  String get statsShareButton;
+
+  /// No description provided for @statsShareText.
+  ///
+  /// In sv, this message translates to:
+  /// **'Min trädgård {year} med Plantera 🌱'**
+  String statsShareText(String year);
+
+  /// No description provided for @statsShareFailed.
+  ///
+  /// In sv, this message translates to:
+  /// **'Kunde inte skapa delningsbild'**
+  String get statsShareFailed;
+
+  /// No description provided for @paywallTitleBranded.
+  ///
+  /// In sv, this message translates to:
+  /// **'Plantera Premium'**
+  String get paywallTitleBranded;
+
+  /// No description provided for @paywallHeaderFrost.
+  ///
+  /// In sv, this message translates to:
+  /// **'Få frostvarning innan plantorna fryser'**
+  String get paywallHeaderFrost;
+
+  /// No description provided for @paywallHeaderGardenLimit.
+  ///
+  /// In sv, this message translates to:
+  /// **'Lägg till hela trädgården'**
+  String get paywallHeaderGardenLimit;
+
+  /// No description provided for @paywallHeaderWaterAll.
+  ///
+  /// In sv, this message translates to:
+  /// **'Vattna alla med ett tryck'**
+  String get paywallHeaderWaterAll;
+
+  /// No description provided for @paywallHeaderPhotoLog.
+  ///
+  /// In sv, this message translates to:
+  /// **'Fotodagbok för dina växter'**
+  String get paywallHeaderPhotoLog;
+
+  /// No description provided for @paywallSubFrost.
+  ///
+  /// In sv, this message translates to:
+  /// **'SMHI-baserad nattetemp — vi pingar dig kvällen före frostnatten'**
+  String get paywallSubFrost;
+
+  /// No description provided for @paywallSubGardenLimit.
+  ///
+  /// In sv, this message translates to:
+  /// **'Inga gränser på antal växter du följer'**
+  String get paywallSubGardenLimit;
+
+  /// No description provided for @paywallSubWaterAll.
+  ///
+  /// In sv, this message translates to:
+  /// **'En knapp markerar alla utomhusväxter vattnade'**
+  String get paywallSubWaterAll;
+
+  /// No description provided for @paywallSubPhotoLog.
+  ///
+  /// In sv, this message translates to:
+  /// **'Se hur de växer från frö till skörd'**
+  String get paywallSubPhotoLog;
+
+  /// No description provided for @paywallSubHome.
+  ///
+  /// In sv, this message translates to:
+  /// **'Frostvarningar, fotodagbok och allt obegränsat'**
+  String get paywallSubHome;
+
+  /// No description provided for @paywallSubDefault.
+  ///
+  /// In sv, this message translates to:
+  /// **'Växla upp din trädgård'**
+  String get paywallSubDefault;
+
+  /// No description provided for @paywallBenefitUnlimited.
+  ///
+  /// In sv, this message translates to:
+  /// **'Obegränsade växter i min trädgård'**
+  String get paywallBenefitUnlimited;
+
+  /// No description provided for @paywallBenefitReminders.
+  ///
+  /// In sv, this message translates to:
+  /// **'Alla påminnelser och frostvarningar'**
+  String get paywallBenefitReminders;
+
+  /// No description provided for @paywallBenefitPhotos.
+  ///
+  /// In sv, this message translates to:
+  /// **'Fotodagbok för varje växt'**
+  String get paywallBenefitPhotos;
+
+  /// No description provided for @paywallBenefitNoAds.
+  ///
+  /// In sv, this message translates to:
+  /// **'Inga annonser'**
+  String get paywallBenefitNoAds;
+
+  /// No description provided for @paywallBenefitPdf.
+  ///
+  /// In sv, this message translates to:
+  /// **'PDF-export av skördedagbok'**
+  String get paywallBenefitPdf;
+
+  /// No description provided for @paywallBenefitArticles.
+  ///
+  /// In sv, this message translates to:
+  /// **'Full tillgång till kunskapsartiklar'**
+  String get paywallBenefitArticles;
+
+  /// No description provided for @paywallPlanYearly.
+  ///
+  /// In sv, this message translates to:
+  /// **'Årsprenumeration'**
+  String get paywallPlanYearly;
+
+  /// No description provided for @paywallPlanYearlySavings.
+  ///
+  /// In sv, this message translates to:
+  /// **'Spara {percent}% jämfört med månad'**
+  String paywallPlanYearlySavings(String percent);
+
+  /// No description provided for @paywallPlanMonthly.
+  ///
+  /// In sv, this message translates to:
+  /// **'Månadsprenumeration'**
+  String get paywallPlanMonthly;
+
+  /// No description provided for @paywallPlanLifetime.
+  ///
+  /// In sv, this message translates to:
+  /// **'Livstidsköp (engångsbetalning)'**
+  String get paywallPlanLifetime;
+
+  /// No description provided for @paywallTrialCta.
+  ///
+  /// In sv, this message translates to:
+  /// **'Starta gratis provperiod ({period})'**
+  String paywallTrialCta(String period);
+
+  /// No description provided for @paywallTrialThen.
+  ///
+  /// In sv, this message translates to:
+  /// **'Sedan {price}'**
+  String paywallTrialThen(String price);
+
+  /// No description provided for @paywallPlanPriceFormat.
+  ///
+  /// In sv, this message translates to:
+  /// **'{title} • {price}'**
+  String paywallPlanPriceFormat(String title, String price);
+
+  /// No description provided for @paywallRestore.
+  ///
+  /// In sv, this message translates to:
+  /// **'Återställ tidigare köp'**
+  String get paywallRestore;
+
+  /// No description provided for @paywallDisclaimer.
+  ///
+  /// In sv, this message translates to:
+  /// **'Prenumerationer förnyas automatiskt tills de avslutas i App Store-inställningarna. Avgiften dras 24 h före förnyelse.'**
+  String get paywallDisclaimer;
+
+  /// No description provided for @paywallTerms.
+  ///
+  /// In sv, this message translates to:
+  /// **'Villkor (EULA)'**
+  String get paywallTerms;
+
+  /// No description provided for @paywallPrivacy.
+  ///
+  /// In sv, this message translates to:
+  /// **'Integritetspolicy'**
+  String get paywallPrivacy;
+
+  /// No description provided for @paywallErrorStore.
+  ///
+  /// In sv, this message translates to:
+  /// **'App Store är inte tillgängligt just nu — försök igen om en stund.'**
+  String get paywallErrorStore;
+
+  /// No description provided for @paywallErrorProduct.
+  ///
+  /// In sv, this message translates to:
+  /// **'Köpet kunde inte laddas från App Store. Stäng paywallen och öppna igen.'**
+  String get paywallErrorProduct;
+
+  /// No description provided for @paywallErrorFailed.
+  ///
+  /// In sv, this message translates to:
+  /// **'Köpet misslyckades. Försök igen.'**
+  String get paywallErrorFailed;
+
+  /// No description provided for @paywallErrorOpenUrl.
+  ///
+  /// In sv, this message translates to:
+  /// **'Kunde inte öppna {url}'**
+  String paywallErrorOpenUrl(String url);
+
+  /// Paywall UX feedback strings (added 2026-05)
+  ///
+  /// In sv, this message translates to:
+  /// **'Premium aktiverat — tack! Allt är upplåst.'**
+  String get paywallPurchaseSuccess;
+
+  /// Paywall UX feedback strings (added 2026-05)
+  ///
+  /// In sv, this message translates to:
+  /// **'Söker efter dina köp…'**
+  String get paywallRestoreInProgress;
+
+  /// Paywall UX feedback strings (added 2026-05)
+  ///
+  /// In sv, this message translates to:
+  /// **'Kunde inte kontakta App Store. Försök igen.'**
+  String get paywallRestoreFailed;
+
+  /// Paywall UX feedback strings (added 2026-05)
+  ///
+  /// In sv, this message translates to:
+  /// **'Premium återställd — tack!'**
+  String get paywallRestoreSuccess;
+
+  /// Paywall UX feedback strings (added 2026-05)
+  ///
+  /// In sv, this message translates to:
+  /// **'Premium är redan aktivt.'**
+  String get paywallRestoreAlreadyActive;
+
+  /// Paywall UX feedback strings (added 2026-05)
+  ///
+  /// In sv, this message translates to:
+  /// **'Inga köp hittades på det här Apple-ID:t.'**
+  String get paywallRestoreNothingFound;
+
+  /// Paywall UX feedback strings (added 2026-05)
+  ///
+  /// In sv, this message translates to:
+  /// **'Du har Premium'**
+  String get paywallAlreadyPremiumTitle;
+
+  /// Paywall UX feedback strings (added 2026-05)
+  ///
+  /// In sv, this message translates to:
+  /// **'Alla funktioner är upplåsta. Tack för stödet — det hjälper oss bygga vidare.'**
+  String get paywallAlreadyPremiumBody;
+
+  /// Paywall UX feedback strings (added 2026-05)
+  ///
+  /// In sv, this message translates to:
+  /// **'Tillbaka till trädgården'**
+  String get paywallAlreadyPremiumCta;
+
+  /// Paywall UX feedback strings (added 2026-05)
+  ///
+  /// In sv, this message translates to:
+  /// **'Kunde inte ladda priserna från App Store. Kolla din internet och försök igen.'**
+  String get paywallProductsUnavailable;
+
+  /// Paywall UX feedback strings (added 2026-05)
+  ///
+  /// In sv, this message translates to:
+  /// **'Försök igen'**
+  String get paywallProductsRetry;
+
+  /// Onboarding value-prop slide (added 2026-05)
+  ///
+  /// In sv, this message translates to:
+  /// **'Sluta gissa när du ska så'**
+  String get onboardingSlide1Title;
+
+  /// Onboarding value-prop slide (added 2026-05)
+  ///
+  /// In sv, this message translates to:
+  /// **'Plantera vet din odlingszon och säger åt dig exakt när det är dags att förodla, direktså eller plantera ut — växt för växt.'**
+  String get onboardingSlide1Body;
+
+  /// Onboarding value-prop slide (added 2026-05)
+  ///
+  /// In sv, this message translates to:
+  /// **'Frostvarning från SMHI'**
+  String get onboardingSlide2Title;
+
+  /// Onboarding value-prop slide (added 2026-05)
+  ///
+  /// In sv, this message translates to:
+  /// **'När det blir kallt om natten får du en notis i tid att täcka över spirorna. Inte panik klockan tre på natten.'**
+  String get onboardingSlide2Body;
+
+  /// Onboarding value-prop slide (added 2026-05)
+  ///
+  /// In sv, this message translates to:
+  /// **'En morgonpåminnelse — inte 50'**
+  String get onboardingSlide3Title;
+
+  /// Onboarding value-prop slide (added 2026-05)
+  ///
+  /// In sv, this message translates to:
+  /// **'Vatten, beskärning, skörd och säsongs-sysslor samlas i en daglig översikt så du faktiskt får en skörd att vara stolt över.'**
+  String get onboardingSlide3Body;
+
+  /// Onboarding value-prop slide (added 2026-05)
+  ///
+  /// In sv, this message translates to:
+  /// **'Hoppa över'**
+  String get onboardingFooterSkip;
+
+  /// Onboarding value-prop slide (added 2026-05)
+  ///
+  /// In sv, this message translates to:
+  /// **'Nästa'**
+  String get onboardingFooterNext;
+
+  /// Onboarding value-prop slide (added 2026-05)
+  ///
+  /// In sv, this message translates to:
+  /// **'Kom igång'**
+  String get onboardingFooterStart;
 }
 
 class _AppLocalizationsDelegate

@@ -1,3 +1,5 @@
+import 'dart:io' show Platform;
+
 import 'package:flutter/foundation.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:intl/intl.dart';
@@ -9,6 +11,7 @@ import '../models/monthly_chore.dart';
 import '../models/plant.dart';
 import '../models/weather.dart';
 import '../utils/zone_shift.dart';
+import 'notification_strings.dart';
 
 class NotificationService extends ChangeNotifier {
   static final NotificationService _instance = NotificationService._internal();
@@ -17,9 +20,23 @@ class NotificationService extends ChangeNotifier {
 
   final FlutterLocalNotificationsPlugin _plugin =
       FlutterLocalNotificationsPlugin();
+  final NotificationStrings _strings = NotificationStrings();
   bool _initialized = false;
   bool _enabled = true;
   int _morningHour = 8;
+
+  /// Update which language notifications fire in. Called from main.dart's
+  /// MaterialApp builder once iOS has resolved the user's preferred
+  /// Sets the locale used for notification text generation. Fires
+  /// `notifyListeners` so the main-level pipeline can re-schedule all
+  /// pending notifications with the new language — without this,
+  /// already-scheduled pings stay in the old language until they fire.
+  void setLocale(String localeCode) {
+    if (_strings.localeCode == localeCode) return;
+    _strings.setLocale(localeCode);
+    notifyListeners();
+  }
+  String get localeCode => _strings.localeCode;
 
   static const String _enabledKey = 'notifications_enabled';
   static const String _morningHourKey = 'notification_morning_hour';
@@ -65,19 +82,29 @@ class NotificationService extends ChangeNotifier {
     notifyListeners();
   }
 
+  /// Returns true only when the user has granted permission on the
+  /// CURRENT platform. Previously this returned `iosOk || androidOk`
+  /// which silently lied on iOS-denied devices that happened to be
+  /// running Android builds in some test matrix — and made the
+  /// settings toggle render "ON" when notifications could never
+  /// actually fire.
   Future<bool> requestPermissions() async {
-    final ios = _plugin.resolvePlatformSpecificImplementation<
-        IOSFlutterLocalNotificationsPlugin>();
-    final iosOk = await ios?.requestPermissions(
-          alert: true,
-          badge: true,
-          sound: true,
-        ) ??
-        false;
-    final android = _plugin.resolvePlatformSpecificImplementation<
-        AndroidFlutterLocalNotificationsPlugin>();
-    final androidOk = await android?.requestNotificationsPermission() ?? true;
-    return iosOk || androidOk;
+    if (Platform.isIOS) {
+      final ios = _plugin.resolvePlatformSpecificImplementation<
+          IOSFlutterLocalNotificationsPlugin>();
+      return await ios?.requestPermissions(
+            alert: true,
+            badge: true,
+            sound: true,
+          ) ??
+          false;
+    }
+    if (Platform.isAndroid) {
+      final android = _plugin.resolvePlatformSpecificImplementation<
+          AndroidFlutterLocalNotificationsPlugin>();
+      return await android?.requestNotificationsPermission() ?? true;
+    }
+    return false;
   }
 
   Future<void> setEnabled(bool value) async {
@@ -187,18 +214,16 @@ class NotificationService extends ChangeNotifier {
       await scheduleOneShot(
         id: _stableId('wish-$wishlistId-$key'),
         title: '🌱 ${plant.namnSv}',
-        body:
-            'Nu öppnar säsongen för att $lower – tryck för att lägga till i trädgården.',
+        body: _strings.wishlistBody(lower),
         when: when,
         payload: 'wishlist:$wishlistId',
       );
-      // Pre-warning 7 days out so the user has time to buy frön.
       final pre = when.subtract(const Duration(days: 7));
       if (pre.isAfter(now)) {
         await scheduleOneShot(
           id: _stableId('wish-$wishlistId-$key-pre'),
           title: '🌱 ${plant.namnSv}',
-          body: 'Om en vecka är det dags att $lower – köp frön i tid.',
+          body: _strings.wishlistPre(lower),
           when: pre,
           payload: 'wishlist:$wishlistId',
         );
@@ -206,12 +231,12 @@ class NotificationService extends ChangeNotifier {
       scheduled.add(label);
     }
 
-    await queue(
-        'forsa', plant.forsadatum, 'Förså inomhus', 'förså inomhus');
-    await queue(
-        'direkt', plant.direktsadatum, 'Direktså', 'direktså');
-    await queue('utplant', plant.utplanteringsdatum, 'Plantera ut',
-        'plantera ut');
+    await queue('forsa', plant.forsadatum, _strings.labelForsa(),
+        _strings.actionForsa());
+    await queue('direkt', plant.direktsadatum, _strings.labelDirekt(),
+        _strings.actionDirekt());
+    await queue('utplant', plant.utplanteringsdatum,
+        _strings.labelUtplant(), _strings.actionUtplant());
 
     return scheduled;
   }
@@ -254,53 +279,58 @@ class NotificationService extends ChangeNotifier {
 
     final actions = <(String, MonthRange, String, String)>[];
 
+    final lblForsa = _strings.labelForsa();
+    final actForsa = _strings.actionForsa();
+    final lblDirekt = _strings.labelDirekt();
+    final actDirekt = _strings.actionDirekt();
+    final lblUtplant = _strings.labelUtplant();
+    final actUtplant = _strings.actionUtplant();
+    final lblSkord = _strings.labelSkord();
+    final actSkord = _strings.actionSkord();
+
     switch (status) {
       case PlantStatus.planerad:
         switch (sowingMethod) {
           case SowingMethod.inomhus:
-            // Fall back to direkt if the plant has no indoor window.
             if (plant.forsadatum != null) {
-              actions.add(('forsa', plant.forsadatum!, 'Förså inomhus',
-                  'förså inomhus'));
+              actions.add(
+                  ('forsa', plant.forsadatum!, lblForsa, actForsa));
             } else if (plant.direktsadatum != null) {
               actions.add(
-                  ('direkt', plant.direktsadatum!, 'Direktså', 'direktså'));
+                  ('direkt', plant.direktsadatum!, lblDirekt, actDirekt));
             }
           case SowingMethod.direkt:
             if (plant.direktsadatum != null) {
               actions.add(
-                  ('direkt', plant.direktsadatum!, 'Direktså', 'direktså'));
+                  ('direkt', plant.direktsadatum!, lblDirekt, actDirekt));
             } else if (plant.forsadatum != null) {
-              actions.add(('forsa', plant.forsadatum!, 'Förså inomhus',
-                  'förså inomhus'));
+              actions.add(
+                  ('forsa', plant.forsadatum!, lblForsa, actForsa));
             }
           case SowingMethod.planta:
             if (plant.utplanteringsdatum != null) {
-              actions.add(('utplant', plant.utplanteringsdatum!, 'Plantera ut',
-                  'plantera ut'));
+              actions.add(('utplant', plant.utplanteringsdatum!,
+                  lblUtplant, actUtplant));
             }
         }
       case PlantStatus.forsoddInne:
         if (plant.utplanteringsdatum != null) {
-          actions.add(('utplant', plant.utplanteringsdatum!, 'Plantera ut',
-              'plantera ut'));
+          actions.add(('utplant', plant.utplanteringsdatum!,
+              lblUtplant, actUtplant));
         }
       case PlantStatus.direktsadd:
       case PlantStatus.utplanterad:
         if (plant.skordeperiod != null) {
-          actions
-              .add(('skord', plant.skordeperiod!, 'Skörda', 'skörda'));
+          actions.add(('skord', plant.skordeperiod!, lblSkord, actSkord));
         }
       case PlantStatus.hardad:
         if (plant.utplanteringsdatum != null) {
-          actions.add(('utplant', plant.utplanteringsdatum!, 'Plantera ut',
-              'plantera ut'));
+          actions.add(('utplant', plant.utplanteringsdatum!,
+              lblUtplant, actUtplant));
         }
       case PlantStatus.skordeklar:
       case PlantStatus.skordad:
       case PlantStatus.vilande:
-        // Terminal-or-paused — no scheduling. The plant detail screen
-        // surfaces "Markera som skördad" etc. inline instead.
         break;
     }
 
@@ -334,7 +364,7 @@ class NotificationService extends ChangeNotifier {
           await scheduleOneShot(
             id: _stableId('$gardenPlantId-$key-pre'),
             title: '${plant.emoji} ${plant.namnSv}',
-            body: 'Om en vecka är det dags att $lower',
+            body: _strings.bodyPre(lower),
             when: preWhen,
             payload: 'plant:${plant.id}',
           );
@@ -343,7 +373,7 @@ class NotificationService extends ChangeNotifier {
       await scheduleOneShot(
         id: _stableId('$gardenPlantId-$key'),
         title: '${plant.emoji} ${plant.namnSv}',
-        body: 'Nu är det dags att $lower',
+        body: _strings.bodyNow(lower),
         when: mainWhen,
         payload: 'plant:${plant.id}',
       );
@@ -363,12 +393,11 @@ class NotificationService extends ChangeNotifier {
         await scheduleOneShot(
           id: _stableId('$gardenPlantId-harden'),
           title: '${plant.emoji} ${plant.namnSv}',
-          body:
-              'Dags att börja härda av — ställ ut plantorna ett par timmar dagligen i en vecka.',
+          body: _strings.hardenBody(),
           when: when,
           payload: 'plant:${plant.id}',
         );
-        scheduled.add('Härda av');
+        scheduled.add(_strings.labelHarden());
       }
     }
 
@@ -393,10 +422,12 @@ class NotificationService extends ChangeNotifier {
     required Plant? Function(String) plantLookup,
     required int zone,
   }) async {
-    if (!_enabled) return garden;
-
     // 1. Auto-transition utplanterad/direktsadd → skordeklar when
     //    skordeperiod has started + plant has been outside long enough.
+    //    Runs unconditionally — this is a correctness migration that
+    //    must happen even when the user has notifications disabled,
+    //    otherwise plant_detail_screen never surfaces "Markera som
+    //    skördad" for ripened produce.
     final now = DateTime.now();
     final today = DateTime(now.year, now.month, now.day);
     final transitioned = <GardenPlant>[];
@@ -417,6 +448,10 @@ class NotificationService extends ChangeNotifier {
       transitioned.add(
           shouldRipen ? gp.copyWith(status: PlantStatus.skordeklar) : gp);
     }
+
+    // Notifications disabled — still return the auto-transitions so
+    // the caller can persist them, just don't touch the schedule.
+    if (!_enabled) return transitioned;
 
     // 2. Cancel everything currently scheduled.
     for (final gp in garden) {
@@ -545,22 +580,19 @@ class NotificationService extends ChangeNotifier {
         title: '${plant.emoji} ${plant.namnSv}',
         body: task.title.isEmpty
             ? task.description
-            : '${task.title} – ${task.description}',
+            : _strings.careBody(task.title, task.description),
         when: when,
         payload: 'care:$gardenPlantId:${task.id}',
       );
       ids.add(task.id);
 
-      // Pre-warning seven days before — same pattern as lifecycle
-      // reminders. Skipped when the task fires within a week (avoids
-      // scheduling a pre-warning for the past).
       final daysToMain = when.difference(now).inDays;
       if (daysToMain > 7) {
         final pre = when.subtract(const Duration(days: 7));
         await scheduleOneShot(
           id: _stableId('$mainKey-pre'),
           title: '${plant.emoji} ${plant.namnSv}',
-          body: 'Om en vecka: ${task.title.toLowerCase()}',
+          body: _strings.carePre(task.title.toLowerCase()),
           when: pre,
           payload: 'care:$gardenPlantId:${task.id}',
         );
@@ -635,10 +667,25 @@ class NotificationService extends ChangeNotifier {
         if (careLines.length >= 6) break;
       }
 
-      // b) Generic monthly chores for this month — already represent
-      //    common Swedish gardening tasks regardless of what's grown.
+      // b) Generic monthly chores for this month — filter against the
+      //    user's actual plants so "Gallra äpple och plommon" doesn't
+      //    appear in the digest when there are no fruit trees.
+      final userPlantIds = garden.map((gp) => gp.plantId).toSet();
+      final userCategories = <String>{};
+      for (final gp in garden) {
+        final p = plantLookup(gp.plantId);
+        if (p != null) userCategories.add(p.kategori.name);
+      }
       final choreLines = chores
-          .where((c) => c.month == month)
+          .where((c) {
+            if (c.month != month) return false;
+            if (c.isUniversal) return true;
+            final matchesPlant =
+                c.appliesToPlants.any(userPlantIds.contains);
+            final matchesCategory =
+                c.appliesToCategories.any(userCategories.contains);
+            return matchesPlant || matchesCategory;
+          })
           .take(4)
           .map((c) => '${c.emoji} ${c.title.toLowerCase()}')
           .toList();
@@ -646,15 +693,18 @@ class NotificationService extends ChangeNotifier {
       final allLines = [...careLines, ...choreLines];
       if (allLines.isEmpty) continue;
 
-      final monthName = _swedishMonth(month);
+      final monthName = _strings.monthName(month);
       final body = allLines.length == 1
-          ? 'I $monthName: ${allLines.first}.'
-          : 'I $monthName: ${allLines.take(3).join(", ")}'
-              '${allLines.length > 3 ? " m.fl." : "."}';
+          ? _strings.digestBodyOne(monthName, allLines.first)
+          : _strings.digestBodyMany(
+              monthName,
+              allLines.take(3).join(', '),
+              hasMore: allLines.length > 3,
+            );
 
       await scheduleOneShot(
         id: _stableId('digest-${monthDate.year}-${monthDate.month}'),
-        title: '🌱 Trädgårdsmorgon',
+        title: _strings.digestTitle(),
         body: body,
         when: monthDate,
         payload: 'digest',
@@ -663,22 +713,6 @@ class NotificationService extends ChangeNotifier {
     }
     return scheduled;
   }
-
-  String _swedishMonth(int m) => const [
-        '',
-        'januari',
-        'februari',
-        'mars',
-        'april',
-        'maj',
-        'juni',
-        'juli',
-        'augusti',
-        'september',
-        'oktober',
-        'november',
-        'december',
-      ][m];
 
   /// Zone-aware next-occurrence picker — applies [ZoneShift] so a
   /// "förså inomhus"-reminder fires later in Norrland än i Skåne.
@@ -791,10 +825,15 @@ class NotificationService extends ChangeNotifier {
   }) async {
     if (!_enabled) return const [];
 
-    // Cancel pending contextual warnings before re-scheduling. We only
-    // know about the next ~11 days, so iterate that span.
+    // Cancel pending contextual warnings before re-scheduling. Use the
+    // actual forecast length (instead of a hard-coded 11 days) so a
+    // forecast provider with longer reach doesn't leave stale frost
+    // warnings armed beyond the cancel window. Add a small safety
+    // overshoot (+3 days) for cases where today's call shortens the
+    // forecast versus the previous call.
     final today = DateTime.now();
-    for (var i = 0; i < 11; i++) {
+    final cancelSpan = (forecast.length + 3).clamp(11, 31);
+    for (var i = 0; i < cancelSpan; i++) {
       final d = today.add(Duration(days: i));
       await _plugin.cancel(_stableId('frost-${d.year}-${d.month}-${d.day}'));
     }
@@ -828,11 +867,11 @@ class NotificationService extends ChangeNotifier {
           .map((p) => p.namnSv.toLowerCase())
           .take(3)
           .join(', ');
-      final more = sensitive.length > 3 ? ' m.fl.' : '';
       final tempStr = day.minTempC.toStringAsFixed(0);
       final body = sensitive.length == 1
-          ? 'I natt väntas $tempStr°C – täck dina $names.'
-          : 'I natt väntas $tempStr°C – täck $names$more.';
+          ? _strings.frostBodyOne(tempStr, names)
+          : _strings.frostBodyMany(tempStr, names,
+              hasMore: sensitive.length > 3);
 
       // Notify 18:00 the evening before the frosty night.
       final notifTime = DateTime(
@@ -844,7 +883,7 @@ class NotificationService extends ChangeNotifier {
         await scheduleOneShot(
           id: _stableId(
               'frost-${day.date.year}-${day.date.month}-${day.date.day}'),
-          title: '❄️ Frostvarning i natt',
+          title: _strings.frostTitle(),
           body: body,
           when: notifTime,
           payload: 'frost',
@@ -882,9 +921,8 @@ class NotificationService extends ChangeNotifier {
         }
         await scheduleOneShot(
           id: _stableId('heatwave-current'),
-          title: '🔥 Värmebölja på väg',
-          body:
-              'Flera varma dagar väntas – vattna noga, skugga känsliga växter och kontrollera krukor dagligen.',
+          title: _strings.heatwaveTitle(),
+          body: _strings.heatwaveBody(),
           when: notifTime,
           payload: 'heatwave',
         );
@@ -947,11 +985,11 @@ class NotificationService extends ChangeNotifier {
             final notifTime = DateTime(
                 tomorrow.year, tomorrow.month, tomorrow.day, _morningHour);
             final body = past14 != null
-                ? 'Endast ${past14.toStringAsFixed(0)} mm regn senaste 14 dagar och lite på väg – vattna noga, särskilt nyplanterade och i krukor.'
-                : 'Mycket lite nederbörd väntas kommande vecka – håll koll på vattningen, särskilt nyplanterade och i krukor.';
+                ? _strings.dryBodyHistorical(past14.toStringAsFixed(0))
+                : _strings.dryBodyForecast();
             await scheduleOneShot(
               id: _stableId('dryperiod-current'),
-              title: '☀️ Torrperiod pågår',
+              title: _strings.dryTitle(),
               body: body,
               when: notifTime,
               payload: 'dryperiod',
@@ -965,17 +1003,84 @@ class NotificationService extends ChangeNotifier {
     return scheduled;
   }
 
+  /// Schedule a recurring set of "season-peak" notifications that nudge
+  /// the user back into the app at the moments where Swedish hobby
+  /// gardeners convert best (Feb pre-sow, Apr direct-sow, Jul harvest,
+  /// Sep bulb planting, Nov year-review). Each is informational and
+  /// kept light — the goal is *return-to-app* engagement, which
+  /// indirectly drives premium conversion.
+  ///
+  /// Idempotent — stable IDs derived from (campaign-tag, year) so re-
+  /// running on every app boot just upserts. Fires the year passed in,
+  /// then re-schedules for [year+1] so a user who returns in Dec 2026
+  /// still has Feb 2027's nudge queued.
+  ///
+  /// Skips notifications already in the past so a Nov-installed user
+  /// doesn't get spammed with the year's earlier checkpoints.
+  Future<int> scheduleSeasonalCampaign({required int year}) async {
+    if (!_enabled) return 0;
+
+    // (month, day) anchors. Title/body are localised per-call via
+    // _strings.campaignTitle/Body so a German user sees German nudges
+    // rather than Swedish ones.
+    final campaigns = <(int, int)>[
+      (2, 15),
+      (3, 15),
+      (4, 15),
+      (7, 1),
+      (9, 15),
+      (11, 15),
+    ];
+
+    var scheduled = 0;
+    final now = DateTime.now();
+    // Schedule for the current year if still in the future, plus next
+    // year so a fall-installed user has spring covered. Limit to two
+    // years to bound the pending-notification list (Apple caps at 64).
+    for (final yr in [year, year + 1]) {
+      for (final c in campaigns) {
+        final when = DateTime(yr, c.$1, c.$2, _morningHour);
+        if (when.isBefore(now)) continue;
+        await scheduleOneShot(
+          id: _stableId('season-${c.$1}-$yr'),
+          title: _strings.campaignTitle(c.$1),
+          body: _strings.campaignBody(c.$1),
+          when: when,
+          payload: 'season:${c.$1}:$yr',
+        );
+        scheduled++;
+      }
+    }
+    return scheduled;
+  }
+
   Future<void> cancel(int id) => _plugin.cancel(id);
   Future<void> cancelAll() => _plugin.cancelAll();
 
   Future<List<PendingNotificationRequest>> pending() =>
       _plugin.pendingNotificationRequests();
 
+  /// Convert a string scheduling key into the 32-bit positive int that
+  /// flutter_local_notifications uses for cancel/pending lookups.
+  ///
+  /// We use FNV-1a (64-bit internal state, folded to 31 bits) instead
+  /// of the classic `hash * 31 + c` because the multiply-31 variant
+  /// distributes poorly over the namespace we use ("uuid-key-suffix")
+  /// and produced realistic collisions with ~100 active reminders
+  /// across (plant lifecycle × wishlist × care × digest × frost ×
+  /// heatwave × season campaign). FNV-1a's avalanche properties give
+  /// effectively zero collision risk for the volume Plantera produces.
   int _stableId(String key) {
-    var hash = 0;
+    // FNV-1a 64-bit constants. Dart ints are 64-bit on native — safe.
+    const int offsetBasis = 0xcbf29ce484222325;
+    const int fnvPrime = 0x100000001b3;
+    int hash = offsetBasis;
     for (final c in key.codeUnits) {
-      hash = (hash * 31 + c) & 0x7fffffff;
+      hash ^= c;
+      hash = (hash * fnvPrime) & 0xffffffffffffffff;
     }
-    return hash;
+    // Fold to 31 bits (positive int) — local_notifications can't take
+    // negative IDs on Android.
+    return ((hash ^ (hash >> 32)) & 0x7fffffff);
   }
 }

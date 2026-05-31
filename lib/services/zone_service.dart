@@ -1,5 +1,6 @@
 import 'package:flutter/foundation.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import '../utils/climate_zones.dart';
 import '../utils/swedish_zones.dart';
 import 'garden_service.dart';
 
@@ -38,10 +39,80 @@ class ZoneService extends ChangeNotifier {
   String? get city => _garden.activeGarden?.city ?? _legacyCity;
   double? get lat => _garden.activeGarden?.lat ?? _legacyLat;
   double? get lon => _garden.activeGarden?.lon ?? _legacyLon;
-  String get zoneLabel => 'Zon $zone';
-  String get zoneDescription => SwedishZones.zoneDescription(zone);
-  (int month, int day) get lastFrostDate => SwedishZones.lastFrostDate(zone);
-  (int month, int day) get firstFrostDate => SwedishZones.firstFrostDate(zone);
+
+  /// Global climate profile derived from the current lat/lon. Returns
+  /// null when no coordinates are set yet — callers should fall back
+  /// to the Swedish zone-based behaviour in that case.
+  ClimateProfile? get climate {
+    final la = lat, lo = lon;
+    if (la == null || lo == null) return null;
+    return ClimateProfile.fromCoordinates(la, lo);
+  }
+
+  /// Region-appropriate zone label. Inside Sweden we show the local
+  /// Swedish växtzon ("Zon 3"); outside we switch to the global USDA
+  /// hardiness zone ("USDA 6") which is the international standard.
+  String get zoneLabel {
+    final c = climate;
+    if (c == null || !c.isOutsideSweden) return 'Zon $zone';
+    return c.usdaZone.label;
+  }
+
+  String get zoneDescription {
+    final c = climate;
+    if (c == null || !c.isOutsideSweden) {
+      return SwedishZones.zoneDescription(zone);
+    }
+    // Approximate degrees-Celsius minimum for the USDA zone.
+    final minC = c.usdaZone.minTempC.round();
+    return '${c.usdaZone.label} – vintertemp typiskt ner till $minC°C';
+  }
+
+  /// Approximate last-frost date in the *active garden's* climate. In
+  /// Sweden we read from SwedishZones; elsewhere we derive a rough
+  /// date from latitude (frost recedes ~1 day per degree latitude as
+  /// you go south). Caller can override via Settings.
+  (int month, int day) get lastFrostDate {
+    final c = climate;
+    if (c == null || !c.isOutsideSweden) {
+      return SwedishZones.lastFrostDate(zone);
+    }
+    return _lastFrostForClimate(c);
+  }
+
+  (int month, int day) get firstFrostDate {
+    final c = climate;
+    if (c == null || !c.isOutsideSweden) {
+      return SwedishZones.firstFrostDate(zone);
+    }
+    return _firstFrostForClimate(c);
+  }
+
+  static (int, int) _lastFrostForClimate(ClimateProfile c) {
+    // North-hemisphere baseline; the southern hemisphere swap is
+    // handled by the season-shifter further down the stack.
+    final absLat = c.latitude.abs();
+    if (absLat < 25) return (1, 1); // no frost
+    if (absLat < 35) return (3, 1);
+    if (absLat < 40) return (4, 1);
+    if (absLat < 45) return (4, 15);
+    if (absLat < 50) return (5, 1);
+    if (absLat < 55) return (5, 10);
+    if (absLat < 60) return (5, 20);
+    return (6, 5);
+  }
+
+  static (int, int) _firstFrostForClimate(ClimateProfile c) {
+    final absLat = c.latitude.abs();
+    if (absLat < 25) return (12, 31); // no frost
+    if (absLat < 35) return (12, 1);
+    if (absLat < 40) return (11, 1);
+    if (absLat < 45) return (10, 20);
+    if (absLat < 50) return (10, 1);
+    if (absLat < 55) return (10, 15);
+    if (absLat < 60) return (9, 25);
+    return (9, 5);
+  }
 
   Future<void> initialize() async {
     final prefs = await SharedPreferences.getInstance();

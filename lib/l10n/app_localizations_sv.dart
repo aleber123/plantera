@@ -24,7 +24,7 @@ class AppLocalizationsSv extends AppLocalizations {
   String get tabPlants => 'Växter';
 
   @override
-  String get tabMyGarden => 'Min trädgård';
+  String get tabMyGarden => 'Mina växter';
 
   @override
   String get tabSettings => 'Inställningar';
@@ -1561,4 +1561,194 @@ class AppLocalizationsSv extends AppLocalizations {
 
   @override
   String get pestTypeLabelPest => 'SKADEDJUR';
+
+  @override
+  String get statsShareButton => 'Dela';
+
+  @override
+  String statsShareText(String year) {
+    return 'Min trädgård $year med Plantera 🌱';
+  }
+
+  @override
+  String get statsShareFailed => 'Kunde inte skapa delningsbild';
+
+  @override
+  String get paywallTitleBranded => 'Plantera Premium';
+
+  @override
+  String get paywallHeaderFrost => 'Få frostvarning innan plantorna fryser';
+
+  @override
+  String get paywallHeaderGardenLimit => 'Lägg till hela trädgården';
+
+  @override
+  String get paywallHeaderWaterAll => 'Vattna alla med ett tryck';
+
+  @override
+  String get paywallHeaderPhotoLog => 'Fotodagbok för dina växter';
+
+  @override
+  String get paywallSubFrost =>
+      'SMHI-baserad nattetemp — vi pingar dig kvällen före frostnatten';
+
+  @override
+  String get paywallSubGardenLimit => 'Inga gränser på antal växter du följer';
+
+  @override
+  String get paywallSubWaterAll =>
+      'En knapp markerar alla utomhusväxter vattnade';
+
+  @override
+  String get paywallSubPhotoLog => 'Se hur de växer från frö till skörd';
+
+  @override
+  String get paywallSubHome => 'Frostvarningar, fotodagbok och allt obegränsat';
+
+  @override
+  String get paywallSubDefault => 'Växla upp din trädgård';
+
+  @override
+  String get paywallBenefitUnlimited => 'Obegränsade växter i min trädgård';
+
+  @override
+  String get paywallBenefitReminders => 'Alla påminnelser och frostvarningar';
+
+  @override
+  String get paywallBenefitPhotos => 'Fotodagbok för varje växt';
+
+  @override
+  String get paywallBenefitNoAds => 'Inga annonser';
+
+  @override
+  String get paywallBenefitPdf => 'PDF-export av skördedagbok';
+
+  @override
+  String get paywallBenefitArticles => 'Full tillgång till kunskapsartiklar';
+
+  @override
+  String get paywallPlanYearly => 'Årsprenumeration';
+
+  @override
+  String paywallPlanYearlySavings(String percent) {
+    return 'Spara $percent% jämfört med månad';
+  }
+
+  @override
+  String get paywallPlanMonthly => 'Månadsprenumeration';
+
+  @override
+  String get paywallPlanLifetime => 'Livstidsköp (engångsbetalning)';
+
+  @override
+  String paywallTrialCta(String period) {
+    return 'Starta gratis provperiod ($period)';
+  }
+
+  @override
+  String paywallTrialThen(String price) {
+    return 'Sedan $price';
+  }
+
+  @override
+  String paywallPlanPriceFormat(String title, String price) {
+    return '$title • $price';
+  }
+
+  @override
+  String get paywallRestore => 'Återställ tidigare köp';
+
+  @override
+  String get paywallDisclaimer =>
+      'Prenumerationer förnyas automatiskt tills de avslutas i App Store-inställningarna. Avgiften dras 24 h före förnyelse.';
+
+  @override
+  String get paywallTerms => 'Villkor (EULA)';
+
+  @override
+  String get paywallPrivacy => 'Integritetspolicy';
+
+  @override
+  String get paywallErrorStore =>
+      'App Store är inte tillgängligt just nu — försök igen om en stund.';
+
+  @override
+  String get paywallErrorProduct =>
+      'Köpet kunde inte laddas från App Store. Stäng paywallen och öppna igen.';
+
+  @override
+  String get paywallErrorFailed => 'Köpet misslyckades. Försök igen.';
+
+  @override
+  String paywallErrorOpenUrl(String url) {
+    return 'Kunde inte öppna $url';
+  }
+
+  @override
+  String get paywallPurchaseSuccess =>
+      'Premium aktiverat — tack! Allt är upplåst.';
+
+  @override
+  String get paywallRestoreInProgress => 'Söker efter dina köp…';
+
+  @override
+  String get paywallRestoreFailed =>
+      'Kunde inte kontakta App Store. Försök igen.';
+
+  @override
+  String get paywallRestoreSuccess => 'Premium återställd — tack!';
+
+  @override
+  String get paywallRestoreAlreadyActive => 'Premium är redan aktivt.';
+
+  @override
+  String get paywallRestoreNothingFound =>
+      'Inga köp hittades på det här Apple-ID:t.';
+
+  @override
+  String get paywallAlreadyPremiumTitle => 'Du har Premium';
+
+  @override
+  String get paywallAlreadyPremiumBody =>
+      'Alla funktioner är upplåsta. Tack för stödet — det hjälper oss bygga vidare.';
+
+  @override
+  String get paywallAlreadyPremiumCta => 'Tillbaka till trädgården';
+
+  @override
+  String get paywallProductsUnavailable =>
+      'Kunde inte ladda priserna från App Store. Kolla din internet och försök igen.';
+
+  @override
+  String get paywallProductsRetry => 'Försök igen';
+
+  @override
+  String get onboardingSlide1Title => 'Sluta gissa när du ska så';
+
+  @override
+  String get onboardingSlide1Body =>
+      'Plantera vet din odlingszon och säger åt dig exakt när det är dags att förodla, direktså eller plantera ut — växt för växt.';
+
+  @override
+  String get onboardingSlide2Title => 'Frostvarning från SMHI';
+
+  @override
+  String get onboardingSlide2Body =>
+      'När det blir kallt om natten får du en notis i tid att täcka över spirorna. Inte panik klockan tre på natten.';
+
+  @override
+  String get onboardingSlide3Title => 'En morgonpåminnelse — inte 50';
+
+  @override
+  String get onboardingSlide3Body =>
+      'Vatten, beskärning, skörd och säsongs-sysslor samlas i en daglig översikt så du faktiskt får en skörd att vara stolt över.';
+
+  @override
+  String get onboardingFooterSkip => 'Hoppa över';
+
+  @override
+  String get onboardingFooterNext => 'Nästa';
+
+  @override
+  String get onboardingFooterStart => 'Kom igång';
 }

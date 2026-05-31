@@ -5,6 +5,7 @@ import '../l10n/app_localizations.dart';
 import '../models/plant.dart';
 import '../services/plant_database_service.dart';
 import '../services/zone_service.dart';
+import '../utils/climate_zones.dart';
 import 'monthly_guide_screen.dart';
 import 'plant_detail_screen.dart';
 
@@ -50,19 +51,21 @@ class _CalendarScreenState extends State<CalendarScreen> {
 
     // Fas-listor — dedup per Plant så samma växt inte dyker upp i två
     // sektioner när den t.ex. både kan förodlas och direktsås.
-    final forsa = _dedup(db.forsaIMonth(_month, zone.zone));
-    final direkt = _dedup(db.direktsaIMonth(_month, zone.zone));
-    final plantera = _dedup(db.utplanteringIMonth(_month, zone.zone));
-    final skord = _dedup(db.skordIMonth(_month, zone.zone));
+    // Southern-hemisphere users see their calendar flipped — January
+    // in Sydney maps to July in the Sweden-calibrated plant database.
+    final hemi = zone.climate?.hemisphere ?? Hemisphere.north;
+    final forsa = _dedup(db.forsaIMonth(_month, zone.zone, hemi: hemi));
+    final direkt =
+        _dedup(db.direktsaIMonth(_month, zone.zone, hemi: hemi));
+    final plantera =
+        _dedup(db.utplanteringIMonth(_month, zone.zone, hemi: hemi));
+    final skord = _dedup(db.skordIMonth(_month, zone.zone, hemi: hemi));
     final total = forsa.length + direkt.length + plantera.length + skord.length;
     final monthLong = _capitalize(DateFormat.MMMM(localeName)
         .format(DateTime(DateTime.now().year, _month, 1)));
 
     return Scaffold(
-      backgroundColor: const Color(0xFFFAF8F1),
       appBar: AppBar(
-        backgroundColor: const Color(0xFFFAF8F1),
-        elevation: 0,
         title: Text(l10n.calendarTitle),
         actions: [
           IconButton(

@@ -1555,4 +1555,194 @@ class AppLocalizationsNb extends AppLocalizations {
 
   @override
   String get pestTypeLabelPest => 'SKADEDYR';
+
+  @override
+  String get statsShareButton => 'Del';
+
+  @override
+  String statsShareText(String year) {
+    return 'Min hage $year med Plantera 🌱';
+  }
+
+  @override
+  String get statsShareFailed => 'Kunne ikke lage delebilde';
+
+  @override
+  String get paywallTitleBranded => 'Plantera Premium';
+
+  @override
+  String get paywallHeaderFrost => 'Få frostvarsel før plantene fryser';
+
+  @override
+  String get paywallHeaderGardenLimit => 'Legg til hele hagen';
+
+  @override
+  String get paywallHeaderWaterAll => 'Vann alt med ett trykk';
+
+  @override
+  String get paywallHeaderPhotoLog => 'Fotodagbok for plantene dine';
+
+  @override
+  String get paywallSubFrost =>
+      'SMHI-basert nattemperatur — vi pinger deg kvelden før frostnatten';
+
+  @override
+  String get paywallSubGardenLimit =>
+      'Ingen grenser for antall planter du følger';
+
+  @override
+  String get paywallSubWaterAll =>
+      'Én knapp markerer alle utendørsplanter vannet';
+
+  @override
+  String get paywallSubPhotoLog => 'Se hvordan de vokser fra frø til høst';
+
+  @override
+  String get paywallSubHome => 'Frostvarsler, fotodagbok og alt ubegrenset';
+
+  @override
+  String get paywallSubDefault => 'Løft hagen din';
+
+  @override
+  String get paywallBenefitUnlimited => 'Ubegrenset antall planter i hagen';
+
+  @override
+  String get paywallBenefitReminders => 'Alle påminnelser og frostvarsler';
+
+  @override
+  String get paywallBenefitPhotos => 'Fotodagbok for hver plante';
+
+  @override
+  String get paywallBenefitNoAds => 'Ingen annonser';
+
+  @override
+  String get paywallBenefitPdf => 'PDF-eksport av høstdagboken';
+
+  @override
+  String get paywallBenefitArticles => 'Full tilgang til kunnskapsartikler';
+
+  @override
+  String get paywallPlanYearly => 'Årsabonnement';
+
+  @override
+  String paywallPlanYearlySavings(String percent) {
+    return 'Spar $percent% sammenlignet med måned';
+  }
+
+  @override
+  String get paywallPlanMonthly => 'Månedsabonnement';
+
+  @override
+  String get paywallPlanLifetime => 'Livstidskjøp (engangsbetaling)';
+
+  @override
+  String paywallTrialCta(String period) {
+    return 'Start gratis prøveperiode ($period)';
+  }
+
+  @override
+  String paywallTrialThen(String price) {
+    return 'Deretter $price';
+  }
+
+  @override
+  String paywallPlanPriceFormat(String title, String price) {
+    return '$title • $price';
+  }
+
+  @override
+  String get paywallRestore => 'Gjenopprett tidligere kjøp';
+
+  @override
+  String get paywallDisclaimer =>
+      'Abonnementer fornyes automatisk inntil de avsluttes i App Store-innstillingene. Beløpet trekkes 24 t før fornyelse.';
+
+  @override
+  String get paywallTerms => 'Vilkår (EULA)';
+
+  @override
+  String get paywallPrivacy => 'Personvern';
+
+  @override
+  String get paywallErrorStore =>
+      'App Store er ikke tilgjengelig akkurat nå — prøv igjen om litt.';
+
+  @override
+  String get paywallErrorProduct =>
+      'Kjøpet kunne ikke lastes fra App Store. Lukk paywallen og åpne på nytt.';
+
+  @override
+  String get paywallErrorFailed => 'Kjøpet mislyktes. Prøv igjen.';
+
+  @override
+  String paywallErrorOpenUrl(String url) {
+    return 'Kunne ikke åpne $url';
+  }
+
+  @override
+  String get paywallPurchaseSuccess =>
+      'Premium aktivert — takk! Alt er låst opp.';
+
+  @override
+  String get paywallRestoreInProgress => 'Søker etter kjøpene dine…';
+
+  @override
+  String get paywallRestoreFailed => 'Kunne ikke nå App Store. Prøv igjen.';
+
+  @override
+  String get paywallRestoreSuccess => 'Premium gjenopprettet — takk!';
+
+  @override
+  String get paywallRestoreAlreadyActive => 'Premium er allerede aktivt.';
+
+  @override
+  String get paywallRestoreNothingFound =>
+      'Ingen kjøp funnet på denne Apple-ID-en.';
+
+  @override
+  String get paywallAlreadyPremiumTitle => 'Du har Premium';
+
+  @override
+  String get paywallAlreadyPremiumBody =>
+      'Alle funksjoner er låst opp. Takk for støtten — det hjelper oss å bygge videre.';
+
+  @override
+  String get paywallAlreadyPremiumCta => 'Tilbake til hagen';
+
+  @override
+  String get paywallProductsUnavailable =>
+      'Kunne ikke laste prisene fra App Store. Sjekk internett og prøv igjen.';
+
+  @override
+  String get paywallProductsRetry => 'Prøv igjen';
+
+  @override
+  String get onboardingSlide1Title => 'Slutt å gjette når du skal så';
+
+  @override
+  String get onboardingSlide1Body =>
+      'Plantera kjenner din herdighetssone og forteller deg nøyaktig når du skal forhåndsså, direkteså eller plante ut — plante for plante.';
+
+  @override
+  String get onboardingSlide2Title => 'Frostvarsel du kan handle på';
+
+  @override
+  String get onboardingSlide2Body =>
+      'Når en kald natt nærmer seg får du varsel i tide til å dekke til spirene. Ingen panikk klokken tre om natten.';
+
+  @override
+  String get onboardingSlide3Title => 'Én morgenpåminnelse — ikke 50';
+
+  @override
+  String get onboardingSlide3Body =>
+      'Vanning, beskjæring, høsting og sesonggjøremål samlet i én daglig oversikt så du faktisk får en avling å være stolt av.';
+
+  @override
+  String get onboardingFooterSkip => 'Hopp over';
+
+  @override
+  String get onboardingFooterNext => 'Neste';
+
+  @override
+  String get onboardingFooterStart => 'Kom i gang';
 }

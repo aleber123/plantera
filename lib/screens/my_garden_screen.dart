@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 import '../l10n/app_localizations.dart';
@@ -50,11 +49,6 @@ class _MyGardenScreenState extends State<MyGardenScreen> {
       appBar: AppBar(
         title: Text(l10n.myGardenTitle),
         actions: [
-          IconButton(
-            tooltip: l10n.myGardenWaterAllTooltip,
-            icon: const Icon(Icons.water_drop_outlined),
-            onPressed: () => _waterAll(context),
-          ),
           IconButton(
             tooltip: l10n.myGardenSeasonStatsTooltip(
                 DateTime.now().year.toString()),
@@ -227,71 +221,13 @@ class _MyGardenScreenState extends State<MyGardenScreen> {
     );
   }
 
-  /// Premium: bumps lastWatered = now för alla utomhus-växter på en
-  /// gång. De allra flesta som har en handvattnings-rutin vattnar
-  /// faktiskt allt samtidigt — den här knappen tar bort 30 separata
-  /// taps i Att göra-fliken. Premium-gated eftersom det är en clear
-  /// power-user-feature; gratis-användare ser paywall.
-  Future<void> _waterAll(BuildContext context) async {
-    final l10n = AppLocalizations.of(context);
-    final premium = context.read<PremiumService>();
-    final garden = context.read<GardenService>();
-    if (!premium.isPremium) {
-      Navigator.of(context).push(
-        MaterialPageRoute(builder: (_) => const PaywallScreen()),
-      );
-      return;
-    }
-    final outdoor = garden.plants.where((g) => g.status.isOutdoorActive);
-    if (outdoor.isEmpty) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text(l10n.myGardenNoOutdoorPlants),
-        ),
-      );
-      return;
-    }
-    final confirmed = await showDialog<bool>(
-      context: context,
-      builder: (ctx) => AlertDialog(
-        title: Text(l10n.myGardenWaterAllTitle),
-        content: Text(
-            l10n.myGardenWaterAllConfirm(outdoor.length.toString())),
-        actions: [
-          TextButton(
-            onPressed: () => Navigator.pop(ctx, false),
-            child: Text(l10n.myGardenWaterAllCancel),
-          ),
-          FilledButton(
-            onPressed: () => Navigator.pop(ctx, true),
-            style: FilledButton.styleFrom(
-              backgroundColor: const Color(0xFF1976D2),
-            ),
-            child: Text(l10n.myGardenWaterAllAction),
-          ),
-        ],
-      ),
-    );
-    if (confirmed != true || !context.mounted) return;
-    HapticFeedback.mediumImpact();
-    for (final gp in outdoor) {
-      await garden.markWatered(gp.id);
-    }
-    if (!context.mounted) return;
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(
-        content: Text(
-            l10n.myGardenWaterAllDone(outdoor.length.toString())),
-      ),
-    );
-  }
-
   void _add(BuildContext ctx) {
     final premium = ctx.read<PremiumService>();
     final garden = ctx.read<GardenService>();
     if (!premium.canAddGardenPlant(garden.plantCount)) {
       Navigator.of(ctx).push(
-        MaterialPageRoute(builder: (_) => const PaywallScreen()),
+        MaterialPageRoute(
+            builder: (_) => const PaywallScreen(source: 'garden_limit')),
       );
       return;
     }

@@ -12,7 +12,7 @@ import '../models/plant.dart';
 import '../screens/main_shell.dart';
 import '../services/garden_service.dart';
 import '../services/notification_service.dart';
-import '../services/zone_service.dart';
+import '../services/season_planner_service.dart';
 import '../widgets/phase_picker_sheet.dart';
 
 /// Shared flow for adding a plant to the user's garden. Used from
@@ -35,8 +35,8 @@ Future<GardenPlant?> addPlantToGarden(
   if (pick == null || !context.mounted) return null;
 
   final garden = context.read<GardenService>();
+  final season = context.read<SeasonPlannerService>();
   final notifications = context.read<NotificationService>();
-  final zone = context.read<ZoneService>();
 
   // Infer sowingMethod from the user's status pick. If they say
   // "förodlar inomhus" the method is implicitly inomhus; "direktsått"
@@ -54,14 +54,32 @@ Future<GardenPlant?> addPlantToGarden(
     sowingMethod: method,
     plantedDate: pick.date,
   );
-  final scheduled = await notifications.scheduleAllForGardenPlant(
-    gardenPlantId: gp.id,
-    plant: plant,
-    zone: zone.zone,
-    status: pick.status,
-    plantedDate: gp.plantedDate,
-    sowingMethod: gp.sowingMethod,
-  );
+
+  // Prune wishlist for the same species in the SAME garden. Once a
+  // plant is actively in the garden, its wishlist reminders are
+  // duplicates of the garden ones and cause double notifications (e.g.
+  // "plantera ut paprika" firing twice — once from wish-{id}-utplant,
+  // once from {gp.id}-utplant). Multi-garden-aware: paprika added to
+  // balkongen must NOT nuke a paprika-wishlist row for kolonilotten.
+  final year = DateTime.now().year;
+  final activeGardenId = gp.gardenId;
+  final matching = season.allItems
+      .where((w) =>
+          w.plantId == plant.id &&
+          w.seasonYear <= year &&
+          w.gardenId == activeGardenId)
+      .toList();
+  for (final w in matching) {
+    await notifications.cancelForWishlist(w.id);
+    await season.remove(w.id);
+  }
+  // Notification scheduling intentionally NOT done here. The
+  // GardenService listener wired in main.dart picks up the change and
+  // runs `rescheduleAllForGarden`, which handles cancel + schedule
+  // idempotently. Doing it explicitly here races with that listener
+  // and can briefly leave the new plant's notifications in an
+  // inconsistent state.
+  final scheduled = <String>[]; // labels populated by background scheduler
   // Reward haptic — adding a plant is a celebration moment, deserves
   // a stronger physical confirmation than a quiet snackbar.
   HapticFeedback.mediumImpact();

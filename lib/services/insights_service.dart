@@ -121,13 +121,21 @@ class InsightsService {
       }
       if (!isReady) continue;
 
+      // Ornamentals get a "blomning"-insight instead of a harvest one
+      // — users grow flowers to look at, not to pick.
+      final isFlower = p.kategori == PlantCategory.blommor;
+      final displayName = (gp.customName ?? p.namnSv).toLowerCase();
       yield DailyInsight(
         emoji: p.emoji,
-        title: 'Skörda ${(gp.customName ?? p.namnSv).toLowerCase()}',
-        body: gp.status == PlantStatus.skordeklar
-            ? 'Markerad som skördeklar — dags!'
-            : 'Skördeperioden är aktiv just nu',
-        urgency: InsightUrgency.high,
+        title: isFlower
+            ? 'Blomning: $displayName'
+            : 'Skörda $displayName',
+        body: isFlower
+            ? 'Njut — blomningen pågår'
+            : gp.status == PlantStatus.skordeklar
+                ? 'Markerad som skördeklar — dags!'
+                : 'Skördeperioden är aktiv just nu',
+        urgency: isFlower ? InsightUrgency.low : InsightUrgency.high,
         gardenPlantId: gp.id,
       );
     }

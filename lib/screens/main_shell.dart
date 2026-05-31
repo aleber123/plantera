@@ -33,11 +33,13 @@ class MainShell extends StatefulWidget {
 class _MainShellState extends State<MainShell>
     with WidgetsBindingObserver
     implements MainShellController {
-  // Att göra is primary because it's where action lives. Hem becomes a
-  // calmer "context" surface (väder, säsongsplanerare). Mina växter
-  // (was "Min trädgård") is the canonical garden view — no longer
-  // duplicated by a "Min trädgård just nu"-card on Hem.
-  int _index = 0;
+  // Hem är default-flik (index 1) — Att göra är fortfarande första
+  // tabben i navigationen så den ALLTID syns längst till vänster, men
+  // användaren landar på Hem vid app-start. Tidigare öppnades Att göra
+  // direkt — användare upplevde det som "all-måsten-vägg" så fort de
+  // öppnade appen och tappade engagement. Hem ger lugnare väder + säsong
+  // som första intryck; den som vill till sin to-do swipear ett klick.
+  int _index = 1;
   final _pages = const [
     TodoScreen(),
     HomeScreen(),

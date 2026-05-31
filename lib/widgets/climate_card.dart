@@ -182,7 +182,8 @@ class _ClimateTeaser extends StatelessWidget {
         child: InkWell(
           borderRadius: BorderRadius.circular(18),
           onTap: () => Navigator.of(context).push(
-            MaterialPageRoute(builder: (_) => const PaywallScreen()),
+            MaterialPageRoute(
+                builder: (_) => const PaywallScreen(source: 'frost')),
           ),
           child: Container(
             decoration: BoxDecoration(

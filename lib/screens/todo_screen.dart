@@ -8,6 +8,7 @@ import '../models/garden_task.dart';
 import '../services/garden_service.dart';
 import '../services/plant_database_service.dart';
 import '../services/task_service.dart';
+import '../utils/water_all.dart';
 import 'plant_detail_screen.dart';
 
 /// "Att göra" — the central inbox of the app. Replaces the previous
@@ -31,6 +32,13 @@ class TodoScreen extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         title: Text(l10n.tabTodo),
+        actions: [
+          IconButton(
+            tooltip: l10n.myGardenWaterAllTooltip,
+            icon: const Icon(Icons.water_drop_outlined),
+            onPressed: () => waterAllOutdoorPlants(context),
+          ),
+        ],
       ),
       body: Consumer<TaskService>(
         builder: (ctx, taskService, _) {
@@ -384,22 +392,36 @@ class _TaskRow extends StatelessWidget {
                 ),
               ),
               const SizedBox(width: 6),
+              // Tappable check-circle on the right edge so the user can
+              // mark a task done without learning the swipe-right
+              // gesture. Earlier versions left this as a static circle
+              // and users tapping it (or the row) got navigated to the
+              // plant detail without anything actually being marked
+              // done — confusing for the most-common flow.
               if (isDone)
-                Icon(Icons.check_circle,
-                    color: const Color(0xFF558B2F), size: 22)
-              else if (task.priority == TaskPriority.high)
-                Icon(Icons.priority_high,
-                    color: accent, size: 18)
+                const Padding(
+                  padding: EdgeInsets.all(6),
+                  child: Icon(Icons.check_circle,
+                      color: Color(0xFF558B2F), size: 22),
+                )
               else
-                Container(
-                  width: 24,
-                  height: 24,
-                  decoration: BoxDecoration(
-                    border: Border.all(
-                      color: Colors.grey.shade400,
-                      width: 1.5,
+                Semantics(
+                  button: true,
+                  label: AppLocalizations.of(context).todoSwipeDone,
+                  child: InkResponse(
+                    onTap: () async {
+                      HapticFeedback.mediumImpact();
+                      await context.read<TaskService>().complete(task);
+                    },
+                    radius: 24,
+                    child: Padding(
+                      padding: const EdgeInsets.all(6),
+                      child: task.priority == TaskPriority.high
+                          ? Icon(Icons.radio_button_unchecked,
+                              color: accent, size: 24)
+                          : Icon(Icons.radio_button_unchecked,
+                              color: Colors.grey.shade400, size: 24),
                     ),
-                    borderRadius: BorderRadius.circular(12),
                   ),
                 ),
             ],

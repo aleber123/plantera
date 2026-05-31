@@ -21,6 +21,11 @@ class MonthRange {
     if (s < 1 || s > 12 || e < 1 || e > 12) return null;
     return MonthRange(s, e);
   }
+
+  Map<String, dynamic> toJson() => {
+        'start_manad': startMonth,
+        'slut_manad': endMonth,
+      };
 }
 
 enum PlantCategory {
@@ -230,6 +235,11 @@ class Plant {
   /// Recurring seasonal care tasks. Empty for annuals; populated for
   /// perennials/trees/shrubs ("beskär äppleträd jan-feb", etc.).
   final List<CareTask> omsorg;
+  /// User-supplied emoji for custom plants. Bundled plants use the
+  /// static `_plantEmojis` lookup instead — this field is only set for
+  /// plants the user creates themselves via the "Lägg till egen växt"-
+  /// flow.
+  final String? customEmoji;
 
   const Plant({
     required this.id,
@@ -256,6 +266,7 @@ class Plant {
     this.skadedjur = const [],
     required this.amazonSokord,
     this.omsorg = const [],
+    this.customEmoji,
   });
 
   factory Plant.fromJson(Map<String, dynamic> j) {
@@ -294,7 +305,40 @@ class Plant {
       omsorg: ((j['omsorg'] as List?) ?? const [])
           .map((e) => CareTask.fromJson(e as Map<String, dynamic>))
           .toList(),
+      customEmoji: j['custom_emoji'] as String?,
     );
+  }
+
+  /// Round-trip serialization for user-created plants. Only emits the
+  /// fields a custom plant actually populates — bundled-plant extras
+  /// like care tasks and pests aren't user-editable yet.
+  Map<String, dynamic> toJson() {
+    return {
+      'id': id,
+      'namn_sv': namnSv,
+      'namn_lat': namnLat,
+      'kategori': kategori.name,
+      'livscykel': livscykel.name,
+      'beskrivning': beskrivning,
+      'zoner': zoner,
+      if (forsadatum != null) 'forsadatum': forsadatum!.toJson(),
+      if (direktsadatum != null) 'direktsadatum': direktsadatum!.toJson(),
+      if (utplanteringsdatum != null)
+        'utplanteringsdatum': utplanteringsdatum!.toJson(),
+      if (skordeperiod != null) 'skordeperiod': skordeperiod!.toJson(),
+      if (dagarTillSkord != null) 'dagar_till_skord': dagarTillSkord,
+      if (avstandCm != null) 'avstand_cm': avstandCm,
+      if (djupCm != null) 'djup_cm': djupCm,
+      'solkrav': solkrav.name,
+      'vattning': vattning.name,
+      if (jordPh != null) 'jord_ph': jordPh,
+      'godselbehov': godselbehov.name,
+      if (kallighetC != null) 'kallighet_c': kallighetC,
+      if (instruktioner != null) 'instruktioner': instruktioner,
+      if (tips != null) 'tips': tips,
+      'amazon_sokord': amazonSokord,
+      if (customEmoji != null) 'custom_emoji': customEmoji,
+    };
   }
 
   /// Is this plant frost-sensitive for the given forecast low temperature?
@@ -303,9 +347,9 @@ class Plant {
     return forecastLowC <= threshold;
   }
 
-  /// Per-plant emoji. Falls back to the category emoji for ids we haven't
-  /// mapped — keeps things sane if the JSON gains new entries.
-  String get emoji => _plantEmojis[id] ?? kategori.emoji;
+  /// Per-plant emoji. User-supplied first (custom plants), then the
+  /// static lookup, finally the category fallback.
+  String get emoji => customEmoji ?? _plantEmojis[id] ?? kategori.emoji;
 }
 
 const Map<String, String> _plantEmojis = {

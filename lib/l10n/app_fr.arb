@@ -372,5 +372,120 @@
   "commonSave": "Enregistrer",
   "pestTypeLabelDisease": "MALADIE",
   "pestTypeLabelDamage": "DOMMAGE",
-  "pestTypeLabelPest": "NUISIBLE"
+  "pestTypeLabelPest": "NUISIBLE",
+  "statsShareButton": "Partager",
+  "statsShareText": "Mon jardin {year} avec Plantera 🌱",
+  "statsShareFailed": "Impossible de créer l'image de partage",
+  "paywallTitleBranded": "Plantera Premium",
+  "paywallHeaderFrost": "Recevez une alerte gel avant que vos plantes ne gèlent",
+  "paywallHeaderGardenLimit": "Ajoutez tout votre jardin",
+  "paywallHeaderWaterAll": "Arrosez tout en un seul tap",
+  "paywallHeaderPhotoLog": "Un journal photo pour vos plantes",
+  "paywallSubFrost": "Températures nocturnes SMHI — on vous prévient la veille de la nuit de gel",
+  "paywallSubGardenLimit": "Aucune limite sur le nombre de plantes suivies",
+  "paywallSubWaterAll": "Un bouton marque toutes vos plantes extérieures comme arrosées",
+  "paywallSubPhotoLog": "Voyez-les grandir de la graine à la récolte",
+  "paywallSubHome": "Alertes gel, journal photo et tout en illimité",
+  "paywallSubDefault": "Passez votre jardin au niveau supérieur",
+  "paywallBenefitUnlimited": "Plantes illimitées dans votre jardin",
+  "paywallBenefitReminders": "Tous les rappels et alertes gel",
+  "paywallBenefitPhotos": "Journal photo pour chaque plante",
+  "paywallBenefitNoAds": "Sans publicité",
+  "paywallBenefitPdf": "Export PDF du journal de récolte",
+  "paywallBenefitArticles": "Accès complet aux articles de connaissance",
+  "paywallPlanYearly": "Abonnement annuel",
+  "paywallPlanYearlySavings": "Économisez {percent}% par rapport au mensuel",
+  "paywallPlanMonthly": "Abonnement mensuel",
+  "paywallPlanLifetime": "Achat à vie (paiement unique)",
+  "paywallTrialCta": "Commencer l'essai gratuit ({period})",
+  "paywallTrialThen": "Puis {price}",
+  "paywallPlanPriceFormat": "{title} • {price}",
+  "paywallRestore": "Restaurer les achats précédents",
+  "paywallDisclaimer": "Les abonnements se renouvellent automatiquement jusqu'à leur annulation dans les réglages App Store. Vous serez débité 24 h avant le renouvellement.",
+  "paywallTerms": "Conditions (CLUF)",
+  "paywallPrivacy": "Politique de confidentialité",
+  "paywallErrorStore": "L'App Store est indisponible pour le moment — réessayez dans quelques instants.",
+  "paywallErrorProduct": "Impossible de charger l'achat depuis l'App Store. Fermez la paywall et rouvrez-la.",
+  "paywallErrorFailed": "Échec de l'achat. Veuillez réessayer.",
+  "paywallErrorOpenUrl": "Impossible d'ouvrir {url}",
+  "paywallPurchaseSuccess": "Premium activé — merci ! Tout est débloqué.",
+  "@paywallPurchaseSuccess": {
+    "description": "Paywall UX feedback strings (added 2026-05)"
+  },
+  "paywallRestoreInProgress": "Recherche de tes achats…",
+  "@paywallRestoreInProgress": {
+    "description": "Paywall UX feedback strings (added 2026-05)"
+  },
+  "paywallRestoreFailed": "Impossible de joindre l'App Store. Réessayer.",
+  "@paywallRestoreFailed": {
+    "description": "Paywall UX feedback strings (added 2026-05)"
+  },
+  "paywallRestoreSuccess": "Premium restauré — merci !",
+  "@paywallRestoreSuccess": {
+    "description": "Paywall UX feedback strings (added 2026-05)"
+  },
+  "paywallRestoreAlreadyActive": "Premium est déjà actif.",
+  "@paywallRestoreAlreadyActive": {
+    "description": "Paywall UX feedback strings (added 2026-05)"
+  },
+  "paywallRestoreNothingFound": "Aucun achat trouvé sur cet identifiant Apple.",
+  "@paywallRestoreNothingFound": {
+    "description": "Paywall UX feedback strings (added 2026-05)"
+  },
+  "paywallAlreadyPremiumTitle": "Tu as Premium",
+  "@paywallAlreadyPremiumTitle": {
+    "description": "Paywall UX feedback strings (added 2026-05)"
+  },
+  "paywallAlreadyPremiumBody": "Toutes les fonctionnalités sont déverrouillées. Merci pour le soutien — ça nous aide à continuer.",
+  "@paywallAlreadyPremiumBody": {
+    "description": "Paywall UX feedback strings (added 2026-05)"
+  },
+  "paywallAlreadyPremiumCta": "Retour au jardin",
+  "@paywallAlreadyPremiumCta": {
+    "description": "Paywall UX feedback strings (added 2026-05)"
+  },
+  "paywallProductsUnavailable": "Impossible de charger les prix depuis l'App Store. Vérifie ta connexion et réessaie.",
+  "@paywallProductsUnavailable": {
+    "description": "Paywall UX feedback strings (added 2026-05)"
+  },
+  "paywallProductsRetry": "Réessayer",
+  "@paywallProductsRetry": {
+    "description": "Paywall UX feedback strings (added 2026-05)"
+  },
+  "onboardingSlide1Title": "Arrêtez de deviner quand semer",
+  "@onboardingSlide1Title": {
+    "description": "Onboarding value-prop slide (added 2026-05)"
+  },
+  "onboardingSlide1Body": "Plantera connaît votre zone de rusticité et vous dit exactement quand semer en intérieur, en pleine terre ou planter — plante par plante.",
+  "@onboardingSlide1Body": {
+    "description": "Onboarding value-prop slide (added 2026-05)"
+  },
+  "onboardingSlide2Title": "Alertes gel utiles",
+  "@onboardingSlide2Title": {
+    "description": "Onboarding value-prop slide (added 2026-05)"
+  },
+  "onboardingSlide2Body": "Quand une nuit froide arrive, vous êtes prévenu à temps pour protéger les semis. Pas de panique à trois heures du matin.",
+  "@onboardingSlide2Body": {
+    "description": "Onboarding value-prop slide (added 2026-05)"
+  },
+  "onboardingSlide3Title": "Un rappel le matin — pas 50",
+  "@onboardingSlide3Title": {
+    "description": "Onboarding value-prop slide (added 2026-05)"
+  },
+  "onboardingSlide3Body": "Arrosage, taille, récolte et travaux saisonniers réunis dans un résumé quotidien pour vraiment obtenir une récolte.",
+  "@onboardingSlide3Body": {
+    "description": "Onboarding value-prop slide (added 2026-05)"
+  },
+  "onboardingFooterSkip": "Passer",
+  "@onboardingFooterSkip": {
+    "description": "Onboarding value-prop slide (added 2026-05)"
+  },
+  "onboardingFooterNext": "Suivant",
+  "@onboardingFooterNext": {
+    "description": "Onboarding value-prop slide (added 2026-05)"
+  },
+  "onboardingFooterStart": "Commencer",
+  "@onboardingFooterStart": {
+    "description": "Onboarding value-prop slide (added 2026-05)"
+  }
 }

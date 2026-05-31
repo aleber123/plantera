@@ -315,17 +315,40 @@ class PremiumService extends ChangeNotifier {
 
   String getMonthlyEquivalent(PremiumPlan plan, String languageCode) {
     if (plan != PremiumPlan.yearly) return '';
+    final perMonthSuffix = _perMonthSuffix(languageCode);
     final productId = _planToProductId(plan);
     final storeProduct = _products.where((p) => p.id == productId).firstOrNull;
     if (storeProduct != null) {
       final monthly = storeProduct.rawPrice / 12;
       final currencyCode = storeProduct.currencyCode;
-      return '${monthly.toStringAsFixed(0)} $currencyCode/mån';
+      return '${monthly.toStringAsFixed(0)} $currencyCode$perMonthSuffix';
     }
     final yearly = _fallbackPricesSek[PremiumPlan.yearly] ?? 0;
-    return '${(yearly / 12).toInt()} kr/mån';
+    return '${(yearly / 12).toInt()} kr$perMonthSuffix';
   }
 
+  /// Locale-aware "/month" suffix appended to currency-amount strings. The
+  /// previous hardcoded "/mån" leaked Swedish into every other locale. Falls
+  /// back to English when the user's locale isn't in our supported list.
+  String _perMonthSuffix(String lang) {
+    return switch (lang) {
+      'sv' => '/mån',
+      'nb' || 'da' => '/md.',
+      'fi' => '/kk',
+      'de' => '/Mon.',
+      'fr' => '/mois',
+      'es' => '/mes',
+      'it' => '/mese',
+      'el' => '/μήνα',
+      _ => '/mo',
+    };
+  }
+
+  /// Returns just the trial PERIOD text (e.g. "7 days" / "7 dagar") in the
+  /// caller's locale — the surrounding "free trial" copy lives in the ARB
+  /// template `paywallTrialCta`. Returns null when no intro free-trial is
+  /// configured for this plan. Non-iOS platforms always return null since
+  /// only StoreKit exposes intro-offer metadata.
   String? introOfferText(PremiumPlan plan, String languageCode) {
     if (!Platform.isIOS) return null;
     final productId = _planToProductId(plan);
@@ -336,23 +359,98 @@ class PremiumService extends ChangeNotifier {
     if (intro == null) return null;
     if (intro.paymentMode != SKProductDiscountPaymentMode.freeTrail) return null;
 
-    final units = intro.subscriptionPeriod.numberOfUnits;
-    final unit = intro.subscriptionPeriod.unit;
-    return _localizedTrialText(units, unit);
+    var units = intro.subscriptionPeriod.numberOfUnits;
+    var unit = intro.subscriptionPeriod.unit;
+    // Apple sends "1 week" for a 7-day trial — convert to days because
+    // every language has a clean plural for days, but week-day mixing
+    // ("1 vecka" / "1 week") looks oddly short next to "Start free trial".
+    if (unit == SKSubscriptionPeriodUnit.week && units == 1) {
+      units = 7;
+      unit = SKSubscriptionPeriodUnit.day;
+    }
+    return _localizedTrialPeriod(units, unit, languageCode);
   }
 
-  String _localizedTrialText(int units, SKSubscriptionPeriodUnit unit) {
-    final unitLabel = switch (unit) {
-      SKSubscriptionPeriodUnit.day => units == 1 ? 'dag' : 'dagar',
-      SKSubscriptionPeriodUnit.week => units == 1 ? 'vecka' : 'veckor',
-      SKSubscriptionPeriodUnit.month => units == 1 ? 'månad' : 'månader',
-      SKSubscriptionPeriodUnit.year => units == 1 ? 'år' : 'år',
+  /// Locale-aware "{N} {unit}" period rendering. Hardcoded per language so
+  /// we don't have to thread BuildContext into the service. Falls back to
+  /// English for unsupported locales.
+  String _localizedTrialPeriod(
+      int units, SKSubscriptionPeriodUnit unit, String lang) {
+    final labels = _trialUnitLabels[lang] ?? _trialUnitLabels['en']!;
+    final key = switch (unit) {
+      SKSubscriptionPeriodUnit.day => units == 1 ? 'day1' : 'dayN',
+      SKSubscriptionPeriodUnit.week => units == 1 ? 'week1' : 'weekN',
+      SKSubscriptionPeriodUnit.month => units == 1 ? 'month1' : 'monthN',
+      SKSubscriptionPeriodUnit.year => units == 1 ? 'year1' : 'yearN',
     };
-    if (unit == SKSubscriptionPeriodUnit.week && units == 1) {
-      return '7 dagar gratis';
-    }
-    return '$units $unitLabel gratis';
+    return '$units ${labels[key]!}';
   }
+
+  /// Singular + plural unit labels per supported locale. Greek and Finnish
+  /// use the nominative form (the ARB template wraps the period in parens
+  /// so we sidestep case agreement: "Aloita ilmainen kokeilu (7 päivää)").
+  static const Map<String, Map<String, String>> _trialUnitLabels = {
+    'sv': {
+      'day1': 'dag', 'dayN': 'dagar',
+      'week1': 'vecka', 'weekN': 'veckor',
+      'month1': 'månad', 'monthN': 'månader',
+      'year1': 'år', 'yearN': 'år',
+    },
+    'en': {
+      'day1': 'day', 'dayN': 'days',
+      'week1': 'week', 'weekN': 'weeks',
+      'month1': 'month', 'monthN': 'months',
+      'year1': 'year', 'yearN': 'years',
+    },
+    'nb': {
+      'day1': 'dag', 'dayN': 'dager',
+      'week1': 'uke', 'weekN': 'uker',
+      'month1': 'måned', 'monthN': 'måneder',
+      'year1': 'år', 'yearN': 'år',
+    },
+    'da': {
+      'day1': 'dag', 'dayN': 'dage',
+      'week1': 'uge', 'weekN': 'uger',
+      'month1': 'måned', 'monthN': 'måneder',
+      'year1': 'år', 'yearN': 'år',
+    },
+    'fi': {
+      'day1': 'päivä', 'dayN': 'päivää',
+      'week1': 'viikko', 'weekN': 'viikkoa',
+      'month1': 'kuukausi', 'monthN': 'kuukautta',
+      'year1': 'vuosi', 'yearN': 'vuotta',
+    },
+    'de': {
+      'day1': 'Tag', 'dayN': 'Tage',
+      'week1': 'Woche', 'weekN': 'Wochen',
+      'month1': 'Monat', 'monthN': 'Monate',
+      'year1': 'Jahr', 'yearN': 'Jahre',
+    },
+    'fr': {
+      'day1': 'jour', 'dayN': 'jours',
+      'week1': 'semaine', 'weekN': 'semaines',
+      'month1': 'mois', 'monthN': 'mois',
+      'year1': 'an', 'yearN': 'ans',
+    },
+    'es': {
+      'day1': 'día', 'dayN': 'días',
+      'week1': 'semana', 'weekN': 'semanas',
+      'month1': 'mes', 'monthN': 'meses',
+      'year1': 'año', 'yearN': 'años',
+    },
+    'it': {
+      'day1': 'giorno', 'dayN': 'giorni',
+      'week1': 'settimana', 'weekN': 'settimane',
+      'month1': 'mese', 'monthN': 'mesi',
+      'year1': 'anno', 'yearN': 'anni',
+    },
+    'el': {
+      'day1': 'ημέρα', 'dayN': 'ημέρες',
+      'week1': 'εβδομάδα', 'weekN': 'εβδομάδες',
+      'month1': 'μήνας', 'monthN': 'μήνες',
+      'year1': 'χρόνος', 'yearN': 'χρόνια',
+    },
+  };
 
   String _planToProductId(PremiumPlan plan) {
     switch (plan) {
@@ -406,7 +504,15 @@ class PremiumService extends ChangeNotifier {
       debugPrint('IAP buyProduct returned: $success');
     } catch (e) {
       _purchaseInProgress = false;
-      _purchaseError = 'purchase_failed';
+      // User-cancellations from StoreKit / Google Play often surface
+      // here as exceptions on some platforms instead of via the
+      // PurchaseStatus.canceled branch. Silence them — surfacing an
+      // error after the user explicitly tapped Cancel is confusing.
+      final msg = e.toString().toLowerCase();
+      final isCancel = msg.contains('cancel') ||
+          msg.contains('skerrorpaymentcancelled') ||
+          msg.contains('user_canceled');
+      _purchaseError = isCancel ? null : 'purchase_failed';
       notifyListeners();
       return false;
     }

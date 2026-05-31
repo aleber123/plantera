@@ -6,6 +6,7 @@ import 'package:sqflite/sqflite.dart';
 import '../models/garden_plant.dart';
 import '../models/garden_task.dart';
 import '../models/plant.dart';
+import '../utils/climate_zones.dart';
 import 'garden_service.dart';
 import 'monthly_chores_service.dart';
 import 'plant_database_service.dart';
@@ -104,12 +105,16 @@ class TaskService extends ChangeNotifier {
   Future<void> complete(GardenTask t) async {
     if (_db == null) return;
     final now = DateTime.now();
-    _completed[t.key] = now;
+    // DB first so a write failure can't leave the in-memory cache
+    // claiming a task is done when nothing is persisted. The next
+    // _regenerate would happily re-emit the task and the user would
+    // think it stuck — but a relaunch would resurrect it.
     await _db!.insert(
       _completionsTable,
       {'task_key': t.key, 'completed_at': now.millisecondsSinceEpoch},
       conflictAlgorithm: ConflictAlgorithm.replace,
     );
+    _completed[t.key] = now;
     // Side effects per kind:
     //   water → bump GardenPlant.lastWatered so the next-water-due math
     //   uses the correct anchor.
@@ -123,15 +128,20 @@ class TaskService extends ChangeNotifier {
 
   /// Push the task forward by [days] days (default 1). The same task
   /// won't reappear in the active list until then.
+  ///
+  /// Stores the snooze under [GardenTask.snoozeIdentity] (NOT the raw
+  /// key) so water tasks — whose keys encode the daily due-date and
+  /// thus mutate every day — survive past tomorrow's regenerate cycle.
   Future<void> snooze(GardenTask t, {int days = 1}) async {
     if (_db == null) return;
     final until = DateTime.now().add(Duration(days: days));
-    _snoozed[t.key] = until;
+    final id = t.snoozeIdentity;
     await _db!.insert(
       _snoozesTable,
-      {'task_key': t.key, 'snoozed_until': until.millisecondsSinceEpoch},
+      {'task_key': id, 'snoozed_until': until.millisecondsSinceEpoch},
       conflictAlgorithm: ConflictAlgorithm.replace,
     );
+    _snoozed[id] = until;
     _regenerate();
   }
 
@@ -160,9 +170,23 @@ class TaskService extends ChangeNotifier {
       tasks.addAll(_lifecycleTasksFor(gp, plant, today, monthAhead));
     }
 
-    // Generic chores — applies to whole garden, not per-plant.
+    // Generic chores — applies to whole garden, not per-plant. Filter
+    // by what the user actually grows: "Gallra äpple och plommon" only
+    // shows up if there's an äpple or plommon in the active garden.
     if (scopedPlants.isNotEmpty) {
-      tasks.addAll(_choreTasksFor(today, weekAhead));
+      final activePlantIds =
+          scopedPlants.map((gp) => gp.plantId).toSet();
+      final activeCategories = <String>{};
+      for (final gp in scopedPlants) {
+        final plant = _plantDb.byId(gp.plantId);
+        if (plant != null) activeCategories.add(plant.kategori.name);
+      }
+      tasks.addAll(_choreTasksFor(
+        today,
+        weekAhead,
+        userPlantIds: activePlantIds,
+        userCategories: activeCategories,
+      ));
     }
 
     // Apply user state, drop completed, and sort by due date + priority.
@@ -178,7 +202,7 @@ class TaskService extends ChangeNotifier {
         }
         continue;
       }
-      final snoozedUntil = _snoozed[t.key];
+      final snoozedUntil = _snoozed[t.snoozeIdentity];
       if (snoozedUntil != null && snoozedUntil.isAfter(now)) {
         continue; // hide from active list while snoozed
       }
@@ -206,6 +230,11 @@ class TaskService extends ChangeNotifier {
   /// Watering: outdoor plants that haven't been watered within their
   /// cadence. Skips planerad (not in the ground yet) and skordad
   /// (season's done).
+  ///
+  /// Cadence is season-scaled for OUTDOOR plants — winter rain handles
+  /// 90% of watering for plants that are "Står ute" or "Direktsådd ute",
+  /// and over-watering in dormancy is the #1 way hobbyists kill plants.
+  /// Indoor seedlings (forsoddInne) keep their year-round cadence.
   Iterable<GardenTask> _waterTasksFor(
       GardenPlant gp, Plant plant, DateTime today) sync* {
     if (gp.status == PlantStatus.planerad ||
@@ -213,11 +242,14 @@ class TaskService extends ChangeNotifier {
         gp.status == PlantStatus.vilande) {
       return;
     }
-    final cadenceDays = switch (plant.vattning) {
+    final baseDays = switch (plant.vattning) {
       WaterNeed.sparsam => 7,
       WaterNeed.regelbunden => 3,
       WaterNeed.riklig => 2,
     };
+    final cadenceDays = (baseDays * _seasonalWaterFactor(today, gp.status))
+        .round()
+        .clamp(1, 21);
     final last = gp.lastWatered;
     final nextDue = last == null
         ? today
@@ -242,7 +274,37 @@ class TaskService extends ChangeNotifier {
     );
   }
 
-  /// Harvest: plant has matured AND is in active harvest period.
+  /// Multiplier on the base water cadence based on season + status.
+  ///
+  /// Hobbyists with outdoor plants in November–February kill them by
+  /// over-watering (rain handles 90% of what an outdoor garden needs,
+  /// dormant root systems can't process more). Indoor seedlings keep
+  /// their year-round cadence because kitchen heating dries fast.
+  ///
+  /// Numbers are intentionally conservative — even at 3× the worst-case
+  /// is "plant is a bit dry for a day", far better than root rot.
+  double _seasonalWaterFactor(DateTime today, PlantStatus status) {
+    // Indoor seedlings or no-status: full cadence year-round.
+    final isOutdoor = status == PlantStatus.direktsadd ||
+        status == PlantStatus.hardad ||
+        status == PlantStatus.utplanterad ||
+        status == PlantStatus.skordeklar;
+    if (!isOutdoor) return 1.0;
+    // Pure Swedish/Northern hemisphere bias for v1 — Plantera's
+    // ASC listing is sv-only so the user base is northern.
+    final month = today.month;
+    if (month == 12 || month == 1 || month == 2) return 3.0; // winter
+    if (month == 11 || month == 3) return 2.0; // shoulder cold
+    if (month == 10 || month == 4) return 1.5; // shoulder mild
+    return 1.0; // May-Sep peak growing season
+  }
+
+  /// Harvest / bloom: plant has matured AND is in active period.
+  ///
+  /// For edible crops (vegetables, herbs, berries, fruit trees) we emit
+  /// a harvest task — the user grows them to pick. For ornamental
+  /// flowers we instead emit a *bloom* task, since "Skörda ros" feels
+  /// wrong when the user is growing roses for beauty, not cuttings.
   Iterable<GardenTask> _harvestTasksFor(
       GardenPlant gp, Plant plant, DateTime today, DateTime horizon) sync* {
     if (plant.skordeperiod == null) return;
@@ -251,8 +313,15 @@ class TaskService extends ChangeNotifier {
         gp.status == PlantStatus.skordad) {
       return;
     }
-    final inHarvestNow = plant.skordeperiod!.includes(today.month);
-    if (!inHarvestNow) return;
+    // Map today's calendar month into NH-equivalent terms for the
+    // SH-aware harvest-window check. NH users get an identity shift.
+    final activeGarden = _garden.activeGarden;
+    final hemi = (activeGarden?.lat != null)
+        ? Hemisphere.forLatitude(activeGarden!.lat!)
+        : Hemisphere.north;
+    final lookupMonth = hemi.shiftMonth(today.month);
+    final inWindowNow = plant.skordeperiod!.includes(lookupMonth);
+    if (!inWindowNow) return;
 
     final isLongLived = plant.livscykel == PlantLifecycle.perennial ||
         plant.livscykel == PlantLifecycle.tree ||
@@ -263,13 +332,31 @@ class TaskService extends ChangeNotifier {
         _annualHasMatured(plant, gp, today);
     if (!maturityOk) return;
 
-    // Bucket by year so the task is "this year's harvest" and the user
-    // can complete it once per season.
-    final key = 'harvest-${gp.id}-${today.year}';
+    final isFlower = plant.kategori == PlantCategory.blommor;
+    final displayName = (gp.customName ?? plant.namnSv).toLowerCase();
+
+    if (isFlower) {
+      // Bloom reminder — informational, lower priority. User grows
+      // ornamentals to look at, not to pick.
+      yield GardenTask(
+        key: 'bloom-${gp.id}-${today.year}',
+        kind: TaskKind.bloom,
+        title: 'Blomning: $displayName',
+        body: 'Njut — blomningen pågår. Klipp för vas om du vill.',
+        emoji: plant.emoji,
+        dueDate: today,
+        priority: TaskPriority.normal,
+        gardenPlantId: gp.id,
+        gardenId: gp.gardenId,
+      );
+      return;
+    }
+
+    // Edible crop — actual harvest task.
     yield GardenTask(
-      key: key,
+      key: 'harvest-${gp.id}-${today.year}',
       kind: TaskKind.harvest,
-      title: 'Skörda ${(gp.customName ?? plant.namnSv).toLowerCase()}',
+      title: 'Skörda $displayName',
       body: gp.status == PlantStatus.skordeklar
           ? 'Markerad som skördeklar'
           : 'Skördeperioden är aktiv',
@@ -286,8 +373,17 @@ class TaskService extends ChangeNotifier {
     final plantedDay =
         DateTime(gp.plantedDate.year, gp.plantedDate.month, gp.plantedDate.day);
     final daysGrown = today.difference(plantedDay).inDays;
-    if (dtH != null) return daysGrown >= (dtH * 0.8).round();
-    return daysGrown >= 30;
+    if (dtH != null) {
+      // 80% of days-to-harvest is when an annual is *expected* to be
+      // mature. The user's own per-plant `harvestOffsetDays` lets them
+      // push earlier ("my zone runs warmer") or later ("had a cold
+      // spring"). Previously this field was stored but never read —
+      // an inert tweak setting. Now it actually moves the maturity
+      // threshold.
+      final base = (dtH * 0.8).round();
+      return daysGrown >= base + gp.harvestOffsetDays;
+    }
+    return daysGrown >= 30 + gp.harvestOffsetDays;
   }
 
   /// Per-plant care tasks from `plant.omsorg`. Generated when the
@@ -427,11 +523,21 @@ class TaskService extends ChangeNotifier {
     required DateTime horizon,
     required GardenPlant gp,
   }) sync* {
+    // Hide the previously-fired window once we're 14d past its start —
+    // saves a stale "förodla i mars" task from sitting at the top of
+    // the list in May. The wrap-around case (window is in the past
+    // year and the next occurrence is too far away) is handled by
+    // pushing due to year+1 below.
     var due = DateTime(today.year, monthStart, 1);
     if (due.isBefore(today.subtract(const Duration(days: 14)))) {
       due = DateTime(today.year + 1, monthStart, 1);
     }
-    if (due.isAfter(horizon)) return;
+    // For year-spanning crops (vitlök forsådatum okt-nov, skörd next
+    // år) the bumped due may sit outside the 30-day horizon. Keep
+    // showing the task if it's *within the current calendar year*,
+    // even past horizon — otherwise höstvitlök planted in Nov shows
+    // no sow task at all.
+    if (due.isAfter(horizon) && due.year > today.year) return;
     yield GardenTask(
       key: key,
       kind: kind,
@@ -444,16 +550,35 @@ class TaskService extends ChangeNotifier {
     );
   }
 
-  /// Generic monthly chores — applies to the whole garden.
-  Iterable<GardenTask> _choreTasksFor(DateTime today, DateTime weekAhead) sync* {
+  /// Generic monthly chores — applies to the whole garden, filtered
+  /// against the user's actual plants. A chore with `applies_to_plants`
+  /// or `applies_to_categories` set only shows up when the user has at
+  /// least one matching plant. Universal chores (no filter) always show.
+  Iterable<GardenTask> _choreTasksFor(
+    DateTime today,
+    DateTime weekAhead, {
+    required Set<String> userPlantIds,
+    required Set<String> userCategories,
+  }) sync* {
     final upcoming = _chores.upcoming(now: today);
     for (final c in upcoming) {
+      if (!c.isUniversal) {
+        final matchesPlant = c.appliesToPlants.any(userPlantIds.contains);
+        final matchesCategory =
+            c.appliesToCategories.any(userCategories.contains);
+        if (!matchesPlant && !matchesCategory) continue;
+      }
       // Bucket per (chore, year, month) so completing it once silences
-      // it for the rest of the month.
+      // it for the rest of the month. Avoid scheduling on the 1st of
+      // the current month when we're past the 1st — that puts the
+      // chore "in the past" which sorts it to the top forever. Use
+      // today instead so it joins the natural sort order.
       final dueMonth = c.month;
       final dueYear =
           (dueMonth >= today.month) ? today.year : today.year + 1;
-      final due = DateTime(dueYear, dueMonth, 1);
+      final due = (dueYear == today.year && dueMonth == today.month)
+          ? today
+          : DateTime(dueYear, dueMonth, 1);
       final key = 'chore-${c.id}-$dueYear';
       yield GardenTask(
         key: key,

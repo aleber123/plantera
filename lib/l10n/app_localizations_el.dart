@@ -1563,4 +1563,200 @@ class AppLocalizationsEl extends AppLocalizations {
 
   @override
   String get pestTypeLabelPest => 'ΠΑΡΑΣΙΤΟ';
+
+  @override
+  String get statsShareButton => 'Κοινοποίηση';
+
+  @override
+  String statsShareText(String year) {
+    return 'Ο κήπος μου $year με Plantera 🌱';
+  }
+
+  @override
+  String get statsShareFailed => 'Δεν ήταν δυνατή η δημιουργία εικόνας';
+
+  @override
+  String get paywallTitleBranded => 'Plantera Premium';
+
+  @override
+  String get paywallHeaderFrost =>
+      'Λάβετε προειδοποίηση παγετού πριν παγώσουν τα φυτά';
+
+  @override
+  String get paywallHeaderGardenLimit => 'Προσθέστε όλο τον κήπο';
+
+  @override
+  String get paywallHeaderWaterAll => 'Πότισμα όλων με ένα πάτημα';
+
+  @override
+  String get paywallHeaderPhotoLog => 'Φωτογραφικό ημερολόγιο για τα φυτά σας';
+
+  @override
+  String get paywallSubFrost =>
+      'Νυχτερινές θερμοκρασίες από SMHI — σας ειδοποιούμε το βράδυ πριν τον παγετό';
+
+  @override
+  String get paywallSubGardenLimit =>
+      'Κανένα όριο στον αριθμό φυτών που παρακολουθείτε';
+
+  @override
+  String get paywallSubWaterAll =>
+      'Ένα κουμπί σημειώνει όλα τα εξωτερικά φυτά ως ποτισμένα';
+
+  @override
+  String get paywallSubPhotoLog =>
+      'Δείτε τα να μεγαλώνουν από σπόρο μέχρι συγκομιδή';
+
+  @override
+  String get paywallSubHome =>
+      'Ειδοποιήσεις παγετού, φωτογραφικό ημερολόγιο και όλα απεριόριστα';
+
+  @override
+  String get paywallSubDefault => 'Ανεβάστε επίπεδο τον κήπο σας';
+
+  @override
+  String get paywallBenefitUnlimited => 'Απεριόριστα φυτά στον κήπο σας';
+
+  @override
+  String get paywallBenefitReminders =>
+      'Όλες οι υπενθυμίσεις και ειδοποιήσεις παγετού';
+
+  @override
+  String get paywallBenefitPhotos => 'Φωτογραφικό ημερολόγιο για κάθε φυτό';
+
+  @override
+  String get paywallBenefitNoAds => 'Χωρίς διαφημίσεις';
+
+  @override
+  String get paywallBenefitPdf => 'Εξαγωγή PDF του ημερολογίου συγκομιδής';
+
+  @override
+  String get paywallBenefitArticles => 'Πλήρης πρόσβαση σε άρθρα γνώσης';
+
+  @override
+  String get paywallPlanYearly => 'Ετήσια συνδρομή';
+
+  @override
+  String paywallPlanYearlySavings(String percent) {
+    return 'Εξοικονομήστε $percent% σε σχέση με τη μηνιαία';
+  }
+
+  @override
+  String get paywallPlanMonthly => 'Μηνιαία συνδρομή';
+
+  @override
+  String get paywallPlanLifetime => 'Εφ\' όρου ζωής (εφάπαξ πληρωμή)';
+
+  @override
+  String paywallTrialCta(String period) {
+    return 'Έναρξη δωρεάν δοκιμής ($period)';
+  }
+
+  @override
+  String paywallTrialThen(String price) {
+    return 'Έπειτα $price';
+  }
+
+  @override
+  String paywallPlanPriceFormat(String title, String price) {
+    return '$title • $price';
+  }
+
+  @override
+  String get paywallRestore => 'Επαναφορά προηγούμενων αγορών';
+
+  @override
+  String get paywallDisclaimer =>
+      'Οι συνδρομές ανανεώνονται αυτόματα μέχρι την ακύρωση στις ρυθμίσεις του App Store. Η χρέωση γίνεται 24 ώρες πριν την ανανέωση.';
+
+  @override
+  String get paywallTerms => 'Όροι (EULA)';
+
+  @override
+  String get paywallPrivacy => 'Πολιτική απορρήτου';
+
+  @override
+  String get paywallErrorStore =>
+      'Το App Store δεν είναι διαθέσιμο αυτή τη στιγμή — δοκιμάστε ξανά σε λίγο.';
+
+  @override
+  String get paywallErrorProduct =>
+      'Η αγορά δεν φορτώθηκε από το App Store. Κλείστε την παρουσίαση και ανοίξτε ξανά.';
+
+  @override
+  String get paywallErrorFailed => 'Η αγορά απέτυχε. Δοκιμάστε ξανά.';
+
+  @override
+  String paywallErrorOpenUrl(String url) {
+    return 'Δεν ήταν δυνατό το άνοιγμα του $url';
+  }
+
+  @override
+  String get paywallPurchaseSuccess =>
+      'Premium ενεργοποιήθηκε — ευχαριστούμε! Όλα είναι ξεκλειδωμένα.';
+
+  @override
+  String get paywallRestoreInProgress => 'Αναζήτηση για τις αγορές σας…';
+
+  @override
+  String get paywallRestoreFailed =>
+      'Δεν ήταν δυνατή η σύνδεση με το App Store. Δοκιμάστε ξανά.';
+
+  @override
+  String get paywallRestoreSuccess =>
+      'Το Premium αποκαταστάθηκε — ευχαριστούμε!';
+
+  @override
+  String get paywallRestoreAlreadyActive => 'Το Premium είναι ήδη ενεργό.';
+
+  @override
+  String get paywallRestoreNothingFound =>
+      'Δεν βρέθηκαν αγορές σε αυτό το Apple ID.';
+
+  @override
+  String get paywallAlreadyPremiumTitle => 'Έχετε Premium';
+
+  @override
+  String get paywallAlreadyPremiumBody =>
+      'Όλες οι λειτουργίες είναι ξεκλειδωμένες. Ευχαριστούμε για την υποστήριξη.';
+
+  @override
+  String get paywallAlreadyPremiumCta => 'Πίσω στον κήπο';
+
+  @override
+  String get paywallProductsUnavailable =>
+      'Δεν ήταν δυνατή η φόρτωση τιμών από το App Store. Ελέγξτε τη σύνδεσή σας και δοκιμάστε ξανά.';
+
+  @override
+  String get paywallProductsRetry => 'Δοκιμή ξανά';
+
+  @override
+  String get onboardingSlide1Title => 'Σταμάτα να μαντεύεις πότε να σπείρεις';
+
+  @override
+  String get onboardingSlide1Body =>
+      'Το Plantera γνωρίζει τη ζώνη σου και σου λέει ακριβώς πότε να σπείρεις εσωτερικά, απευθείας ή να φυτέψεις — φυτό προς φυτό.';
+
+  @override
+  String get onboardingSlide2Title => 'Προειδοποιήσεις παγετού';
+
+  @override
+  String get onboardingSlide2Body =>
+      'Όταν έρχεται κρύα νύχτα ειδοποιείσαι έγκαιρα για να σκεπάσεις τα φυτά. Καμία πανικός στις τρεις τη νύχτα.';
+
+  @override
+  String get onboardingSlide3Title => 'Μία πρωινή υπενθύμιση — όχι 50';
+
+  @override
+  String get onboardingSlide3Body =>
+      'Πότισμα, κλάδεμα, συγκομιδή και εποχιακές εργασίες σε μία ημερήσια σύνοψη ώστε να έχεις πραγματικά σοδειά.';
+
+  @override
+  String get onboardingFooterSkip => 'Παράλειψη';
+
+  @override
+  String get onboardingFooterNext => 'Επόμενο';
+
+  @override
+  String get onboardingFooterStart => 'Ξεκίνα';
 }

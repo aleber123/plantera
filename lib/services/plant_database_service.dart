@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
 import '../models/plant.dart';
+import '../utils/climate_zones.dart';
 
 class PlantDatabaseService extends ChangeNotifier {
   static final PlantDatabaseService _instance =
@@ -49,43 +50,54 @@ class PlantDatabaseService extends ChangeNotifier {
         .toList();
   }
 
-  /// Plants that can be pre-sown (förså) in the given month for the given zone.
-  List<Plant> forsaIMonth(int month, int zone) {
+  /// Plants that can be pre-sown (förså) in the given month for the
+  /// given zone. The optional [hemi] flips the calendar for southern-
+  /// hemisphere users — a Sydney gardener's January maps to a Swedish
+  /// gardener's July for the purposes of looking up plant timing.
+  List<Plant> forsaIMonth(int month, int zone,
+      {Hemisphere hemi = Hemisphere.north}) {
+    final m = hemi.shiftMonth(month);
     return _plants
         .where((p) =>
             p.zoner.contains(zone) &&
             p.forsadatum != null &&
-            p.forsadatum!.includes(month))
+            p.forsadatum!.includes(m))
         .toList();
   }
 
   /// Plants that can be direct-sown outdoors in the given month/zone.
-  List<Plant> direktsaIMonth(int month, int zone) {
+  List<Plant> direktsaIMonth(int month, int zone,
+      {Hemisphere hemi = Hemisphere.north}) {
+    final m = hemi.shiftMonth(month);
     return _plants
         .where((p) =>
             p.zoner.contains(zone) &&
             p.direktsadatum != null &&
-            p.direktsadatum!.includes(month))
+            p.direktsadatum!.includes(m))
         .toList();
   }
 
   /// Plants that should be transplanted out in the given month/zone.
-  List<Plant> utplanteringIMonth(int month, int zone) {
+  List<Plant> utplanteringIMonth(int month, int zone,
+      {Hemisphere hemi = Hemisphere.north}) {
+    final m = hemi.shiftMonth(month);
     return _plants
         .where((p) =>
             p.zoner.contains(zone) &&
             p.utplanteringsdatum != null &&
-            p.utplanteringsdatum!.includes(month))
+            p.utplanteringsdatum!.includes(m))
         .toList();
   }
 
   /// Plants harvestable in the given month/zone.
-  List<Plant> skordIMonth(int month, int zone) {
+  List<Plant> skordIMonth(int month, int zone,
+      {Hemisphere hemi = Hemisphere.north}) {
+    final m = hemi.shiftMonth(month);
     return _plants
         .where((p) =>
             p.zoner.contains(zone) &&
             p.skordeperiod != null &&
-            p.skordeperiod!.includes(month))
+            p.skordeperiod!.includes(m))
         .toList();
   }
 }

@@ -64,4 +64,26 @@ class WishlistPlant {
             DateTime.fromMillisecondsSinceEpoch(m['added_at'] as int),
         gardenId: m['garden_id'] as String?,
       );
+
+  /// Earliest sensible sowing date for this wish, given the plant's
+  /// `forsadatum` (indoor pre-sow) and the user's zone. Returns the
+  /// indoor pre-sow date if defined (most reliable anchor), otherwise
+  /// the direct-sow date, otherwise null.
+  ///
+  /// Lets the UI surface "Sow around <date>" next to each wishlist
+  /// entry — previously the user had to open the plant detail screen
+  /// to find that out, which defeated the season planner's purpose.
+  ///
+  /// Pass in the plant lookup and the user's zone — this helper is
+  /// model-side so it can be called from any screen without injecting
+  /// services.
+  DateTime? suggestedSowDate({
+    required DateTime Function(int year, int month) zoneShifted,
+    required int? indoorStartMonth,
+    required int? directStartMonth,
+  }) {
+    final m = indoorStartMonth ?? directStartMonth;
+    if (m == null) return null;
+    return zoneShifted(seasonYear, m);
+  }
 }

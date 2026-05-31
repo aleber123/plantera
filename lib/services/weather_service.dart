@@ -89,27 +89,109 @@ class WeatherService extends ChangeNotifier {
     _error = null;
     notifyListeners();
 
-    try {
-      final uri = Uri.parse(AppConstants.smhiForecastUrl(lat, lon));
-      final resp = await http.get(uri).timeout(const Duration(seconds: 15));
-      if (resp.statusCode != 200) {
-        throw Exception('SMHI HTTP ${resp.statusCode}');
+    // SMHI covers the Nordics + parts of northern Europe (officially
+    // lat 52-71, lon -9 to 38). Outside that box we fall back to
+    // Open-Meteo's daily forecast which is global. We also fall back
+    // when SMHI fails for any reason — the user shouldn't see "Väder
+    // ej tillgängligt" just because they're in Spain.
+    final inSmhiCoverage =
+        lat >= 52 && lat <= 71 && lon >= -9 && lon <= 38;
+    var fetched = false;
+    if (inSmhiCoverage) {
+      try {
+        final uri = Uri.parse(AppConstants.smhiForecastUrl(lat, lon));
+        final resp =
+            await http.get(uri).timeout(const Duration(seconds: 15));
+        if (resp.statusCode == 200) {
+          final data = jsonDecode(resp.body) as Map<String, dynamic>;
+          _forecast = _parseSmhi(data);
+          _lastFetch = now;
+          fetched = true;
+        } else {
+          debugPrint('SMHI HTTP ${resp.statusCode}; trying Open-Meteo');
+        }
+      } catch (e) {
+        debugPrint('SMHI fetch failed ($e); trying Open-Meteo');
       }
-      final data = jsonDecode(resp.body) as Map<String, dynamic>;
-      _forecast = _parseSmhi(data);
-      _lastFetch = now;
-    } catch (e) {
-      _error = e.toString();
-      debugPrint('SMHI fetch failed: $e');
-    } finally {
-      _loading = false;
-      notifyListeners();
     }
+
+    if (!fetched) {
+      try {
+        final uri = Uri.parse(AppConstants.openMeteoForecastUrl(lat, lon));
+        final resp =
+            await http.get(uri).timeout(const Duration(seconds: 15));
+        if (resp.statusCode != 200) {
+          throw Exception('Open-Meteo HTTP ${resp.statusCode}');
+        }
+        final data = jsonDecode(resp.body) as Map<String, dynamic>;
+        _forecast = _parseOpenMeteo(data);
+        _lastFetch = now;
+      } catch (e) {
+        _error = e.toString();
+        debugPrint('Open-Meteo fetch failed: $e');
+      }
+    }
+
+    _loading = false;
+    notifyListeners();
     // Historical rain is independent of the forecast: a failure here
-    // shouldn't blank the forecast section. Fire after the SMHI block
-    // so the UI gets the (more important) forecast immediately and the
-    // drought banner fills in once the second request lands.
+    // shouldn't blank the forecast section.
     _fetchHistoricalRain(lat, lon);
+  }
+
+  /// Parses Open-Meteo daily forecast into the same WeatherDay shape
+  /// as SMHI. Open-Meteo's `weathercode` differs from SMHI's symbol
+  /// integers — we map it to the closest SMHI equivalent so the
+  /// existing icon-lookup keeps working.
+  List<WeatherDay> _parseOpenMeteo(Map<String, dynamic> data) {
+    final daily = data['daily'] as Map<String, dynamic>?;
+    if (daily == null) return [];
+    final times = (daily['time'] as List?)?.cast<String>() ?? const [];
+    final maxes = (daily['temperature_2m_max'] as List?) ?? const [];
+    final mins = (daily['temperature_2m_min'] as List?) ?? const [];
+    final codes = (daily['weathercode'] as List?) ?? const [];
+    final precs = (daily['precipitation_sum'] as List?) ?? const [];
+    final out = <WeatherDay>[];
+    for (var i = 0; i < times.length; i++) {
+      final date = DateTime.parse(times[i]);
+      final mx = i < maxes.length ? (maxes[i] as num?)?.toDouble() : null;
+      final mn = i < mins.length ? (mins[i] as num?)?.toDouble() : null;
+      final wmo = i < codes.length ? (codes[i] as num?)?.toInt() ?? 0 : 0;
+      final precip =
+          i < precs.length ? (precs[i] as num?)?.toDouble() ?? 0 : 0.0;
+      final smhiSymbol = _wmoToSmhiSymbol(wmo);
+      out.add(WeatherDay(
+        date: date,
+        maxTempC: mx ?? 0,
+        minTempC: mn ?? 0,
+        precipitationMm: precip,
+        windSpeedMs: 0, // Open-Meteo can return wind, but we don't
+        // surface it in the UI — keep the request narrow.
+        symbolDescription: _smhiSymbolText(smhiSymbol),
+        smhiSymbolCode: smhiSymbol,
+      ));
+    }
+    return out;
+  }
+
+  /// Maps WMO weather codes (Open-Meteo) → closest SMHI Wsymb2 code
+  /// so the existing icon lookup keeps working. Reference:
+  ///   https://open-meteo.com/en/docs (weathercode table)
+  ///   https://opendata.smhi.se/apidocs/metfcst/parameters.html
+  int _wmoToSmhiSymbol(int wmo) {
+    if (wmo == 0) return 1; // clear
+    if (wmo <= 2) return 2; // mostly clear / partly cloudy
+    if (wmo <= 3) return 4; // overcast
+    if (wmo == 45 || wmo == 48) return 7; // fog
+    if (wmo >= 51 && wmo <= 57) return 9; // drizzle
+    if (wmo >= 61 && wmo <= 65) return 10; // rain
+    if (wmo >= 66 && wmo <= 67) return 12; // freezing rain
+    if (wmo >= 71 && wmo <= 77) return 15; // snow
+    if (wmo >= 80 && wmo <= 82) return 18; // rain showers
+    if (wmo >= 85 && wmo <= 86) return 21; // snow showers
+    if (wmo == 95) return 11; // thunderstorm
+    if (wmo >= 96 && wmo <= 99) return 11; // thunderstorm w hail
+    return 4; // unknown → overcast
   }
 
   /// Pulls observed precipitation for the last 14 days from Open-Meteo.

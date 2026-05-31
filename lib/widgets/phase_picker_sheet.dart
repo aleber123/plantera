@@ -271,7 +271,10 @@ class _PhasePickerSheetState extends State<PhasePickerSheet> {
         context: context,
         initialDate: DateTime.now(),
         firstDate: DateTime.now().subtract(const Duration(days: 365)),
-        lastDate: DateTime.now().add(const Duration(days: 30)),
+        // Clamp to today — a future plantedDate breaks downstream
+        // date arithmetic (negative daysGrown, future-anchored water
+        // and harvest schedules).
+        lastDate: DateTime.now(),
         helpText: switch (option.status) {
           PlantStatus.forsoddInne => l10n.phaseDateHelpPresow,
           PlantStatus.direktsadd => l10n.phaseDateHelpDirectsow,

@@ -65,6 +65,24 @@ class GardenTask {
     this.snoozedUntil,
   });
 
+  /// Stable identity used for SNOOZE lookups.
+  ///
+  /// Water-task keys encode a daily date, which changes each day for
+  /// plants without a recorded `lastWatered` (the snooze stored against
+  /// today's key wouldn't match tomorrow's regenerated key, so the task
+  /// reappeared the next morning). Folding the date out for water tasks
+  /// lets a snooze persist across the regenerate cycle until its
+  /// `snoozedUntil` expires.
+  ///
+  /// For other task kinds (harvest, care, chore, sow, plant-out) the
+  /// key already only encodes the year, so the raw key works fine.
+  String get snoozeIdentity {
+    if (kind == TaskKind.water && gardenPlantId != null) {
+      return 'water-$gardenPlantId';
+    }
+    return key;
+  }
+
   /// True if the task should appear in *today's* list (or earlier).
   bool isDueOnOrBefore(DateTime date) {
     final d = DateTime(date.year, date.month, date.day);
@@ -109,6 +127,10 @@ enum TaskKind {
   prune,
   /// Harvest is open AND plant has matured.
   harvest,
+  /// Ornamental flowers in bloom — informational "njut av blomningen"
+  /// reminder rather than a harvest. Same window as skordeperiod but
+  /// the user grows them to look at, not to pick.
+  bloom,
   /// Förodla / direktså / utplantering — phase reminders that today's
   /// notification system fires. They get folded into tasks too.
   sow,
@@ -140,6 +162,8 @@ extension TaskKindLabel on TaskKind {
         return 0xFFEF6C00; // orange
       case TaskKind.harvest:
         return 0xFFC62828; // red
+      case TaskKind.bloom:
+        return 0xFFE91E63; // pink — ornamental
       case TaskKind.sow:
       case TaskKind.plantOut:
       case TaskKind.hardenOff:
