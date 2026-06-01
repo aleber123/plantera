@@ -69,6 +69,13 @@ class PremiumService extends ChangeNotifier {
   // them from re-subscribing via the _AlreadyPremium panel.
   bool _restoreSawActiveSub = false;
 
+  // Whether the store demonstrably responded over the network this launch
+  // (product query succeeded with results). Used to gate the stale-stamp
+  // prune: an offline launch must NOT prune, because a failed restore is
+  // indistinguishable from a lapsed subscription, and pruning offline would
+  // falsely demote a valid subscriber to free-tier.
+  bool _storeReachableThisLaunch = false;
+
   bool get isPremium =>
       _isPremium || _isTempPremium || _hasActiveSubscription;
   bool get _isTempPremium {
@@ -226,9 +233,18 @@ class PremiumService extends ChangeNotifier {
   /// stops returning true and the re-subscribe CTAs come back.
   Future<void> _pruneStaleSubscriptionAfterRestore() async {
     if (_activeSubPlan == null && _subActivatedAt == null) return;
-    // Let any in-flight restored-purchase events settle.
-    await Future<void>.delayed(const Duration(seconds: 3));
+    // Let any in-flight restored-purchase events settle. The paywall
+    // tolerates up to 10s for a restore to land, so a 3s window was too
+    // tight and would race a slow-but-online restore.
+    await Future<void>.delayed(const Duration(seconds: 8));
     if (_restoreSawActiveSub) return;
+    // Only prune when the store demonstrably responded over the network
+    // this launch. On an offline launch a restore returns nothing, which
+    // is indistinguishable from a lapsed sub — pruning then would demote
+    // a valid subscriber to free-tier for the whole session. When offline
+    // we keep the cached stamp; the grace window covers it and the next
+    // online launch re-validates against StoreKit.
+    if (!_storeReachableThisLaunch) return;
     _activeSubPlan = null;
     _subActivatedAt = null;
     final prefs = await SharedPreferences.getInstance();
@@ -246,6 +262,12 @@ class PremiumService extends ChangeNotifier {
       debugPrint('IAP products not found: ${response.notFoundIDs}');
     }
     _products = response.productDetails;
+    // A successful product query means StoreKit reached Apple this launch,
+    // so a restore that returns no active sub is trustworthy (genuinely
+    // lapsed, not just offline). Latches true once reachable.
+    if (response.error == null && response.productDetails.isNotEmpty) {
+      _storeReachableThisLaunch = true;
+    }
     notifyListeners();
   }
 

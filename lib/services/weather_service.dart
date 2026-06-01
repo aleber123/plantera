@@ -186,6 +186,24 @@ class WeatherService extends ChangeNotifier {
       }
     }
 
+    // If the fetch failed and the cached forecast belongs to a DIFFERENT
+    // location (user switched gardens while offline), drop it. _lastLat/
+    // _lastLon track the coords the current _forecast was fetched for and
+    // are only updated on success, so a mismatch here means the cache is
+    // the previous garden's. Showing that under the new garden's label
+    // could hide a real frost risk — better to show "no data" than
+    // wrong-location frost. A same-location refresh failure keeps the
+    // forecast (the offline chip flags it as stale).
+    if (_error != null && _forecast.isNotEmpty) {
+      final forecastMatchesRequest = _lastLat != null &&
+          _coordsClose(_lastLat!, lat) &&
+          _coordsClose(_lastLon!, lon);
+      if (!forecastMatchesRequest) {
+        _forecast = const [];
+        _lastFetch = null;
+      }
+    }
+
     _loading = false;
     notifyListeners();
     // Historical rain is independent of the forecast: a failure here
