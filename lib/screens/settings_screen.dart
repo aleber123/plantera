@@ -11,6 +11,7 @@ import '../services/premium_service.dart';
 import '../services/season_planner_service.dart';
 import '../services/ui_settings_service.dart';
 import '../utils/constants.dart';
+import '../utils/debug_build.dart';
 import '../widgets/affiliate_card.dart';
 import '../widgets/other_apps_section.dart';
 import '../services/affiliate_service.dart';
@@ -184,6 +185,11 @@ class SettingsScreen extends StatelessWidget {
           const OtherAppsSection(
             currentBundleId: 'com.alexanderbergqvist.plantera',
           ),
+          const SizedBox(height: 24),
+          // Version footer. Tapping it 7× reveals a hidden debug menu —
+          // but only on TestFlight / dev builds (gated on the sandbox
+          // receipt), never in an App Store install.
+          const _DebugVersionFooter(),
           const SizedBox(height: 30),
         ],
       ),
@@ -318,5 +324,123 @@ class SettingsScreen extends StatelessWidget {
         SnackBar(content: Text(l10n.settingsBackupFailed(e.toString()))),
       );
     }
+  }
+}
+
+/// Version label at the bottom of Settings. Seven taps reveal a hidden
+/// developer menu — but only on TestFlight / dev builds (gated on the
+/// sandbox-receipt check in [DebugBuild]); in an App Store install the
+/// taps do nothing. Strings are deliberately Swedish literals: this is
+/// a dev-only surface, never shown to real users, so it stays out of
+/// the localized string set.
+class _DebugVersionFooter extends StatefulWidget {
+  const _DebugVersionFooter();
+
+  @override
+  State<_DebugVersionFooter> createState() => _DebugVersionFooterState();
+}
+
+class _DebugVersionFooterState extends State<_DebugVersionFooter> {
+  int _taps = 0;
+
+  Future<void> _onTap() async {
+    _taps++;
+    if (_taps < 7) return;
+    _taps = 0;
+    if (!await DebugBuild.isSandbox()) return; // App Store → no-op
+    if (!mounted) return;
+    _openDebugSheet();
+  }
+
+  void _openDebugSheet() {
+    final premium = context.read<PremiumService>();
+    showModalBottomSheet<void>(
+      context: context,
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.vertical(top: Radius.circular(24)),
+      ),
+      builder: (ctx) => SafeArea(
+        child: Padding(
+          padding: const EdgeInsets.fromLTRB(20, 16, 20, 24),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: [
+              const Text('🛠 Debug (endast TestFlight)',
+                  style:
+                      TextStyle(fontSize: 18, fontWeight: FontWeight.w800)),
+              const SizedBox(height: 4),
+              // Live status so you can confirm the reset took effect.
+              AnimatedBuilder(
+                animation: premium,
+                builder: (_, _) => Text(
+                  premium.debugStatusLine,
+                  style: const TextStyle(
+                      fontSize: 11, fontFamily: 'monospace', height: 1.4),
+                ),
+              ),
+              const SizedBox(height: 16),
+              FilledButton.icon(
+                icon: const Icon(Icons.lock_open),
+                label: const Text('Återställ till gratis (denna session)'),
+                onPressed: () async {
+                  await premium.debugResetToFree();
+                  if (ctx.mounted) {
+                    ScaffoldMessenger.of(ctx).showSnackBar(
+                      const SnackBar(
+                        content: Text(
+                            'Premium nollställt – du är gratisanvändare. '
+                            'Ett riktigt sandbox-köp återställer det.'),
+                      ),
+                    );
+                  }
+                },
+              ),
+              const SizedBox(height: 10),
+              OutlinedButton.icon(
+                icon: const Icon(Icons.workspace_premium),
+                label: const Text('Öppna paywall'),
+                onPressed: () {
+                  Navigator.pop(ctx);
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (_) =>
+                          const PaywallScreen(source: 'debug_menu'),
+                    ),
+                  );
+                },
+              ),
+              const SizedBox(height: 10),
+              OutlinedButton.icon(
+                icon: const Icon(Icons.restore),
+                label: const Text('Återställ köp (StoreKit)'),
+                onPressed: () => premium.restorePurchases(),
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Center(
+      child: GestureDetector(
+        behavior: HitTestBehavior.opaque,
+        onTap: _onTap,
+        child: Padding(
+          padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 24),
+          child: Text(
+            'Plantera v${AppConstants.appVersion}',
+            style: TextStyle(
+              fontSize: 12,
+              color: Theme.of(context).disabledColor,
+            ),
+          ),
+        ),
+      ),
+    );
   }
 }

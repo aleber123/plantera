@@ -35,5 +35,25 @@ import UserNotifications
         }
       }
     }
+
+    // Whether this is a non-production build. App Store builds ship a
+    // receipt named "receipt"; TestFlight and Xcode-run builds ship a
+    // "sandboxReceipt". The Dart side gates the hidden debug menu on
+    // this, so the menu can never appear in a real App Store install —
+    // there is no build flag to forget.
+    if let registrar = engineBridge.pluginRegistry.registrar(forPlugin: "PlanteraDebugChannel") {
+      let debugChannel = FlutterMethodChannel(
+        name: "com.alexanderbergqvist.plantera/debug",
+        binaryMessenger: registrar.messenger()
+      )
+      debugChannel.setMethodCallHandler { call, result in
+        if call.method == "isSandbox" {
+          let receiptName = Bundle.main.appStoreReceiptURL?.lastPathComponent
+          result(receiptName == "sandboxReceipt")
+        } else {
+          result(FlutterMethodNotImplemented)
+        }
+      }
+    }
   }
 }
