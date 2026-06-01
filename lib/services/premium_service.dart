@@ -198,40 +198,6 @@ class PremiumService extends ChangeNotifier {
     notifyListeners();
   }
 
-  // ── Debug / TestFlight only ───────────────────────────────────────
-  // Reset to a free-tier state so the paywall + 5-plant limit can be
-  // exercised without giving up a real entitlement. Clears the locally
-  // cached premium (lifetime flag + subscription stamp + temp premium)
-  // for THIS session. StoreKit still owns the truth, so a real (sandbox)
-  // purchase or a Restore re-grants premium naturally — which is exactly
-  // what lets you test both the cancel path (stays free) and the happy
-  // path (flips premium) of the purchase flow.
-  //
-  // MUST be called only behind a DebugBuild.isSandbox() check (the
-  // Settings menu does this), so it can never run in an App Store build.
-  Future<void> debugResetToFree() async {
-    _isPremium = false;
-    _currentPlan = PremiumPlan.free;
-    _tempExpiryTicker?.cancel();
-    _tempPremiumExpiry = null;
-    _activeSubPlan = null;
-    _subActivatedAt = null;
-    final prefs = await SharedPreferences.getInstance();
-    await prefs.setBool(_premiumKey, false);
-    await prefs.setInt(_planKey, 0);
-    await prefs.remove(_subPlanKey);
-    await prefs.remove(_subActivatedAtKey);
-    await prefs.remove(_tempPremiumExpiryKey);
-    notifyListeners();
-  }
-
-  /// One-line diagnostic for the debug sheet.
-  String get debugStatusLine =>
-      'plan=${_currentPlan.name} premium=$isPremium store=$_storeAvailable '
-      'sub=${_activeSubPlan?.name ?? "-"} '
-      'stamp=${_subActivatedAt?.toIso8601String().split("T").first ?? "-"} '
-      'products=${_products.length}';
-
   /// Called after the launch-time restorePurchases() pass. Restore
   /// events arrive asynchronously on the purchase stream, so we give
   /// them a brief window to drain before deciding the cached stamp is
