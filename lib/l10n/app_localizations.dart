@@ -3041,6 +3041,12 @@ abstract class AppLocalizations {
   /// **'Premium aktiverat — tack! Allt är upplåst.'**
   String get paywallPurchaseSuccess;
 
+  /// Shown when a purchase is deferred (Ask-to-Buy / parental approval)
+  ///
+  /// In sv, this message translates to:
+  /// **'Köpet inväntar godkännande. Premium aktiveras automatiskt när det godkänts.'**
+  String get paywallPurchasePending;
+
   /// Paywall UX feedback strings (added 2026-05)
   ///
   /// In sv, this message translates to:
@@ -3154,6 +3160,18 @@ abstract class AppLocalizations {
   /// In sv, this message translates to:
   /// **'Kom igång'**
   String get onboardingFooterStart;
+
+  /// Affiliate disclosure footnote shown under product links (added 2026-06)
+  ///
+  /// In sv, this message translates to:
+  /// **'Annonslänkar – vi kan få provision om du handlar via Amazon.'**
+  String get affiliateDisclosure;
+
+  /// Title for the monthly affiliate products card (added 2026-06)
+  ///
+  /// In sv, this message translates to:
+  /// **'Månadens produkter'**
+  String get monthlyProductsTitle;
 }
 
 class _AppLocalizationsDelegate

@@ -1684,6 +1684,10 @@ class AppLocalizationsNb extends AppLocalizations {
       'Premium aktivert — takk! Alt er låst opp.';
 
   @override
+  String get paywallPurchasePending =>
+      'Köpet inväntar godkännande. Premium aktiveras automatiskt när det godkänts.';
+
+  @override
   String get paywallRestoreInProgress => 'Søker etter kjøpene dine…';
 
   @override
@@ -1745,4 +1749,11 @@ class AppLocalizationsNb extends AppLocalizations {
 
   @override
   String get onboardingFooterStart => 'Kom i gang';
+
+  @override
+  String get affiliateDisclosure =>
+      'Annonslänkar – vi kan få provision om du handlar via Amazon.';
+
+  @override
+  String get monthlyProductsTitle => 'Månadens produkter';
 }

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 import '../data/monthly_guides.dart';
+import '../l10n/app_localizations.dart';
 import '../models/monthly_guide.dart';
 import '../services/affiliate_service.dart';
 import '../utils/constants.dart';
@@ -41,7 +42,7 @@ class _MonthlyGuideScreenState extends State<MonthlyGuideScreen> {
           if (guide.chores.isNotEmpty) _choresCard(guide.chores),
           const SizedBox(height: 12),
           AffiliateCard(
-            title: 'Månadens produkter',
+            title: AppLocalizations.of(context).monthlyProductsTitle,
             products: AffiliateService.productsForMonth(_month),
           ),
         ],

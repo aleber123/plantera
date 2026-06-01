@@ -6,6 +6,7 @@ import '../models/wishlist_plant.dart';
 import '../services/notification_service.dart';
 import '../services/season_planner_service.dart';
 import '../services/zone_service.dart';
+import 'zone_shift.dart';
 
 /// Shared flow for "lägg till i säsongen" — used from PlantCard's
 /// season-button and PlantDetailScreen's CTA so the experience is
@@ -25,7 +26,12 @@ Future<WishlistPlant?> toggleSeasonWishlist(
   final notifications = context.read<NotificationService>();
   final zone = context.read<ZoneService>();
   final messenger = ScaffoldMessenger.of(context);
-  final year = DateTime.now().year;
+  // Roll over to next year when every sowing/harvest window for this
+  // plant has already passed in the current (zone-shifted) season — e.g.
+  // adding a spring annual in December plans for *next* spring. Without
+  // this the wish gets dates in the past (reminders skipped) and falls
+  // out of "Min säsong" the moment the calendar year turns.
+  final year = _seasonYearFor(plant, zone.zone);
 
   // Toggle off if already on the wishlist.
   WishlistPlant? existing;
@@ -59,5 +65,34 @@ Future<WishlistPlant?> toggleSeasonWishlist(
     duration: const Duration(seconds: 4),
   ));
   return w;
+}
+
+/// Season year to file a wish under. Returns the current year while any
+/// of the plant's sowing/harvest windows is still ahead (zone-shifted,
+/// same calibration the notifications use), otherwise next year so a
+/// late-autumn/winter add lands on the upcoming spring instead of dates
+/// that have already gone by.
+int _seasonYearFor(Plant plant, int zone) {
+  final now = DateTime.now();
+  final ranges = [
+    plant.forsadatum,
+    plant.direktsadatum,
+    plant.utplanteringsdatum,
+    plant.skordeperiod,
+  ];
+  for (final range in ranges) {
+    if (range == null) continue;
+    final start = ZoneShift.shiftSeasonStart(now.year, range.startMonth, zone);
+    // Still within reach this year if the window hasn't started yet or
+    // we're currently inside it.
+    if (!start.isBefore(now) || range.includes(now.month)) {
+      return now.year;
+    }
+  }
+  // No window applies (or all have passed) — if the plant carries no
+  // datable windows at all we keep the current year, matching the
+  // generic "i säsong" handling elsewhere.
+  final hasAnyWindow = ranges.any((r) => r != null);
+  return hasAnyWindow ? now.year + 1 : now.year;
 }
 

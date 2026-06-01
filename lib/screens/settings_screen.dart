@@ -184,6 +184,19 @@ class SettingsScreen extends StatelessWidget {
           const OtherAppsSection(
             currentBundleId: 'com.alexanderbergqvist.plantera',
           ),
+          const SizedBox(height: 24),
+          Center(
+            child: Padding(
+              padding: const EdgeInsets.symmetric(vertical: 8),
+              child: Text(
+                'Plantera v${AppConstants.appVersion}',
+                style: TextStyle(
+                  fontSize: 12,
+                  color: Theme.of(context).disabledColor,
+                ),
+              ),
+            ),
+          ),
           const SizedBox(height: 30),
         ],
       ),

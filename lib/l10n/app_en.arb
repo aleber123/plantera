@@ -658,6 +658,10 @@
   "@paywallPurchaseSuccess": {
     "description": "Paywall UX feedback strings (added 2026-05)"
   },
+  "paywallPurchasePending": "Your purchase is awaiting approval. Premium unlocks automatically once it's approved.",
+  "@paywallPurchasePending": {
+    "description": "Shown when a purchase is deferred (Ask-to-Buy / parental approval)"
+  },
   "paywallRestoreInProgress": "Looking for your purchases…",
   "@paywallRestoreInProgress": {
     "description": "Paywall UX feedback strings (added 2026-05)"
@@ -733,5 +737,13 @@
   "onboardingFooterStart": "Get started",
   "@onboardingFooterStart": {
     "description": "Onboarding value-prop slide (added 2026-05)"
+  },
+  "affiliateDisclosure": "Affiliate links – we may earn a commission if you shop via Amazon.",
+  "@affiliateDisclosure": {
+    "description": "Affiliate disclosure footnote shown under product links (added 2026-06)"
+  },
+  "monthlyProductsTitle": "Products of the month",
+  "@monthlyProductsTitle": {
+    "description": "Title for the monthly affiliate products card (added 2026-06)"
   }
 }

@@ -1686,6 +1686,10 @@ class AppLocalizationsEn extends AppLocalizations {
       'Premium activated — thank you! Everything is unlocked.';
 
   @override
+  String get paywallPurchasePending =>
+      'Your purchase is awaiting approval. Premium unlocks automatically once it\'s approved.';
+
+  @override
   String get paywallRestoreInProgress => 'Looking for your purchases…';
 
   @override
@@ -1748,4 +1752,11 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get onboardingFooterStart => 'Get started';
+
+  @override
+  String get affiliateDisclosure =>
+      'Affiliate links – we may earn a commission if you shop via Amazon.';
+
+  @override
+  String get monthlyProductsTitle => 'Products of the month';
 }

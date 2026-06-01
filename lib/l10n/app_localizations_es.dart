@@ -1696,6 +1696,10 @@ class AppLocalizationsEs extends AppLocalizations {
       'Premium activado — ¡gracias! Todo está desbloqueado.';
 
   @override
+  String get paywallPurchasePending =>
+      'Köpet inväntar godkännande. Premium aktiveras automatiskt när det godkänts.';
+
+  @override
   String get paywallRestoreInProgress => 'Buscando tus compras…';
 
   @override
@@ -1758,4 +1762,11 @@ class AppLocalizationsEs extends AppLocalizations {
 
   @override
   String get onboardingFooterStart => 'Empezar';
+
+  @override
+  String get affiliateDisclosure =>
+      'Annonslänkar – vi kan få provision om du handlar via Amazon.';
+
+  @override
+  String get monthlyProductsTitle => 'Månadens produkter';
 }

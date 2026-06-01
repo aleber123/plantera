@@ -217,7 +217,26 @@ class _Stats {
     final rotation = <String, Map<int, Set<PlantFamily>>>{};
     var readyNow = 0;
     var harvested = 0;
+    var totalPlants = 0;
     for (final gp in garden.plants) {
+      // Scope the inventory aggregates to the selected year — otherwise
+      // "Min trädgård 2024" shows today's whole garden. A plant counts
+      // for the year it was planted.
+      if (gp.plantedDate.year != year) {
+        // Rotation is a multi-year history view: still record beds from
+        // earlier years (up to the selected one) so the rotation panel
+        // can flag repeats against this year. Skip future years.
+        if (gp.plantedDate.year < year) {
+          final loc = (gp.location ?? '').trim();
+          if (loc.isNotEmpty) {
+            final byYear = rotation.putIfAbsent(loc, () => {});
+            final fams = byYear.putIfAbsent(gp.plantedDate.year, () => {});
+            fams.add(PlantFamily.fromPlantId(gp.plantId));
+          }
+        }
+        continue;
+      }
+      totalPlants++;
       speciesIds.add(gp.plantId);
       final loc = (gp.location ?? '').trim();
       if (loc.isNotEmpty) {
@@ -250,7 +269,6 @@ class _Stats {
     final monthlySek = <int, double>{for (var m = 1; m <= 12; m++) m: 0};
     var totalSek = 0.0;
     for (final e in harvestThisYear) {
-      byUnit[e.unit] = (byUnit[e.unit] ?? 0) + e.amount;
       // Find plant via gardenPlantId
       GardenPlant? gp;
       for (final g in garden.plants) {
@@ -262,6 +280,9 @@ class _Stats {
       if (gp == null) continue;
       final plant = db.byId(gp.plantId);
       if (plant == null) continue;
+      // Count the unit total only for priceable entries — otherwise the
+      // kg/g totals include entries the SEK estimate silently dropped.
+      byUnit[e.unit] = (byUnit[e.unit] ?? 0) + e.amount;
       final sek = HarvestValue.estimateSek(plant, e.unit, e.amount);
       totalSek += sek;
       perPlantSek[plant.id] = (perPlantSek[plant.id] ?? 0) + sek;
@@ -280,7 +301,7 @@ class _Stats {
     }
 
     return _Stats(
-      totalPlants: garden.plants.length,
+      totalPlants: totalPlants,
       speciesCount: speciesIds.length,
       harvestEntries: harvestThisYear.length,
       estimatedSek: totalSek,
@@ -892,6 +913,9 @@ class _RotationRow extends StatelessWidget {
     // location — the gardener's biggest rotation mistake.
     final repeats = <PlantFamily>{};
     for (var i = 1; i < years.length; i++) {
+      // Only compare calendar-adjacent years — a fallow gap (e.g. 2022
+      // then 2024) is good rotation, not a repeat, so don't flag it.
+      if (years[i] != years[i - 1] + 1) continue;
       final prev = byYear[years[i - 1]]!;
       final curr = byYear[years[i]]!;
       for (final f in curr) {

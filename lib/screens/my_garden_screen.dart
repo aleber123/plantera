@@ -224,7 +224,11 @@ class _MyGardenScreenState extends State<MyGardenScreen> {
   void _add(BuildContext ctx) {
     final premium = ctx.read<PremiumService>();
     final garden = ctx.read<GardenService>();
-    if (!premium.canAddGardenPlant(garden.plantCount)) {
+    // Gate on the account-wide total, matching GardenService.add()'s own
+    // limit check. Using the per-garden plantCount here would let a user
+    // with plants spread across gardens past the pre-check, only to hit
+    // the real cap (and the paywall) after walking the whole plant picker.
+    if (!premium.canAddGardenPlant(garden.totalPlantCount)) {
       Navigator.of(ctx).push(
         MaterialPageRoute(
             builder: (_) => const PaywallScreen(source: 'garden_limit')),

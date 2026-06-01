@@ -263,6 +263,7 @@ class _ZonePickerPageState extends State<_ZonePickerPage> {
   Timer? _debounce;
   List<GeocodedPlace> _searchResults = const [];
   bool _searching = false;
+  bool _searchNetworkError = false;
 
   @override
   void dispose() {
@@ -285,12 +286,27 @@ class _ZonePickerPageState extends State<_ZonePickerPage> {
           perm == LocationPermission.deniedForever) {
         throw l10n.onboardingErrorLocationDenied;
       }
-      final pos = await Geolocator.getCurrentPosition();
+      // Cap the GPS lookup — without a timeLimit the platform can wait
+      // indefinitely for a fix (e.g. indoors), leaving the spinner stuck.
+      final pos = await Geolocator.getCurrentPosition(
+        locationSettings: const LocationSettings(
+          timeLimit: Duration(seconds: 15),
+        ),
+      );
       if (!mounted) return;
       await context
           .read<ZoneService>()
           .setCoordinates(pos.latitude, pos.longitude);
       await _finish();
+    } on TimeoutException {
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(
+            content: Text(
+                'Kunde inte hitta din position — välj en stad i listan istället.'),
+          ),
+        );
+      }
     } catch (e) {
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
@@ -326,17 +342,24 @@ class _ZonePickerPageState extends State<_ZonePickerPage> {
 
   void _onSearchChanged(String value) {
     _debounce?.cancel();
+    // Capture the active locale so place names come back localised
+    // (e.g. "Köpenhamn" rather than "Copenhagen") instead of anglicised.
+    final lang = Localizations.localeOf(context).languageCode;
     _debounce = Timer(const Duration(milliseconds: 350), () async {
       if (!mounted) return;
       if (value.trim().length < 2) {
-        setState(() => _searchResults = const []);
+        setState(() {
+          _searchResults = const [];
+          _searchNetworkError = false;
+        });
         return;
       }
       setState(() => _searching = true);
-      final results = await GeocodingService.search(value);
+      final result = await GeocodingService.search(value, language: lang);
       if (!mounted) return;
       setState(() {
-        _searchResults = results;
+        _searchResults = result.places;
+        _searchNetworkError = result.networkError;
         _searching = false;
       });
     });
@@ -392,7 +415,10 @@ class _ZonePickerPageState extends State<_ZonePickerPage> {
                       icon: const Icon(Icons.clear),
                       onPressed: () {
                         _searchCtl.clear();
-                        setState(() => _searchResults = const []);
+                        setState(() {
+                          _searchResults = const [];
+                          _searchNetworkError = false;
+                        });
                       },
                     )
                   : null,
@@ -410,6 +436,7 @@ class _ZonePickerPageState extends State<_ZonePickerPage> {
                 : hasSearch
                     ? _SearchResultsList(
                         results: _searchResults,
+                        networkError: _searchNetworkError,
                         onPick: _pickGeocoded,
                       )
                     : _SwedishCityList(
@@ -458,17 +485,27 @@ class _SwedishCityList extends StatelessWidget {
 
 class _SearchResultsList extends StatelessWidget {
   final List<GeocodedPlace> results;
+  final bool networkError;
   final void Function(GeocodedPlace) onPick;
-  const _SearchResultsList({required this.results, required this.onPick});
+  const _SearchResultsList({
+    required this.results,
+    required this.networkError,
+    required this.onPick,
+  });
 
   @override
   Widget build(BuildContext context) {
     if (results.isEmpty) {
+      // Distinguish "search ran, nothing matched" from "couldn't reach
+      // the geocoder" — telling an offline user to try another spelling
+      // is misleading.
       return Center(
         child: Padding(
           padding: const EdgeInsets.all(24),
           child: Text(
-            'Inga städer matchar — prova en annan stavning.',
+            networkError
+                ? 'Ingen anslutning — kontrollera internet och försök igen.'
+                : 'Inga städer matchar — prova en annan stavning.',
             style: TextStyle(color: Colors.grey.shade600),
             textAlign: TextAlign.center,
           ),

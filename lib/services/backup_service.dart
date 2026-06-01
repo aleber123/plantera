@@ -47,7 +47,7 @@ class BackupService {
       [XFile(file.path, mimeType: 'application/json')],
       subject: 'Plantera-säkerhetskopia',
       text:
-          'Säkerhetskopia av din trädgård. Spara på iCloud Drive eller skicka till dig själv – för att återställa, tryck "Importera" i appens inställningar.',
+          'Säkerhetskopia av din trädgård. Spara på iCloud Drive eller skicka till dig själv så att du har den om du byter telefon.',
     );
     return file.path;
   }
@@ -65,12 +65,17 @@ class BackupService {
     required HarvestService harvest,
     required SeasonPlannerService season,
   }) {
+    // Export *all* gardens, not just the active one — otherwise a
+    // multi-garden user silently loses every other garden's plants and
+    // wishlist on restore. allPlants/allItems span all gardens, and the
+    // gardens table itself carries the name/lat/lon/zone we'd lose too.
     return {
       'schema': _schemaVersion,
       'exported_at': DateTime.now().toIso8601String(),
-      'plants': garden.plants.map((g) => g.toMap()).toList(),
+      'gardens': garden.gardens.map((g) => g.toMap()).toList(),
+      'plants': garden.allPlants.map((g) => g.toMap()).toList(),
       'harvests': harvest.entries.map((e) => e.toMap()).toList(),
-      'wishlist': season.items.map((w) => w.toMap()).toList(),
+      'wishlist': season.allItems.map((w) => w.toMap()).toList(),
     };
   }
 

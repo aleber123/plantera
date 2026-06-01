@@ -55,15 +55,23 @@ class ClimateCard extends StatelessWidget {
                     const Text('🌡️',
                         style: TextStyle(fontSize: 22)),
                     const SizedBox(width: 8),
-                    Text(
-                      AppLocalizations.of(context).climateCardTitle,
-                      style: const TextStyle(
-                        fontSize: 16,
-                        fontWeight: FontWeight.w800,
-                        color: Color(0xFF1F2A1A),
+                    Flexible(
+                      child: Text(
+                        AppLocalizations.of(context).climateCardTitle,
+                        overflow: TextOverflow.ellipsis,
+                        style: const TextStyle(
+                          fontSize: 16,
+                          fontWeight: FontWeight.w800,
+                          color: Color(0xFF1F2A1A),
+                        ),
                       ),
                     ),
                     const Spacer(),
+                    _UpdatedChip(
+                      updatedAt: weather.lastFetchedAt,
+                      stale: weather.isStale,
+                    ),
+                    const SizedBox(width: 6),
                     const Icon(Icons.workspace_premium,
                         size: 16, color: Color(0xFFF6A700)),
                   ],
@@ -120,6 +128,46 @@ class ClimateCard extends StatelessWidget {
     if (gdd < 200) return l10n.climateInterpretMidSpring;
     if (gdd < 350) return l10n.climateInterpretFullGrowth;
     return l10n.climateInterpretHot;
+  }
+}
+
+/// Subtle freshness chip: "uppdaterad HH:MM", or an "offline"-flavoured
+/// variant when the last fetch failed and we're showing stale data.
+/// Strings are hardcoded Swedish to match the sv-only ASC listing —
+/// adding l10n keys would require a gen-l10n run we can't do here.
+class _UpdatedChip extends StatelessWidget {
+  final DateTime? updatedAt;
+  final bool stale;
+  const _UpdatedChip({required this.updatedAt, required this.stale});
+
+  @override
+  Widget build(BuildContext context) {
+    if (updatedAt == null) return const SizedBox.shrink();
+    final t = updatedAt!;
+    final hhmm = '${t.hour.toString().padLeft(2, '0')}:'
+        '${t.minute.toString().padLeft(2, '0')}';
+    final label = stale ? 'offline · $hhmm' : 'uppdaterad $hhmm';
+    final color =
+        stale ? const Color(0xFF9A6A00) : Colors.grey.shade500;
+    return Row(
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        Icon(
+          stale ? Icons.cloud_off : Icons.schedule,
+          size: 12,
+          color: color,
+        ),
+        const SizedBox(width: 3),
+        Text(
+          label,
+          style: TextStyle(
+            fontSize: 10.5,
+            fontWeight: FontWeight.w600,
+            color: color,
+          ),
+        ),
+      ],
+    );
   }
 }
 

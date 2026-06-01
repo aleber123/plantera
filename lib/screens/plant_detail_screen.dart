@@ -165,8 +165,19 @@ class _OverviewTab extends StatelessWidget {
     );
   }
 
-  Future<void> _addToGarden(BuildContext context) =>
-      addPlantToGarden(context, plant);
+  Future<void> _addToGarden(BuildContext context) async {
+    // Await + guard the add so a failure (e.g. garden persistence
+    // throwing) surfaces to the user instead of being silently
+    // swallowed by a fire-and-forget call.
+    final messenger = ScaffoldMessenger.of(context);
+    try {
+      await addPlantToGarden(context, plant);
+    } catch (e) {
+      messenger.showSnackBar(
+        SnackBar(content: Text('Kunde inte lägga till växten: $e')),
+      );
+    }
+  }
 
   Future<void> _confirmRemove(BuildContext context, GardenPlant gp) async {
     final l10n = AppLocalizations.of(context);
@@ -757,6 +768,10 @@ class _PlantingJournal extends StatefulWidget {
 class _PlantingJournalState extends State<_PlantingJournal> {
   final _picker = ImagePicker();
   bool _busy = false;
+  // Guards against a double-tap on the delete confirmation deleting the
+  // same note twice (and double-deleting the file). Mirrors the pattern
+  // in GardenPhotoTimeline.
+  final Set<String> _deletingNoteIds = {};
 
   Future<void> _addPhoto(ImageSource source) async {
     if (_busy) return;
@@ -940,14 +955,20 @@ class _PlantingJournalState extends State<_PlantingJournal> {
       ),
     );
     if (confirmed != true || !mounted) return;
-    if (note.photoPath != null) {
-      try {
-        final f = File(note.photoPath!);
-        if (f.existsSync()) await f.delete();
-      } catch (_) {/* file already gone — proceed */}
+    if (_deletingNoteIds.contains(note.id)) return;
+    _deletingNoteIds.add(note.id);
+    try {
+      if (note.photoPath != null) {
+        try {
+          final f = File(note.photoPath!);
+          if (f.existsSync()) await f.delete();
+        } catch (_) {/* file already gone — proceed */}
+      }
+      if (!mounted) return;
+      await context.read<GardenService>().deleteNote(note.id);
+    } finally {
+      _deletingNoteIds.remove(note.id);
     }
-    if (!mounted) return;
-    await context.read<GardenService>().deleteNote(note.id);
   }
 
   @override
@@ -1018,14 +1039,21 @@ class _PlantingJournalState extends State<_PlantingJournal> {
                   ),
                 )
               else
-                Column(
-                  children: [
-                    for (final note in entries)
-                      _JournalEntry(
-                        note: note,
-                        onDelete: () => _confirmDelete(note),
-                      ),
-                  ],
+                // Lazy list so a long diary doesn't decode every photo
+                // up front. shrinkWrap + non-scrollable physics because
+                // this sits inside the tab's outer ListView.
+                ListView.builder(
+                  shrinkWrap: true,
+                  physics: const NeverScrollableScrollPhysics(),
+                  padding: EdgeInsets.zero,
+                  itemCount: entries.length,
+                  itemBuilder: (ctx, i) {
+                    final note = entries[i];
+                    return _JournalEntry(
+                      note: note,
+                      onDelete: () => _confirmDelete(note),
+                    );
+                  },
                 ),
             ],
           ),
@@ -1075,6 +1103,11 @@ class _JournalEntry extends StatelessWidget {
                         width: double.infinity,
                         height: 160,
                         fit: BoxFit.cover,
+                        // Decode at thumbnail resolution instead of the
+                        // full 1600px source — the diary card is ~160px
+                        // tall, so 480px covers retina without the
+                        // memory spike of full-res decodes.
+                        cacheWidth: 480,
                         errorBuilder: (_, _, _) => Container(
                           height: 80,
                           color: Colors.grey.shade100,
@@ -1298,14 +1331,23 @@ Future<void> _advanceTo(
   DateTime? date;
   if (askDate) {
     final l10n = AppLocalizations.of(context);
+    // Perennials/trees may have been planted many years ago — a 1-year
+    // floor would block the user from entering the real "i trädgården
+    // sedan"-date. Give long-lived plants a 30-year window; annuals keep
+    // the tighter 1-year floor.
+    final isLongLived = plant.livscykel == PlantLifecycle.perennial ||
+        plant.livscykel.isLongLived;
+    final now = DateTime.now();
     date = await showDatePicker(
       context: context,
-      initialDate: DateTime.now(),
-      firstDate: DateTime.now().subtract(const Duration(days: 365)),
+      initialDate: now,
+      firstDate: isLongLived
+          ? DateTime(now.year - 30, now.month, now.day)
+          : now.subtract(const Duration(days: 365)),
       // Clamped to today: a future plantedDate breaks downstream date
       // math (negative daysGrown, water tasks never fire, harvest ETA
       // pushed past the season).
-      lastDate: DateTime.now(),
+      lastDate: now,
       helpText: l10n.plantDetailDateHelp,
     );
     if (date == null || !context.mounted) return;
@@ -1777,12 +1819,18 @@ String _wateredLabel(BuildContext context, DateTime? lastWatered) {
   final now = DateTime.now();
   final diff = now.difference(lastWatered);
   if (diff.inHours < 4) return l10n.plantDetailWaterJust;
-  if (diff.inDays == 0) return l10n.plantDetailWaterToday;
-  if (diff.inDays == 1) return l10n.plantDetailWaterYesterday;
-  if (diff.inDays < 7) {
-    return l10n.wateredDaysAgo(diff.inDays.toString());
+  // Calendar-day comparison, not 24h periods: watering at 23:00
+  // yesterday should read "igår" the next morning, not "idag".
+  final today = DateTime(now.year, now.month, now.day);
+  final wateredDay =
+      DateTime(lastWatered.year, lastWatered.month, lastWatered.day);
+  final calendarDays = today.difference(wateredDay).inDays;
+  if (calendarDays == 0) return l10n.plantDetailWaterToday;
+  if (calendarDays == 1) return l10n.plantDetailWaterYesterday;
+  if (calendarDays < 7) {
+    return l10n.wateredDaysAgo(calendarDays.toString());
   }
-  return l10n.wateredWeeksAgo((diff.inDays / 7).round().toString());
+  return l10n.wateredWeeksAgo((calendarDays / 7).round().toString());
 }
 
 int _daysUntilMonth(int targetMonth, DateTime now) {

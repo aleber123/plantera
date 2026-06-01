@@ -75,6 +75,9 @@ void main() async {
     if (zone.lat != null && zone.lon != null) {
       weather.fetch(zone.lat!, zone.lon!);
     }
+    // A plant removal cascades into harvest rows; refresh the harvest
+    // cache so "Min trädgård"-totals don't stay inflated until restart.
+    harvest.reloadFromDb();
   });
 
   AdService().initialize();
@@ -170,25 +173,51 @@ void main() async {
   garden.addListener(refreshWarnings);
   garden.addListener(reschedulePlantLifecycles);
 
+  // Seasonal "peak-intent"-pushar för hobby-odlare. Idempotent —
+  // upsertar fönstret för innevarande + nästa år och skrivs över på
+  // varje locale-byte så texten matchar användarens språk. Cost: 0
+  // (gratis kanal). Driver retention och konvertering under feb-april
+  // peak-säsong utan att kräva användarinmatning.
+  void scheduleSeasonalCampaign() {
+    notifications.scheduleSeasonalCampaign(year: DateTime.now().year);
+  }
+
+  // The full cold-start pipeline must run exactly once, and only after
+  // iOS has resolved the user's locale (so reminders + the 6 yearly
+  // seasonal pushes get baked in the right language — bare "sv" would
+  // otherwise leak into non-Swedish installs). The MaterialApp builder
+  // calls notifications.setLocale(...) post-resolution; that either fires
+  // the listener below (locale != current) or short-circuits when the
+  // resolved tag already matches (e.g. a real Swedish user landing on
+  // "sv"). A guarded post-frame run covers the short-circuit case so the
+  // pipeline still runs once. `coldStartDone` keeps the two paths from
+  // double-running on the same cold start.
+  var coldStartDone = false;
+  void runColdStartPipeline() {
+    if (coldStartDone) return;
+    coldStartDone = true;
+    reschedulePlantLifecycles();
+    refreshWarnings();
+    scheduleSeasonalCampaign();
+  }
+
   // Re-schedule everything when notification settings change. This
   // catches the morning-hour picker in Settings — without this listener
   // the user picks 07:00, but all already-scheduled reminders keep
   // firing at the old hour until they get re-generated for other
-  // reasons (garden edit, weather refresh).
+  // reasons (garden edit, weather refresh). It ALSO fires on locale
+  // change (setLocale → notifyListeners), so re-running the seasonal
+  // campaign here rewrites those pushes in the new language.
   notifications.addListener(() {
+    coldStartDone = true; // this run satisfies the cold-start guard
     reschedulePlantLifecycles();
     refreshWarnings();
+    scheduleSeasonalCampaign();
   });
 
-  // Initial run on cold start — picks up auto-transitions from time
-  // the app was closed and dedupes existing schedules.
-  reschedulePlantLifecycles();
-
-  // Seasonal "peak-intent"-pushar för svenska hobby-odlare. Idempotent —
-  // varje cold start upsertar fönstret för innevarande + nästa år.
-  // Cost: 0 (gratis kanal). Driver retention och konvertering under
-  // feb-april peak-säsong utan att kräva användarinmatning.
-  notifications.scheduleSeasonalCampaign(year: DateTime.now().year);
+  // Fallback cold-start trigger for the case where setLocale short-
+  // circuits (resolved tag == current) and never fires the listener.
+  WidgetsBinding.instance.addPostFrameCallback((_) => runColdStartPipeline());
 
   runApp(PlanteraApp(
     premium: premium,

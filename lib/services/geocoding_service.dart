@@ -38,6 +38,20 @@ class GeocodedPlace {
   }
 }
 
+/// Outcome of a city search. Separates "the network failed" (offline,
+/// timeout, server error) from "the search ran but matched nothing", so
+/// the calling UI can show a retry/connectivity hint instead of a
+/// spelling hint in the offline case.
+class GeocodingResult {
+  final List<GeocodedPlace> places;
+  final bool networkError;
+
+  const GeocodingResult(this.places, {this.networkError = false});
+
+  static const empty = GeocodingResult([]);
+  static const failure = GeocodingResult([], networkError: true);
+}
+
 /// Thin wrapper around Open-Meteo's free geocoding endpoint. No API
 /// key required, no rate-limit handshake — fine for the low-volume
 /// city-search use case (one search per onboarding, occasional edits).
@@ -46,15 +60,18 @@ class GeocodingService {
 
   /// Search cities by partial name. Returns up to [count] results sorted
   /// by relevance (Open-Meteo's own ranking — typically population +
-  /// name-match weight). Returns empty list on network failure rather
-  /// than throwing, so the calling UI can degrade gracefully.
-  static Future<List<GeocodedPlace>> search(
+  /// name-match weight). Returns a [GeocodingResult] with [networkError]
+  /// set rather than throwing, so the calling UI can degrade gracefully.
+  ///
+  /// [language] should be the active app locale (e.g. 'sv') so place
+  /// names come back localised instead of anglicised.
+  static Future<GeocodingResult> search(
     String query, {
     int count = 8,
     String language = 'en',
   }) async {
     final trimmed = query.trim();
-    if (trimmed.length < 2) return const [];
+    if (trimmed.length < 2) return GeocodingResult.empty;
     final uri = Uri.parse(_base).replace(queryParameters: {
       'name': trimmed,
       'count': '$count',
@@ -63,23 +80,30 @@ class GeocodingService {
     });
     try {
       final resp = await http.get(uri).timeout(const Duration(seconds: 8));
-      if (resp.statusCode != 200) return const [];
+      if (resp.statusCode != 200) return GeocodingResult.failure;
       final data = jsonDecode(resp.body) as Map<String, dynamic>;
       final results = (data['results'] as List?) ?? const [];
-      return results.map((r) {
+      final places = <GeocodedPlace>[];
+      for (final r in results) {
         final m = r as Map<String, dynamic>;
-        return GeocodedPlace(
+        final lat = (m['latitude'] as num?)?.toDouble();
+        final lon = (m['longitude'] as num?)?.toDouble();
+        // Skip rows with missing or (0,0) coords — a malformed row would
+        // otherwise drop a garden in the Gulf of Guinea.
+        if (lat == null || lon == null || (lat == 0 && lon == 0)) continue;
+        places.add(GeocodedPlace(
           name: m['name'] as String? ?? '?',
           admin1: m['admin1'] as String?,
           country: m['country'] as String?,
           countryCode: m['country_code'] as String?,
-          lat: (m['latitude'] as num?)?.toDouble() ?? 0,
-          lon: (m['longitude'] as num?)?.toDouble() ?? 0,
+          lat: lat,
+          lon: lon,
           populationEstimate: (m['population'] as num?)?.toInt(),
-        );
-      }).toList();
+        ));
+      }
+      return GeocodingResult(places);
     } catch (_) {
-      return const [];
+      return GeocodingResult.failure;
     }
   }
 }

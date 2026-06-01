@@ -1,23 +1,27 @@
 import 'package:flutter/material.dart';
 import 'package:url_launcher/url_launcher.dart';
+import '../l10n/app_localizations.dart';
 import '../services/affiliate_service.dart';
 
 class AffiliateCard extends StatelessWidget {
   final String title;
   final List<AffiliateProduct> products;
-  final String footnote;
+  // Null falls back to the localized affiliate disclosure (FTC/Amazon
+  // require a disclosure comprehensible in the user's locale).
+  final String? footnote;
 
   const AffiliateCard({
     super.key,
     required this.title,
     required this.products,
-    this.footnote =
-        'Annonslänkar – vi kan få provision om du handlar via Amazon.',
+    this.footnote,
   });
 
   @override
   Widget build(BuildContext context) {
     if (products.isEmpty) return const SizedBox.shrink();
+    final disclosure =
+        footnote ?? AppLocalizations.of(context).affiliateDisclosure;
     return Card(
       margin: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
       child: Padding(
@@ -39,7 +43,7 @@ class AffiliateCard extends StatelessWidget {
             const SizedBox(height: 10),
             ...products.map((p) => _row(context, p)),
             const SizedBox(height: 8),
-            Text(footnote,
+            Text(disclosure,
                 style: TextStyle(fontSize: 11, color: Colors.grey.shade600)),
           ],
         ),

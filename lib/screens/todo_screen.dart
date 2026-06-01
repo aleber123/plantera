@@ -249,17 +249,70 @@ class _SectionHeader extends StatelessWidget {
   }
 }
 
-class _TaskTile extends StatelessWidget {
+class _TaskTile extends StatefulWidget {
   final GardenTask task;
   const _TaskTile({required this.task});
 
   @override
+  State<_TaskTile> createState() => _TaskTileState();
+}
+
+class _TaskTileState extends State<_TaskTile> {
+  // True while a complete/snooze is being persisted. The tap-circle and
+  // swipe gesture can both fire on the same row in quick succession
+  // (e.g. tap the circle then immediately swipe), double-completing,
+  // double-marking-watered, and double-firing haptics. This flag locks
+  // the row for the duration of the in-flight action.
+  bool _busy = false;
+
+  Future<void> _complete() async {
+    if (_busy) return;
+    setState(() => _busy = true);
+    final svc = context.read<TaskService>();
+    final messenger = ScaffoldMessenger.of(context);
+    HapticFeedback.mediumImpact();
+    await svc.complete(widget.task);
+    // Confirmation only — a water completion also bumps lastWatered, which
+    // isn't cleanly reversible, so no "Ångra" here. The "Klart idag"-row
+    // still surfaces it for the rest of the day.
+    messenger
+      ..clearSnackBars()
+      ..showSnackBar(const SnackBar(
+        content: Text('Klart!'),
+        duration: Duration(seconds: 2),
+      ));
+    if (mounted) setState(() => _busy = false);
+  }
+
+  Future<void> _snooze() async {
+    if (_busy) return;
+    setState(() => _busy = true);
+    final svc = context.read<TaskService>();
+    final messenger = ScaffoldMessenger.of(context);
+    HapticFeedback.lightImpact();
+    await svc.snooze(widget.task);
+    final captured = widget.task;
+    messenger
+      ..clearSnackBars()
+      ..showSnackBar(SnackBar(
+        content: const Text('Skjuten 1 dag'),
+        duration: const Duration(seconds: 4),
+        action: SnackBarAction(
+          label: 'Ångra',
+          onPressed: () => svc.undoSnooze(captured),
+        ),
+      ));
+    if (mounted) setState(() => _busy = false);
+  }
+
+  @override
   Widget build(BuildContext context) {
+    final task = widget.task;
     final accent = Color(task.kind.accentArgb);
     final isDone = task.status == TaskStatus.done;
     return Dismissible(
       key: ValueKey(task.key),
-      direction: isDone
+      direction: (isDone || _busy)
           ? DismissDirection.none
           : DismissDirection.horizontal,
       background: Container(
@@ -302,20 +355,24 @@ class _TaskTile extends StatelessWidget {
         ),
       ),
       confirmDismiss: (direction) async {
-        final svc = context.read<TaskService>();
+        if (_busy) return false;
         if (direction == DismissDirection.startToEnd) {
-          HapticFeedback.mediumImpact();
-          await svc.complete(task);
+          await _complete();
         } else if (direction == DismissDirection.endToStart) {
-          HapticFeedback.lightImpact();
-          await svc.snooze(task);
+          await _snooze();
         }
         // Always return false — the Consumer rebuild handles the
         // visual removal via _regenerate, so the tile re-renders
         // already without it. Returning true would double-animate.
         return false;
       },
-      child: _TaskRow(task: task, accent: accent, isDone: isDone),
+      child: _TaskRow(
+        task: task,
+        accent: accent,
+        isDone: isDone,
+        busy: _busy,
+        onComplete: _complete,
+      ),
     );
   }
 }
@@ -324,10 +381,14 @@ class _TaskRow extends StatelessWidget {
   final GardenTask task;
   final Color accent;
   final bool isDone;
+  final bool busy;
+  final Future<void> Function() onComplete;
   const _TaskRow({
     required this.task,
     required this.accent,
     required this.isDone,
+    required this.busy,
+    required this.onComplete,
   });
 
   @override
@@ -410,8 +471,15 @@ class _TaskRow extends StatelessWidget {
                   label: AppLocalizations.of(context).todoSwipeDone,
                   child: InkResponse(
                     onTap: () async {
-                      HapticFeedback.mediumImpact();
-                      await context.read<TaskService>().complete(task);
+                      // In-flight guard: the swipe gesture and this circle
+                      // can both fire on the same row otherwise.
+                      if (busy) return;
+                      // Existence guard (mirrors _handleTap): a task can
+                      // reference a plant the user just deleted in another
+                      // tab. Completing it would write an orphan completion
+                      // row for a plant that no longer exists.
+                      if (!_plantStillExists(context)) return;
+                      await onComplete();
                     },
                     radius: 24,
                     child: Padding(
@@ -429,6 +497,16 @@ class _TaskRow extends StatelessWidget {
         ),
       ),
     );
+  }
+
+  /// True if the task's plant still exists (or the task is a generic
+  /// chore with no plant). Guards tap-to-complete against orphan
+  /// completion rows for plants deleted in another tab.
+  bool _plantStillExists(BuildContext context) {
+    final id = task.gardenPlantId;
+    if (id == null) return true; // generic chore — no plant to check
+    final garden = context.read<GardenService>();
+    return garden.allPlants.any((g) => g.id == id);
   }
 
   Future<void> _handleTap(BuildContext context) async {

@@ -7,6 +7,21 @@ import 'package:sqflite/sqflite.dart';
 import 'package:uuid/uuid.dart';
 import '../models/garden.dart';
 import '../models/garden_plant.dart';
+import 'premium_service.dart';
+
+/// Thrown by [GardenService.add] / [GardenService.createGarden] when the
+/// free-tier limit is hit. Callers catch this to route the user to the
+/// paywall instead of silently failing. Centralising the gate here means
+/// every entry point (quick-add `+`, plant detail, season planner,
+/// overview card) is covered, not just the one screen that remembered to
+/// call canAddGardenPlant.
+class GardenLimitReachedException implements Exception {
+  final String message;
+  const GardenLimitReachedException(
+      [this.message = 'Free garden-plant limit reached']);
+  @override
+  String toString() => 'GardenLimitReachedException: $message';
+}
 
 /// Owns the garden_plants + garden_notes tables, the gardens table
 /// (multi-trädgård support, schema v4+) and the active-garden state.
@@ -57,6 +72,12 @@ class GardenService extends ChangeNotifier {
   }
 
   int get plantCount => plants.length;
+
+  /// Account-wide plant count across every garden. The free-tier limit
+  /// is account-wide, not per-garden — otherwise a free user could fill
+  /// the active garden, spin up a second garden, and repeat forever.
+  int get totalPlantCount => _allPlants.length;
+
   bool get loaded => _loaded;
 
   List<Garden> get gardens => List.unmodifiable(_gardens);
@@ -334,6 +355,11 @@ class GardenService extends ChangeNotifier {
       (g) => g.id != id && g.isDefault,
       orElse: () => _gardens.firstWhere((g) => g.id != id),
     );
+    // If we're deleting the default garden, the "exactly one default"
+    // invariant breaks unless we promote a survivor. The fallback row
+    // (chosen above) becomes the new default.
+    final deletingDefault =
+        _gardens.firstWhere((g) => g.id == id).isDefault;
     // Wrap the multi-step migration in a transaction so a partial
     // failure (disk full mid-update, OS kill) doesn't leave the user
     // with plants/wishlist rows pointing at the deleted garden id —
@@ -346,6 +372,10 @@ class GardenService extends ChangeNotifier {
       if (tables.isNotEmpty) {
         await txn.update('wishlist_plants', {'garden_id': fallback.id},
             where: 'garden_id = ?', whereArgs: [id]);
+      }
+      if (deletingDefault) {
+        await txn.update(_tableGardens, {'is_default': 1},
+            where: 'id = ?', whereArgs: [fallback.id]);
       }
       await txn.delete(_tableGardens, where: 'id = ?', whereArgs: [id]);
     });
@@ -379,10 +409,22 @@ class GardenService extends ChangeNotifier {
     SowingMethod sowingMethod = SowingMethod.inomhus,
     int quantity = 1,
   }) async {
-    final activeId = _activeGardenId;
-    if (activeId == null) {
-      throw StateError(
-          'Ingen aktiv trädgård. Skapa först via createGarden().');
+    // Central free-tier gate. Every add() entry point now enforces the
+    // account-wide limit, so callers can no longer leak past it by going
+    // through a path that forgot to call canAddGardenPlant. Counted
+    // against [totalPlantCount] (all gardens) so a free user can't reset
+    // the cap by creating a fresh garden.
+    final premium = PremiumService();
+    if (!premium.canAddGardenPlant(totalPlantCount)) {
+      throw const GardenLimitReachedException();
+    }
+    // Self-heal a missing active garden instead of throwing an uncaught
+    // StateError. This happens when onboarding was aborted before the
+    // first garden was created, or after a self-healed reload race. Fall
+    // back to the default/first existing garden, or create one.
+    var activeId = _activeGardenId;
+    if (activeId == null || !_gardens.any((g) => g.id == activeId)) {
+      activeId = await _ensureActiveGarden();
     }
     final gp = GardenPlant(
       id: _uuid.v4(),
@@ -399,6 +441,28 @@ class GardenService extends ChangeNotifier {
     await _db!.insert(_tablePlants, gp.toMap());
     await _reload();
     return gp;
+  }
+
+  /// Returns a usable active-garden id, restoring or creating one if the
+  /// current state has none. Used by [add] so adding a plant can never
+  /// crash on an aborted-onboarding install with no garden row.
+  Future<String> _ensureActiveGarden() async {
+    if (_gardens.isNotEmpty) {
+      // Reuse the default-flagged garden, otherwise the oldest one.
+      final existing = _gardens.firstWhere(
+        (g) => g.isDefault,
+        orElse: () => _gardens.first,
+      );
+      _activeGardenId = existing.id;
+      final prefs = await SharedPreferences.getInstance();
+      await prefs.setString(_activeGardenKey, existing.id);
+      return existing.id;
+    }
+    // No garden at all (onboarding never finished). Create a minimal
+    // default so the user's plant has somewhere to live. Zone defaults
+    // to 3 — the user can correct it later in garden settings.
+    final created = await createGarden(name: 'Min trädgård', zone: 3);
+    return created.id;
   }
 
   Future<void> update(GardenPlant gp) async {
@@ -459,10 +523,20 @@ class GardenService extends ChangeNotifier {
   Future<void> setHeroPhoto(String id, String? photoPath) async {
     final gp = _allPlants.where((g) => g.id == id).firstOrNull;
     if (gp == null) return;
+    // Capture the outgoing hero before we overwrite it so we can delete
+    // its file from disk. Without this, every swap/clear leaked the old
+    // image and the app's storage footprint grew unbounded.
+    final previous = gp.heroPhotoPath;
     final updated = photoPath == null
         ? gp.copyWith(clearHeroPhoto: true)
         : gp.copyWith(heroPhotoPath: photoPath);
     await update(updated);
+    if (previous != null && previous != photoPath) {
+      try {
+        final f = File(previous);
+        if (f.existsSync()) await f.delete();
+      } catch (_) {/* best effort */}
+    }
   }
 
   Future<void> addNote(String gardenPlantId, String text,

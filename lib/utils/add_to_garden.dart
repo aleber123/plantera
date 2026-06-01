@@ -10,6 +10,7 @@ import '../l10n/app_localizations.dart';
 import '../models/garden_plant.dart';
 import '../models/plant.dart';
 import '../screens/main_shell.dart';
+import '../screens/paywall_screen.dart';
 import '../services/garden_service.dart';
 import '../services/notification_service.dart';
 import '../services/season_planner_service.dart';
@@ -48,12 +49,36 @@ Future<GardenPlant?> addPlantToGarden(
     _ => SowingMethod.inomhus,
   };
 
-  final gp = await garden.add(
-    plantId: plant.id,
-    status: pick.status,
-    sowingMethod: method,
-    plantedDate: pick.date,
-  );
+  // When the user marks a plant as already harvested but gives no date,
+  // defaulting plantedDate to now() makes the growth bar read 0% ("just
+  // sown") for something that's literally done. Backdate by the plant's
+  // days-to-harvest so progress saturates to "skördeklar" instead. For
+  // every other status we keep the user's picked date (or null → now()).
+  DateTime? effectiveDate = pick.date;
+  if (effectiveDate == null && pick.status == PlantStatus.skordad) {
+    final days = plant.dagarTillSkord ?? 90;
+    effectiveDate = DateTime.now().subtract(Duration(days: days));
+  }
+
+  final GardenPlant gp;
+  try {
+    gp = await garden.add(
+      plantId: plant.id,
+      status: pick.status,
+      sowingMethod: method,
+      plantedDate: effectiveDate,
+    );
+  } on GardenLimitReachedException {
+    // Free-tier cap hit. Route to the paywall instead of silently
+    // failing — this is the central gate so it fires from every add
+    // entry point (quick-add +, plant detail, season planner, overview).
+    if (!context.mounted) return null;
+    Navigator.of(context).push(
+      MaterialPageRoute(
+          builder: (_) => const PaywallScreen(source: 'garden_limit')),
+    );
+    return null;
+  }
 
   // Prune wishlist for the same species in the SAME garden. Once a
   // plant is actively in the garden, its wishlist reminders are
@@ -102,7 +127,10 @@ Future<GardenPlant?> addPlantToGarden(
   // committed to the app. Apple's review API rate-limits to 3
   // prompts/year and silently no-ops if shown too often, so we don't
   // need our own backoff beyond the "shown once"-flag.
-  unawaited(_maybeRequestReview(garden.plantCount));
+  // Use the account-wide total, not the active garden's count — a
+  // multi-garden user with 2 plants here and 3 in another garden has
+  // clearly committed and should still see the review prompt.
+  unawaited(_maybeRequestReview(garden.totalPlantCount));
   return gp;
 }
 
