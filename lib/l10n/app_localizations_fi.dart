@@ -1694,6 +1694,10 @@ class AppLocalizationsFi extends AppLocalizations {
       'Premium aktivoitu — kiitos! Kaikki on auki.';
 
   @override
+  String get paywallPurchasePending =>
+      'Köpet inväntar godkännande. Premium aktiveras automatiskt när det godkänts.';
+
+  @override
   String get paywallRestoreInProgress => 'Etsitään ostojasi…';
 
   @override

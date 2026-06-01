@@ -1686,6 +1686,10 @@ class AppLocalizationsEn extends AppLocalizations {
       'Premium activated — thank you! Everything is unlocked.';
 
   @override
+  String get paywallPurchasePending =>
+      'Your purchase is awaiting approval. Premium unlocks automatically once it\'s approved.';
+
+  @override
   String get paywallRestoreInProgress => 'Looking for your purchases…';
 
   @override

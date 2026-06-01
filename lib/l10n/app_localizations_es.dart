@@ -1696,6 +1696,10 @@ class AppLocalizationsEs extends AppLocalizations {
       'Premium activado — ¡gracias! Todo está desbloqueado.';
 
   @override
+  String get paywallPurchasePending =>
+      'Köpet inväntar godkännande. Premium aktiveras automatiskt när det godkänts.';
+
+  @override
   String get paywallRestoreInProgress => 'Buscando tus compras…';
 
   @override

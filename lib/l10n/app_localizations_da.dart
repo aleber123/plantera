@@ -1686,6 +1686,10 @@ class AppLocalizationsDa extends AppLocalizations {
       'Premium aktiveret — tak! Alt er låst op.';
 
   @override
+  String get paywallPurchasePending =>
+      'Köpet inväntar godkännande. Premium aktiveras automatiskt när det godkänts.';
+
+  @override
   String get paywallRestoreInProgress => 'Søger efter dine køb…';
 
   @override

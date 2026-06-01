@@ -1696,6 +1696,10 @@ class AppLocalizationsEl extends AppLocalizations {
       'Premium ενεργοποιήθηκε — ευχαριστούμε! Όλα είναι ξεκλειδωμένα.';
 
   @override
+  String get paywallPurchasePending =>
+      'Köpet inväntar godkännande. Premium aktiveras automatiskt när det godkänts.';
+
+  @override
   String get paywallRestoreInProgress => 'Αναζήτηση για τις αγορές σας…';
 
   @override

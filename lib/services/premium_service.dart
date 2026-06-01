@@ -55,6 +55,12 @@ class PremiumService extends ChangeNotifier {
   bool _isPremium = false;
   PremiumPlan _currentPlan = PremiumPlan.free;
   bool _purchaseInProgress = false;
+  // True while a purchase sits in StoreKit's deferred state (Ask-to-Buy /
+  // parental approval). The buy buttons are released (not spinning) but
+  // the outcome is pending an external approval that can take hours — the
+  // paywall reads this to tell the user it's awaiting approval instead of
+  // silently hanging.
+  bool _purchasePending = false;
   String? _purchaseError;
   DateTime? _tempPremiumExpiry;
   Timer? _tempExpiryTicker;
@@ -115,6 +121,7 @@ class PremiumService extends ChangeNotifier {
 
   PremiumPlan get currentPlan => _currentPlan;
   bool get purchaseInProgress => _purchaseInProgress;
+  bool get purchasePending => _purchasePending;
   String? get purchaseError => _purchaseError;
   List<ProductDetails> get products => _products;
   bool get storeAvailable => _storeAvailable;
@@ -294,12 +301,14 @@ class PremiumService extends ChangeNotifier {
           // the in-progress flag so the UI is usable again. The eventual
           // purchased/canceled event still drives the real outcome.
           _purchaseInProgress = false;
+          _purchasePending = true;
           _purchaseError = null;
           notifyListeners();
           break;
 
         case PurchaseStatus.purchased:
         case PurchaseStatus.restored:
+          _purchasePending = false;
           await _verifyAndActivate(purchase);
           if (purchase.pendingCompletePurchase) {
             await _iap.completePurchase(purchase);
@@ -308,6 +317,7 @@ class PremiumService extends ChangeNotifier {
 
         case PurchaseStatus.error:
           _purchaseInProgress = false;
+          _purchasePending = false;
           _purchaseError = purchase.error?.message ?? 'purchase_failed';
           notifyListeners();
           if (purchase.pendingCompletePurchase) {
@@ -317,6 +327,7 @@ class PremiumService extends ChangeNotifier {
 
         case PurchaseStatus.canceled:
           _purchaseInProgress = false;
+          _purchasePending = false;
           _purchaseError = null;
           notifyListeners();
           if (purchase.pendingCompletePurchase) {
@@ -601,6 +612,7 @@ class PremiumService extends ChangeNotifier {
     }
 
     _purchaseInProgress = true;
+    _purchasePending = false;
     _purchaseError = null;
     notifyListeners();
 

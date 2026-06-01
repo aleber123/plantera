@@ -939,6 +939,10 @@
   "@paywallPurchaseSuccess": {
     "description": "Paywall UX feedback strings (added 2026-05)"
   },
+  "paywallPurchasePending": "Köpet inväntar godkännande. Premium aktiveras automatiskt när det godkänts.",
+  "@paywallPurchasePending": {
+    "description": "Shown when a purchase is deferred (Ask-to-Buy / parental approval)"
+  },
   "paywallRestoreInProgress": "Söker efter dina köp…",
   "@paywallRestoreInProgress": {
     "description": "Paywall UX feedback strings (added 2026-05)"

@@ -3041,6 +3041,12 @@ abstract class AppLocalizations {
   /// **'Premium aktiverat — tack! Allt är upplåst.'**
   String get paywallPurchaseSuccess;
 
+  /// Shown when a purchase is deferred (Ask-to-Buy / parental approval)
+  ///
+  /// In sv, this message translates to:
+  /// **'Köpet inväntar godkännande. Premium aktiveras automatiskt när det godkänts.'**
+  String get paywallPurchasePending;
+
   /// Paywall UX feedback strings (added 2026-05)
   ///
   /// In sv, this message translates to:

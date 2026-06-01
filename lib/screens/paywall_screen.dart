@@ -88,10 +88,20 @@ class _PaywallScreenState extends State<PaywallScreen> {
         return;
       }
     }
-    // Timed out without a flip (deferred Ask-to-Buy, or a cancel that
-    // surfaced no error). Leave the paywall open; the entitlement will
-    // unlock the app silently if/when it later completes. No misleading
-    // success toast.
+    // Timed out without a flip. If StoreKit parked the purchase in its
+    // deferred (Ask-to-Buy / parental approval) state, tell the user it's
+    // awaiting approval and close the paywall — leaving it open invites a
+    // confused re-tap that queues a second request. The entitlement
+    // unlocks the app automatically if/when approval later arrives. Any
+    // other timeout (e.g. a silent cancel) just leaves the paywall as-is
+    // with no misleading success toast.
+    if (!mounted) return;
+    if (premium.purchasePending) {
+      messenger.showSnackBar(
+        SnackBar(content: Text(l10n.paywallPurchasePending)),
+      );
+      navigator.pop();
+    }
   }
 
   /// Restore Purchases with real UX feedback.

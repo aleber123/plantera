@@ -988,25 +988,34 @@ class NotificationService extends ChangeNotifier {
     // take priority over these engagement nudges, so once the pending
     // list is near the cap we stop queuing campaign pushes.
     final budget = await _remainingSlots();
-    // Schedule for the current year if still in the future, plus next
-    // year so a fall-installed user has spring covered. Limit to two
-    // years to bound the pending-notification list (Apple caps at 64).
-    // Title/body are read from `_strings` at call time so the CURRENT
-    // resolved locale wins.
+    // Build every candidate push across the two-year window (current year
+    // if still future, plus next year so a fall-installed user has spring
+    // covered), drop any in the past, then schedule SOONEST-FIRST up to
+    // the slot budget. Sorting by date — not iterating year-then-month —
+    // is what stops a tight budget from spending all its slots on this
+    // year's remaining autumn nudges and starving next spring: the pushes
+    // dropped under pressure are the furthest-future ones (next autumn),
+    // never the nearer next-spring ones. Title/body are read from
+    // `_strings` at call time so the CURRENT resolved locale wins.
+    final candidates = <({DateTime when, int month})>[];
     for (final yr in [year, year + 1]) {
       for (final c in campaigns) {
         final when = DateTime(yr, c.$1, c.$2, _morningHour);
         if (when.isBefore(now)) continue;
-        if (scheduled >= budget) return scheduled;
-        await scheduleOneShot(
-          id: _stableId('season-${c.$1}-$yr'),
-          title: _strings.campaignTitle(c.$1),
-          body: _strings.campaignBody(c.$1),
-          when: when,
-          payload: 'season:${c.$1}:$yr',
-        );
-        scheduled++;
+        candidates.add((when: when, month: c.$1));
       }
+    }
+    candidates.sort((a, b) => a.when.compareTo(b.when));
+    for (final cand in candidates) {
+      if (scheduled >= budget) break;
+      await scheduleOneShot(
+        id: _stableId('season-${cand.month}-${cand.when.year}'),
+        title: _strings.campaignTitle(cand.month),
+        body: _strings.campaignBody(cand.month),
+        when: cand.when,
+        payload: 'season:${cand.month}:${cand.when.year}',
+      );
+      scheduled++;
     }
     return scheduled;
   }
