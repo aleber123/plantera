@@ -1,7 +1,7 @@
 name: plantera
 description: "Plantera – din digitala trädgårdskompis med planteringskalender, frostvarning och växtdatabas."
 publish_to: 'none'
-version: 2.5.0+37
+version: 2.5.1+38
 
 environment:
   sdk: ^3.10.8
