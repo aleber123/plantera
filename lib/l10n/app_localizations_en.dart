@@ -1748,4 +1748,11 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get onboardingFooterStart => 'Get started';
+
+  @override
+  String get affiliateDisclosure =>
+      'Affiliate links – we may earn a commission if you shop via Amazon.';
+
+  @override
+  String get monthlyProductsTitle => 'Products of the month';
 }

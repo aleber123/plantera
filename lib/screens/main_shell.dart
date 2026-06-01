@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import '../l10n/app_localizations.dart';
 import '../services/badge_service.dart';
+import '../services/weather_service.dart';
+import '../services/zone_service.dart';
 import 'calendar_screen.dart';
 import 'home_screen.dart';
 import 'my_garden_screen.dart';
@@ -79,6 +82,14 @@ class _MainShellState extends State<MainShell>
   void didChangeAppLifecycleState(AppLifecycleState state) {
     if (state == AppLifecycleState.resumed) {
       BadgeService.clear();
+      // Refresh weather/frost on resume — the app may have sat in the
+      // background overnight, going stale right when a frost warning
+      // matters most. WeatherService guards on its own staleness window
+      // + the active lat/lon, so this won't over-fetch on quick resumes.
+      final zone = context.read<ZoneService>();
+      if (zone.lat != null && zone.lon != null) {
+        context.read<WeatherService>().fetch(zone.lat!, zone.lon!);
+      }
     }
   }
 

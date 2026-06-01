@@ -30,6 +30,13 @@ class DryPeriodBanner extends StatelessWidget {
         // forecast-only banner felt unreliable during cloudy-but-dry
         // weeks. If past is null we just hide and wait.
         if (past == null) return const SizedBox.shrink();
+        // A failed forecast leaves _forecast empty, which makes
+        // rainNext7d read as 0mm — that would fake a drought (combined
+        // drops below threshold). Don't warn unless we actually have a
+        // forecast and the last fetch didn't error out.
+        if (weather.forecast.isEmpty || weather.error != null) {
+          return const SizedBox.shrink();
+        }
         final next = weather.rainNext7d;
         final combined = past + next;
 

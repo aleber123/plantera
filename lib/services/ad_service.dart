@@ -105,6 +105,7 @@ class AdService {
     return isIos ? testBannerIos : testBannerAndroid;
   }
 
+  // currently unused — only App Open is live today
   BannerAd createBannerAd({
     required void Function(Ad) onAdLoaded,
     required void Function(Ad, LoadAdError) onAdFailedToLoad,
@@ -147,10 +148,10 @@ class AdService {
     );
   }
 
+  // currently unused — only App Open is live today
   Future<bool> maybeShowInterstitial({int frequency = 3}) async {
     if (kIsWeb) return false;
-    _interstitialCloseCounter++;
-    if (_interstitialCloseCounter % frequency != 0) {
+    if (_interstitialCloseCounter++ % frequency != 0) {
       loadInterstitial();
       return false;
     }
@@ -201,6 +202,7 @@ class AdService {
     );
   }
 
+  // currently unused — only App Open is live today
   Future<bool> showRewardedAd() async {
     if (kIsWeb) return false;
     final ad = _rewardedAd;

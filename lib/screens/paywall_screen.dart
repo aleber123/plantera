@@ -36,24 +36,62 @@ class _PaywallScreenState extends State<PaywallScreen> {
     final messenger = ScaffoldMessenger.of(context);
     final navigator = Navigator.of(context);
     final l10n = AppLocalizations.of(context);
+    final wasPremium = premium.isPremium;
+    // purchase() only returns false on an up-front failure (store down,
+    // product missing, or an exception — including user-cancel). A `true`
+    // return just means StoreKit ACCEPTED the request onto its queue; it
+    // does NOT mean payment completed. A cancelled/declined card still
+    // ACKs, so trusting `ok` here closed the paywall and "granted" a
+    // premium the user never paid for. Instead we mirror _onRestore:
+    // wait for the purchase-update stream to actually flip isPremium.
     final ok = await premium.purchase(plan);
     if (!mounted) return;
-    if (ok) {
-      // Close paywall on success so the user actually sees the app
-      // unlocked instead of staring at the same paywall. Audit found
-      // users would tap Buy, see nothing change, and bail.
-      messenger.showSnackBar(
-        SnackBar(content: Text(l10n.paywallPurchaseSuccess)),
-      );
-      navigator.pop();
+    if (!ok) {
+      // Silent return when the user cancelled (purchaseError cleared in
+      // the service) — surfacing an error after an explicit Cancel is
+      // confusing. Only show a snackbar for genuine failures.
+      final err = premium.purchaseError;
+      if (err == null) return;
+      final reason = switch (err) {
+        'store_not_available' => l10n.paywallErrorStore,
+        'product_not_found' => l10n.paywallErrorProduct,
+        _ => l10n.paywallErrorFailed,
+      };
+      messenger.showSnackBar(SnackBar(content: Text(reason)));
       return;
     }
-    final reason = switch (premium.purchaseError) {
-      'store_not_available' => l10n.paywallErrorStore,
-      'product_not_found' => l10n.paywallErrorProduct,
-      _ => l10n.paywallErrorFailed,
-    };
-    messenger.showSnackBar(SnackBar(content: Text(reason)));
+    // Up to ~10s for the purchase-update stream to confirm + flip
+    // isPremium. Sandbox / Ask-to-Buy can lag; we only celebrate + close
+    // once premium is actually granted.
+    for (var i = 0; i < 20; i++) {
+      await Future<void>.delayed(const Duration(milliseconds: 500));
+      if (!mounted) return;
+      if (premium.isPremium && !wasPremium) {
+        // Close paywall on real success so the user sees the app
+        // unlocked instead of staring at the same paywall.
+        messenger.showSnackBar(
+          SnackBar(content: Text(l10n.paywallPurchaseSuccess)),
+        );
+        navigator.pop();
+        return;
+      }
+      // A surfaced purchaseError mid-wait means the stream reported a
+      // failure after the queue ACK — stop waiting and report it.
+      final err = premium.purchaseError;
+      if (err != null) {
+        final reason = switch (err) {
+          'store_not_available' => l10n.paywallErrorStore,
+          'product_not_found' => l10n.paywallErrorProduct,
+          _ => l10n.paywallErrorFailed,
+        };
+        messenger.showSnackBar(SnackBar(content: Text(reason)));
+        return;
+      }
+    }
+    // Timed out without a flip (deferred Ask-to-Buy, or a cancel that
+    // surfaced no error). Leave the paywall open; the entitlement will
+    // unlock the app silently if/when it later completes. No misleading
+    // success toast.
   }
 
   /// Restore Purchases with real UX feedback.
@@ -79,8 +117,12 @@ class _PaywallScreenState extends State<PaywallScreen> {
       );
       return;
     }
-    // Up to 4s for the purchase-update stream to flip isPremium.
-    for (var i = 0; i < 8; i++) {
+    // Up to ~10s for the purchase-update stream to flip isPremium.
+    // Sandbox / App Review restores are routinely slower than 4s, and a
+    // premature "no purchases found" snackbar made real subscribers
+    // think Restore was broken. The extra wait is invisible to users
+    // who restore instantly (we break out the moment isPremium flips).
+    for (var i = 0; i < 20; i++) {
       await Future<void>.delayed(const Duration(milliseconds: 500));
       if (!mounted) return;
       if (premium.isPremium && !wasPremium) {
@@ -224,17 +266,25 @@ class _PaywallScreenState extends State<PaywallScreen> {
               // Disabled buttons with "Pris kommer snart"-fallbacks
               // looked broken and prompted users to bail.
               if (!productsMissing) ...[
-                _planButton(
-                  ctx,
-                  premium,
-                  PremiumPlan.yearly,
-                  l10n.paywallPlanYearly,
-                  lang: lang,
-                  l10n: l10n,
-                  subtitle: l10n.paywallPlanYearlySavings(
-                      '${premium.getYearlySavingsPercent(lang)}'),
-                  highlight: true,
-                ),
+                Builder(builder: (_) {
+                  // Only show the savings badge when the % is real. During
+                  // a partial product load getYearlySavingsPercent returns
+                  // 0 rather than mixing store/fallback prices — don't
+                  // render a "Spara 0%" line in that window.
+                  final savings = premium.getYearlySavingsPercent(lang);
+                  return _planButton(
+                    ctx,
+                    premium,
+                    PremiumPlan.yearly,
+                    l10n.paywallPlanYearly,
+                    lang: lang,
+                    l10n: l10n,
+                    subtitle: savings > 0
+                        ? l10n.paywallPlanYearlySavings('$savings')
+                        : null,
+                    highlight: true,
+                  );
+                }),
                 const SizedBox(height: 10),
                 _planButton(ctx, premium, PremiumPlan.monthly,
                     l10n.paywallPlanMonthly,

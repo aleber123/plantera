@@ -235,6 +235,11 @@ Future<void> _showEditor(BuildContext context, Garden? existing) async {
   final svc = context.read<GardenService>();
   final cityController =
       TextEditingController(text: existing?.city ?? '');
+  // Lifted outside the StatefulBuilder so it survives rebuilds — rebuilding
+  // it inline reset the cursor/IME mid-typing and leaked a controller each
+  // frame.
+  final nameController =
+      TextEditingController(text: existing?.name ?? '');
   String name = existing?.name ?? '';
   String emoji = existing?.emoji ?? '🌿';
   String? city = existing?.city;
@@ -242,7 +247,8 @@ Future<void> _showEditor(BuildContext context, Garden? existing) async {
   double? lat = existing?.lat;
   double? lon = existing?.lon;
 
-  await showModalBottomSheet<void>(
+  try {
+    await showModalBottomSheet<void>(
     context: context,
     isScrollControlled: true,
     shape: const RoundedRectangleBorder(
@@ -281,8 +287,7 @@ Future<void> _showEditor(BuildContext context, Garden? existing) async {
             ),
             const SizedBox(height: 14),
             TextField(
-              controller: TextEditingController(text: name)
-                ..selection = TextSelection.collapsed(offset: name.length),
+              controller: nameController,
               autofocus: existing == null,
               textCapitalization: TextCapitalization.sentences,
               decoration: InputDecoration(
@@ -316,18 +321,18 @@ Future<void> _showEditor(BuildContext context, Garden? existing) async {
             _CitySearchField(
               initialCity: city,
               swedishCities: cities,
-              onSelected: (cityName, latVal, lonVal) {
+              onSelected: (cityName, latVal, lonVal, countryCode) {
                 setState(() {
                   city = cityName;
                   lat = latVal;
                   lon = lonVal;
-                  // Re-derive Swedish-zone equivalent. For coords inside
-                  // Sweden this is exact; outside it's the closest USDA
-                  // crosswalk back into the Sweden-calibrated scale.
-                  if (latVal >= 54 &&
-                      latVal <= 70 &&
-                      lonVal >= 8 &&
-                      lonVal <= 28) {
+                  // Re-derive Swedish-zone equivalent. The exact
+                  // växtzon-by-latitude scale is only calibrated for
+                  // Sweden, so gate it on the geocoder's country code —
+                  // a lat/lon box would mislabel Copenhagen/Oslo with a
+                  // precise Swedish zone. Everything else goes through the
+                  // USDA crosswalk back into the Sweden-calibrated scale.
+                  if (countryCode == 'SE') {
                     zone = SwedishZones.zoneForLatitude(latVal);
                   } else {
                     final profile =
@@ -445,7 +450,11 @@ Future<void> _showEditor(BuildContext context, Garden? existing) async {
         ),
       );
     }),
-  );
+    );
+  } finally {
+    cityController.dispose();
+    nameController.dispose();
+  }
 }
 
 class _AddButton extends StatelessWidget {
@@ -499,7 +508,10 @@ class _AddButton extends StatelessWidget {
 class _CitySearchField extends StatefulWidget {
   final String? initialCity;
   final List<String> swedishCities;
-  final void Function(String city, double lat, double lon) onSelected;
+  // countryCode is the ISO-2 code from the geocoder ('SE', 'DK', 'NO', …),
+  // or null for the Swedish quick-pick chips (always Sweden).
+  final void Function(String city, double lat, double lon, String? countryCode)
+      onSelected;
   const _CitySearchField({
     required this.initialCity,
     required this.swedishCities,
@@ -532,6 +544,9 @@ class _CitySearchFieldState extends State<_CitySearchField> {
   void _onChanged(String v) {
     _debounce?.cancel();
     setState(() {});
+    // Capture the active locale so place names come back localised
+    // (e.g. "Köpenhamn") instead of anglicised.
+    final lang = Localizations.localeOf(context).languageCode;
     _debounce = Timer(const Duration(milliseconds: 350), () async {
       if (!mounted) return;
       if (v.trim().length < 2) {
@@ -539,10 +554,10 @@ class _CitySearchFieldState extends State<_CitySearchField> {
         return;
       }
       setState(() => _searching = true);
-      final r = await GeocodingService.search(v);
+      final result = await GeocodingService.search(v, language: lang);
       if (!mounted) return;
       setState(() {
-        _results = r;
+        _results = result.places;
         _searching = false;
       });
     });
@@ -613,7 +628,7 @@ class _CitySearchFieldState extends State<_CitySearchField> {
                   onTap: () {
                     _ctl.text = r.name;
                     setState(() => _results = const []);
-                    widget.onSelected(r.name, r.lat, r.lon);
+                    widget.onSelected(r.name, r.lat, r.lon, r.countryCode);
                   },
                 );
               },
@@ -639,7 +654,7 @@ class _CitySearchFieldState extends State<_CitySearchField> {
                       onSelected: (_) {
                         final coords = SwedishZones.cityCoords[c]!;
                         _ctl.text = c;
-                        widget.onSelected(c, coords.$1, coords.$2);
+                        widget.onSelected(c, coords.$1, coords.$2, 'SE');
                       },
                     ),
                   ),

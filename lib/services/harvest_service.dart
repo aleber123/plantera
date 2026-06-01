@@ -62,6 +62,12 @@ class HarvestService extends ChangeNotifier {
     notifyListeners();
   }
 
+  /// Re-reads the cache from disk. GardenService removes a plant by
+  /// cascading the DELETE into harvest_entries; this service's in-memory
+  /// list doesn't know about that, so the garden change-listener calls
+  /// this to drop the now-orphaned rows.
+  Future<void> reloadFromDb() => _reload();
+
   Future<HarvestEntry> add({
     required String gardenPlantId,
     required DateTime date,

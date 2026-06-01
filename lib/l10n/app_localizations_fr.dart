@@ -1761,4 +1761,11 @@ class AppLocalizationsFr extends AppLocalizations {
 
   @override
   String get onboardingFooterStart => 'Commencer';
+
+  @override
+  String get affiliateDisclosure =>
+      'Annonslänkar – vi kan få provision om du handlar via Amazon.';
+
+  @override
+  String get monthlyProductsTitle => 'Månadens produkter';
 }

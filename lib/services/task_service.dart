@@ -83,6 +83,17 @@ class TaskService extends ChangeNotifier {
 
   Future<void> _loadState() async {
     if (_db == null) return;
+    // Prune ancient completions before loading. Completions accrue one row
+    // per plant per watering day and are fully loaded each launch, so they
+    // grow unbounded over a season. A completion only matters while its
+    // "Klart idag"-row is visible (same calendar day), so anything older
+    // than 60 days is dead weight. Snoozes self-expire and delete-cleanup
+    // already bounds the others — only completions leak.
+    final cutoff = DateTime.now()
+        .subtract(const Duration(days: 60))
+        .millisecondsSinceEpoch;
+    await _db!.delete(_completionsTable,
+        where: 'completed_at < ?', whereArgs: [cutoff]);
     final results = await Future.wait([
       _db!.query(_completionsTable),
       _db!.query(_snoozesTable),
@@ -105,16 +116,32 @@ class TaskService extends ChangeNotifier {
   Future<void> complete(GardenTask t) async {
     if (_db == null) return;
     final now = DateTime.now();
+    // Water-task keys encode the rotating daily due-date, so a completion
+    // logged under the raw key would never match the task regenerated
+    // tomorrow (new date → new key) and the "Klart idag"-row would vanish.
+    // Key the completion on the date-less snoozeIdentity for water so the
+    // join survives the daily regenerate cycle. Other kinds already encode
+    // only the year in their key, so the raw key is stable enough.
+    final completionKey = t.snoozeIdentity;
     // DB first so a write failure can't leave the in-memory cache
     // claiming a task is done when nothing is persisted. The next
     // _regenerate would happily re-emit the task and the user would
     // think it stuck — but a relaunch would resurrect it.
     await _db!.insert(
       _completionsTable,
-      {'task_key': t.key, 'completed_at': now.millisecondsSinceEpoch},
+      {'task_key': completionKey, 'completed_at': now.millisecondsSinceEpoch},
       conflictAlgorithm: ConflictAlgorithm.replace,
     );
-    _completed[t.key] = now;
+    _completed[completionKey] = now;
+    // Clear any matching snooze — completing a task supersedes a pending
+    // snooze. Without this a stale water snooze keeps hiding the next
+    // preview task for ~a day after the user has already watered.
+    final snoozeId = t.snoozeIdentity;
+    if (_snoozed.containsKey(snoozeId)) {
+      await _db!.delete(_snoozesTable,
+          where: 'task_key = ?', whereArgs: [snoozeId]);
+      _snoozed.remove(snoozeId);
+    }
     // Side effects per kind:
     //   water → bump GardenPlant.lastWatered so the next-water-due math
     //   uses the correct anchor.
@@ -142,6 +169,19 @@ class TaskService extends ChangeNotifier {
       conflictAlgorithm: ConflictAlgorithm.replace,
     );
     _snoozed[id] = until;
+    _regenerate();
+  }
+
+  /// Reverse a [snooze] — drops the snooze row so the task reappears in
+  /// the active list immediately. Backs the "Ångra"-action on the
+  /// swipe-snooze SnackBar. Snoozes are cleanly reversible (unlike a
+  /// water completion, which also bumps lastWatered), so only this undo
+  /// is offered.
+  Future<void> undoSnooze(GardenTask t) async {
+    if (_db == null) return;
+    final id = t.snoozeIdentity;
+    await _db!.delete(_snoozesTable, where: 'task_key = ?', whereArgs: [id]);
+    _snoozed.remove(id);
     _regenerate();
   }
 
@@ -192,11 +232,17 @@ class TaskService extends ChangeNotifier {
     // Apply user state, drop completed, and sort by due date + priority.
     final filtered = <GardenTask>[];
     for (final t in tasks) {
-      final doneAt = _completed[t.key];
+      // Match completions on the same identity complete() writes under —
+      // snoozeIdentity folds the rotating daily date out of water keys so
+      // a completed/snoozed water task still resolves to its "done" row.
+      final doneAt = _completed[t.snoozeIdentity];
       if (doneAt != null) {
-        // Keep done items visible until midnight tomorrow so the user
-        // can see what they accomplished today.
-        if (doneAt.isAfter(today.subtract(const Duration(hours: 6)))) {
+        // Keep done items visible until end of today (calendar day) so the
+        // user sees what they accomplished. Comparing on the calendar day
+        // — not a raw 6h window — stops yesterday-evening completions from
+        // lingering into the next morning's list.
+        final doneDay = DateTime(doneAt.year, doneAt.month, doneAt.day);
+        if (!doneDay.isBefore(today)) {
           filtered.add(t.withStatus(
               status: TaskStatus.done, completedAt: doneAt));
         }
@@ -285,8 +331,11 @@ class TaskService extends ChangeNotifier {
   /// is "plant is a bit dry for a day", far better than root rot.
   double _seasonalWaterFactor(DateTime today, PlantStatus status) {
     // Indoor seedlings or no-status: full cadence year-round.
+    // 'hardad' (härdar av) seedlings are only out for part of the day and
+    // still in pots — the most drought-sensitive stage. Treating them as
+    // fully outdoor stretched their watering 1.5-2x in a cold spring, so
+    // they keep the indoor (1.0) cadence.
     final isOutdoor = status == PlantStatus.direktsadd ||
-        status == PlantStatus.hardad ||
         status == PlantStatus.utplanterad ||
         status == PlantStatus.skordeklar;
     if (!isOutdoor) return 1.0;
@@ -310,7 +359,11 @@ class TaskService extends ChangeNotifier {
     if (plant.skordeperiod == null) return;
     if (gp.status == PlantStatus.planerad ||
         gp.status == PlantStatus.forsoddInne ||
-        gp.status == PlantStatus.skordad) {
+        gp.status == PlantStatus.skordad ||
+        gp.status == PlantStatus.vilande) {
+      // A dormant plant isn't producing — no harvest or bloom even if the
+      // calendar month falls inside its skordeperiod (watering already
+      // skips vilande for the same reason).
       return;
     }
     // Map today's calendar month into NH-equivalent terms for the
@@ -523,21 +576,36 @@ class TaskService extends ChangeNotifier {
     required DateTime horizon,
     required GardenPlant gp,
   }) sync* {
-    // Hide the previously-fired window once we're 14d past its start —
-    // saves a stale "förodla i mars" task from sitting at the top of
-    // the list in May. The wrap-around case (window is in the past
-    // year and the next occurrence is too far away) is handled by
-    // pushing due to year+1 below.
+    // This year's window start. If we're more than 14d past it the window
+    // for *this* year has opened already — the previously-fired "förodla i
+    // mars"-task shouldn't keep sitting at the top of the list in May, so
+    // we bump to next year's occurrence.
     var due = DateTime(today.year, monthStart, 1);
-    if (due.isBefore(today.subtract(const Duration(days: 14)))) {
+    final thisYearStart = due;
+    final wrapped = due.isBefore(today.subtract(const Duration(days: 14)));
+    if (wrapped) {
       due = DateTime(today.year + 1, monthStart, 1);
     }
-    // For year-spanning crops (vitlök forsådatum okt-nov, skörd next
-    // år) the bumped due may sit outside the 30-day horizon. Keep
-    // showing the task if it's *within the current calendar year*,
-    // even past horizon — otherwise höstvitlök planted in Nov shows
-    // no sow task at all.
-    if (due.isAfter(horizon) && due.year > today.year) return;
+    // Horizon kill: anything opening beyond the 30-day horizon is too far
+    // off to surface yet. (Previously this was gated on `due.year >
+    // today.year`, which let every later-this-year window — August sow,
+    // plant-out — leak into May/June, AND made the autumn-bulb branch
+    // below unreachable. Both are fixed by dropping that condition.)
+    if (due.isAfter(horizon)) {
+      // Year-wrap exception for autumn-sow crops (höstvitlök forsådatum
+      // okt-nov, skörd next år): when this year's window opened in the
+      // last ~6 weeks we're still inside the planting season, so keep
+      // showing the task anchored to this year's start rather than hiding
+      // it until next autumn. Only the genuinely-stale wrap (window long
+      // past, next occurrence far off) is suppressed.
+      final inAutumnSeason = wrapped &&
+          thisYearStart.isAfter(today.subtract(const Duration(days: 45)));
+      if (inAutumnSeason) {
+        due = thisYearStart;
+      } else {
+        return;
+      }
+    }
     yield GardenTask(
       key: key,
       kind: kind,

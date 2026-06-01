@@ -61,6 +61,14 @@ class PremiumService extends ChangeNotifier {
   PremiumPlan? _activeSubPlan;
   DateTime? _subActivatedAt;
 
+  // Tracks whether the in-flight restorePurchases() pass at launch saw
+  // a still-active subscription entitlement. If the pass completes and
+  // this is still false, the cached _subActivatedAt is stale (the user
+  // let the sub lapse) and we clear it — otherwise the grace window
+  // would keep an expired subscriber premium for up to a year AND block
+  // them from re-subscribing via the _AlreadyPremium panel.
+  bool _restoreSawActiveSub = false;
+
   bool get isPremium =>
       _isPremium || _isTempPremium || _hasActiveSubscription;
   bool get _isTempPremium {
@@ -159,13 +167,39 @@ class PremiumService extends ChangeNotifier {
           onError: (error) => debugPrint('IAP stream error: $error'),
         );
         await _loadProducts();
+        // Validate the cached subscription stamp against StoreKit. If a
+        // sub is still active, restorePurchases() fires a `restored`
+        // event that re-stamps _subActivatedAt via _verifyAndActivate
+        // (which flips _restoreSawActiveSub). If nothing comes back the
+        // entitlement is gone, so we prune the stale stamp afterwards.
+        _restoreSawActiveSub = false;
         await _iap.restorePurchases();
+        await _pruneStaleSubscriptionAfterRestore();
       }
     } catch (e) {
       debugPrint('IAP initialization failed: $e');
       _storeAvailable = false;
     }
 
+    notifyListeners();
+  }
+
+  /// Called after the launch-time restorePurchases() pass. Restore
+  /// events arrive asynchronously on the purchase stream, so we give
+  /// them a brief window to drain before deciding the cached stamp is
+  /// stale. If no monthly/yearly entitlement was restored, the user's
+  /// subscription has lapsed — clear the stamp so [_hasActiveSubscription]
+  /// stops returning true and the re-subscribe CTAs come back.
+  Future<void> _pruneStaleSubscriptionAfterRestore() async {
+    if (_activeSubPlan == null && _subActivatedAt == null) return;
+    // Let any in-flight restored-purchase events settle.
+    await Future<void>.delayed(const Duration(seconds: 3));
+    if (_restoreSawActiveSub) return;
+    _activeSubPlan = null;
+    _subActivatedAt = null;
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.remove(_subPlanKey);
+    await prefs.remove(_subActivatedAtKey);
     notifyListeners();
   }
 
@@ -198,7 +232,12 @@ class PremiumService extends ChangeNotifier {
     for (final purchase in purchases) {
       switch (purchase.status) {
         case PurchaseStatus.pending:
-          _purchaseInProgress = true;
+          // Deferred / Ask-to-Buy: StoreKit has accepted the request but
+          // it may sit pending for hours/days (parental approval). Don't
+          // keep the buy buttons spinning-locked the whole time — release
+          // the in-progress flag so the UI is usable again. The eventual
+          // purchased/canceled event still drives the real outcome.
+          _purchaseInProgress = false;
           _purchaseError = null;
           notifyListeners();
           break;
@@ -257,6 +296,10 @@ class PremiumService extends ChangeNotifier {
         // user is always inside the window.
         _activeSubPlan = plan;
         _subActivatedAt = DateTime.now();
+        // Mark that the launch restore pass saw a live entitlement, so
+        // _pruneStaleSubscriptionAfterRestore keeps the stamp instead of
+        // clearing it.
+        _restoreSawActiveSub = true;
         await prefs.setInt(_subPlanKey, plan.index);
         await prefs.setInt(
             _subActivatedAtKey, _subActivatedAt!.millisecondsSinceEpoch);
@@ -303,9 +346,17 @@ class PremiumService extends ChangeNotifier {
     if (monthlyStore != null && yearlyStore != null) {
       monthly = monthlyStore.rawPrice;
       yearly = yearlyStore.rawPrice;
-    } else {
+    } else if (monthlyStore == null && yearlyStore == null) {
+      // No store data yet — pure SEK fallback for both is internally
+      // consistent (same currency, same source).
       monthly = _fallbackPricesSek[PremiumPlan.monthly] ?? 0;
       yearly = _fallbackPricesSek[PremiumPlan.yearly] ?? 0;
+    } else {
+      // Partial load: one product came back from the store, the other
+      // didn't. Mixing a real store price with the SEK fallback (or two
+      // different currencies) yields a nonsense %. Suppress the badge
+      // until both products resolve.
+      return 0;
     }
     if (monthly <= 0 || yearly <= 0) return 0;
     final fullYear = monthly * 12;

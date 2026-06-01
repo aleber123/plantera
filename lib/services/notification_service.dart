@@ -208,8 +208,13 @@ class NotificationService extends ChangeNotifier {
     Future<void> queue(String key, MonthRange? range, String label,
         String lower) async {
       if (range == null) return;
-      final when =
-          DateTime(seasonYear, range.startMonth, 1, _morningHour);
+      // Zone-shift the season start like every other scheduling path —
+      // without this Norrland (zon 7) got "dags att så" 28 dagar för
+      // tidigt och Skåne (zon 1) 14 dagar för sent.
+      final shifted =
+          ZoneShift.shiftSeasonStart(seasonYear, range.startMonth, zone);
+      final when = DateTime(
+          shifted.year, shifted.month, shifted.day, _morningHour);
       if (!when.isAfter(now)) return;
       await scheduleOneShot(
         id: _stableId('wish-$wishlistId-$key'),
@@ -533,86 +538,19 @@ class NotificationService extends ChangeNotifier {
     await _cancelCareTasks(gardenPlantId);
   }
 
-  /// Schedule recurring annual care reminders ("beskär äpple", "gödsla
-  /// rosor"…) for each [CareTask] on a plant. Fires on the first day of
-  /// the task's month range at the user's preferred morning hour.
-  ///
-  /// Two reminders per task: a one-week heads-up and the day itself.
-  /// Schedules for *this year* if the window hasn't started, otherwise
-  /// for next year — so a perennial added in July still gets next
-  /// February's beskärnings-påminnelse queued immediately.
-  ///
-  /// We also remember which task ids we scheduled per garden plant in
-  /// [_careTaskIds] so cancellation can hit the same set without
-  /// requiring the original Plant lookup later.
-  Future<List<String>> scheduleCareTasks({
-    required String gardenPlantId,
-    required Plant plant,
-  }) async {
-    if (!_enabled) return const [];
-    if (plant.omsorg.isEmpty) return const [];
-
-    final scheduled = <String>[];
-    final ids = <String>[];
-    final now = DateTime.now();
-
-    for (final task in plant.omsorg) {
-      // Pick the next occurrence of the start month.
-      var when = DateTime(
-          now.year, task.month.startMonth, 1, _morningHour);
-      if (!when.isAfter(now)) {
-        // Window already started this year — but if we're still inside
-        // the range, schedule "tomorrow morning" so the user gets a
-        // ping for the active task today rather than next year.
-        if (task.month.includes(now.month)) {
-          final tomorrow = now.add(const Duration(days: 1));
-          when = DateTime(
-              tomorrow.year, tomorrow.month, tomorrow.day, _morningHour);
-        } else {
-          when = DateTime(
-              now.year + 1, task.month.startMonth, 1, _morningHour);
-        }
-      }
-
-      final mainKey = '$gardenPlantId-care-${task.id}';
-      await scheduleOneShot(
-        id: _stableId(mainKey),
-        title: '${plant.emoji} ${plant.namnSv}',
-        body: task.title.isEmpty
-            ? task.description
-            : _strings.careBody(task.title, task.description),
-        when: when,
-        payload: 'care:$gardenPlantId:${task.id}',
-      );
-      ids.add(task.id);
-
-      final daysToMain = when.difference(now).inDays;
-      if (daysToMain > 7) {
-        final pre = when.subtract(const Duration(days: 7));
-        await scheduleOneShot(
-          id: _stableId('$mainKey-pre'),
-          title: '${plant.emoji} ${plant.namnSv}',
-          body: _strings.carePre(task.title.toLowerCase()),
-          when: pre,
-          payload: 'care:$gardenPlantId:${task.id}',
-        );
-      }
-      scheduled.add(task.title);
-    }
-
-    _careTaskIds[gardenPlantId] = ids;
-    return scheduled;
-  }
-
-  /// Per-garden-plant cache of which CareTask ids were scheduled, so
-  /// cancellation can target exactly those without re-resolving the
-  /// Plant. Lives in memory; on cold start [rescheduleAllForGarden]
-  /// will re-cancel-then-schedule which repopulates it.
+  // DEAD: per-plant care reminders were replaced by the rolled-up
+  // [scheduleCareDigest] (one morning digest per month instead of
+  // 60-100 individual pings/year). The old per-task `scheduleCareTasks`
+  // was the only writer of [_careTaskIds]; with it gone the map is
+  // always empty and [_cancelCareTasks] is provably a no-op. The two
+  // remaining call-sites ([rescheduleAllForGarden], [cancelForGardenPlant])
+  // keep calling it harmlessly so the cancel path stays correct if the
+  // per-task scheduler ever comes back.
   final Map<String, List<String>> _careTaskIds = {};
 
   Future<void> _cancelCareTasks(String gardenPlantId) async {
     final ids = _careTaskIds[gardenPlantId];
-    if (ids == null) return;
+    if (ids == null) return; // DEAD: always taken — map is never written.
     for (final taskId in ids) {
       await _plugin.cancel(_stableId('$gardenPlantId-care-$taskId'));
       await _plugin.cancel(_stableId('$gardenPlantId-care-$taskId-pre'));
@@ -1034,13 +972,32 @@ class NotificationService extends ChangeNotifier {
 
     var scheduled = 0;
     final now = DateTime.now();
+    // Cancel the whole campaign set first so a re-call after the locale
+    // has resolved (setLocale → main re-schedules) cleanly replaces the
+    // old-language pushes. IDs are stable per (month, year) and locale-
+    // independent, so a future entry is also upserted by the schedule
+    // below; this cancel additionally clears any entry that has since
+    // slipped into the past (and is skipped below) but was queued in the
+    // previous locale.
+    for (final yr in [year, year + 1]) {
+      for (final c in campaigns) {
+        await _plugin.cancel(_stableId('season-${c.$1}-$yr'));
+      }
+    }
+    // Budget against the iOS 64-slot cap — frost/time-critical warnings
+    // take priority over these engagement nudges, so once the pending
+    // list is near the cap we stop queuing campaign pushes.
+    final budget = await _remainingSlots();
     // Schedule for the current year if still in the future, plus next
     // year so a fall-installed user has spring covered. Limit to two
     // years to bound the pending-notification list (Apple caps at 64).
+    // Title/body are read from `_strings` at call time so the CURRENT
+    // resolved locale wins.
     for (final yr in [year, year + 1]) {
       for (final c in campaigns) {
         final when = DateTime(yr, c.$1, c.$2, _morningHour);
         if (when.isBefore(now)) continue;
+        if (scheduled >= budget) return scheduled;
         await scheduleOneShot(
           id: _stableId('season-${c.$1}-$yr'),
           title: _strings.campaignTitle(c.$1),
@@ -1059,6 +1016,25 @@ class NotificationService extends ChangeNotifier {
 
   Future<List<PendingNotificationRequest>> pending() =>
       _plugin.pendingNotificationRequests();
+
+  /// iOS silently drops anything past 64 pending notifications, and it
+  /// drops the *newest* schedule attempts — which would be the frost /
+  /// time-critical warnings if low-value engagement nudges had already
+  /// filled the queue. To keep behaviour deterministic we reserve a
+  /// block of slots for those warnings and let lower-priority schedulers
+  /// (the seasonal campaign) consult [_remainingSlots] before queuing.
+  static const int _iosPendingCap = 64;
+  static const int _criticalReserve = 16;
+
+  /// How many *additional* notifications a low-priority scheduler may
+  /// queue without risking the cap. Counts what's already pending and
+  /// keeps [_criticalReserve] slots free for frost/time-critical alerts.
+  /// Returns 0 (never negative) when the queue is already saturated.
+  Future<int> _remainingSlots() async {
+    final current = (await pending()).length;
+    final free = _iosPendingCap - _criticalReserve - current;
+    return free > 0 ? free : 0;
+  }
 
   /// Convert a string scheduling key into the 32-bit positive int that
   /// flutter_local_notifications uses for cancel/pending lookups.

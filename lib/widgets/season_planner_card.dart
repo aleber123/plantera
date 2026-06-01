@@ -5,9 +5,12 @@ import '../l10n/app_localizations.dart';
 import '../models/plant.dart';
 import '../models/wishlist_plant.dart';
 import '../screens/main_shell.dart';
+import '../screens/plant_detail_screen.dart';
 import '../services/plant_database_service.dart';
 import '../services/season_planner_service.dart';
+import '../services/zone_service.dart';
 import '../utils/constants.dart';
+import '../utils/zone_shift.dart';
 
 /// "Min säsong YYYY" — wishlist of plants the user wants to grow this
 /// season. Shows the next two upcoming planting windows so the user
@@ -21,8 +24,8 @@ class SeasonPlannerCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Consumer2<SeasonPlannerService, PlantDatabaseService>(
-      builder: (ctx, season, db, _) {
+    return Consumer3<SeasonPlannerService, PlantDatabaseService, ZoneService>(
+      builder: (ctx, season, db, zoneSvc, _) {
         if (!season.loaded) return const SizedBox.shrink();
         final items = season.currentSeason;
         final year = DateTime.now().year;
@@ -31,12 +34,16 @@ class SeasonPlannerCard extends StatelessWidget {
 
         // Pair each wishlist item with its plant + next sowing window.
         // Sort by which plant should be planted first this year so the
-        // top of the card always shows what's most imminent.
+        // top of the card always shows what's most imminent. Carry the
+        // active garden's zone so the "X dagar kvar"/"så nu" labels are
+        // zone-shifted like the rest of the app (zon 7 ripens ~4v efter
+        // zon 3), instead of raw zone-3 database dates.
+        final zone = zoneSvc.zone;
         final entries = <_Entry>[];
         for (final w in items) {
           final p = db.byId(w.plantId);
           if (p == null) continue;
-          entries.add(_Entry(w: w, plant: p));
+          entries.add(_Entry(w: w, plant: p, zone: zone));
         }
         entries.sort((a, b) {
           final aDays = a.daysUntilNext ?? 9999;
@@ -139,7 +146,11 @@ class SeasonPlannerCard extends StatelessWidget {
 class _Entry {
   final WishlistPlant w;
   final Plant plant;
-  _Entry({required this.w, required this.plant});
+
+  /// Active garden's växtzon — used to slide the database's zone-3
+  /// calibrated windows to the user's actual climate.
+  final int zone;
+  _Entry({required this.w, required this.plant, required this.zone});
 
   /// Days until the next sowing window opens this year. Null when no
   /// window applies (lifecycle without forsadatum/direktsadatum) — the
@@ -165,9 +176,13 @@ class _Entry {
     if (candidates.isEmpty) return null;
     ({DateTime start, String label})? best;
     for (final (range, label) in candidates) {
-      var d = DateTime(now.year, range.startMonth, 1);
+      // Zone-shift the window start so the label matches what the
+      // notifications actually schedule (same ZoneShift the rest of the
+      // stack uses). Roll forward a year once the shifted window has
+      // closed and we're no longer inside it.
+      var d = ZoneShift.shiftSeasonStart(now.year, range.startMonth, zone);
       if (d.isBefore(now) && !range.includes(now.month)) {
-        d = DateTime(now.year + 1, range.startMonth, 1);
+        d = ZoneShift.shiftSeasonStart(now.year + 1, range.startMonth, zone);
       }
       if (best == null || d.isBefore(best.start)) {
         best = (start: d, label: label);
@@ -209,11 +224,15 @@ class _SeasonRow extends StatelessWidget {
 
     return InkWell(
       onTap: () {
-        // Navigation to plant detail uses the existing browse flow —
-        // we don't have a wishlist-specific detail yet, and reusing
-        // PlantDetailScreen lets the user convert the wish into a real
-        // garden plant via the same +-button.
-        MainShellController.of(context)?.openPlantDatabase(context);
+        // Open this plant's detail directly — entry.plant is already in
+        // hand, so we skip the round-trip through the whole database and
+        // land the user right on the wish→garden-plant conversion CTA.
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (_) => PlantDetailScreen(plant: entry.plant),
+          ),
+        );
       },
       borderRadius: BorderRadius.circular(10),
       child: Padding(

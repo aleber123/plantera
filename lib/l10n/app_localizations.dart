@@ -3154,6 +3154,18 @@ abstract class AppLocalizations {
   /// In sv, this message translates to:
   /// **'Kom igång'**
   String get onboardingFooterStart;
+
+  /// Affiliate disclosure footnote shown under product links (added 2026-06)
+  ///
+  /// In sv, this message translates to:
+  /// **'Annonslänkar – vi kan få provision om du handlar via Amazon.'**
+  String get affiliateDisclosure;
+
+  /// Title for the monthly affiliate products card (added 2026-06)
+  ///
+  /// In sv, this message translates to:
+  /// **'Månadens produkter'**
+  String get monthlyProductsTitle;
 }
 
 class _AppLocalizationsDelegate
